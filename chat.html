@@ -145,11 +145,21 @@
 </div>
 
 <div class="questions-panel">
+    <!-- СТАРЫЕ ВОПРОСЫ -->
     <button class="question-btn" data-question="download">📱 Где скачать игры?</button>
     <button class="question-btn" data-question="vk">📢 Дай ссылку на ВК</button>
     <button class="question-btn" data-question="github">🐙 Дай ссылку на GitHub</button>
     <button class="question-btn" data-question="support">🛠️ Перенаправь к службе поддержки</button>
     <button class="question-btn" data-question="exit">🚪 Выйти из чата</button>
+    
+    <!-- НОВЫЕ ВОПРОСЫ -->
+    <button class="question-btn" data-question="descClicker">🎮 Описание «Бесконечный кликер»</button>
+    <button class="question-btn" data-question="descBusiness">🏢 Описание «My Business»</button>
+    <button class="question-btn" data-question="descMiner">⛏️ Описание «Симулятор добычи»</button>
+    <button class="question-btn" data-question="future">🚀 Будет ли компания развиваться?</button>
+    <button class="question-btn" data-question="licenseText">📜 Лицензионное соглашение</button>
+    <button class="question-btn" data-question="licenseExplain">🧠 Объясни лицензию простыми словами</button>
+    <button class="question-btn" data-question="teamSize">👥 Сколько человек в компании?</button>
 </div>
 
 <div class="footer-note">Поддержка работает 24/7</div>
@@ -189,6 +199,7 @@
     }
 
     const answers = {
+        // СТАРЫЕ
         download: () => {
             addUserMessage('Где скачать игры?');
             const think = showThinking();
@@ -233,6 +244,64 @@
                 removeThinking(think);
                 addBotMessage('Возвращаемся на главную страницу...');
                 setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+            }, 1000);
+        },
+        
+        // НОВЫЕ
+        descClicker: () => {
+            addUserMessage('Описание «Бесконечный кликер»');
+            const think = showThinking();
+            setTimeout(() => {
+                removeThinking(think);
+                addBotMessage(`💰 Зарабатывай очки простыми кликами.<br>⚡ Улучшай силу клика.<br>🤖 Автокликер — твой помощник.<br>🎁 Бонусы каждые 5 минут и 100 кликов.<br>💎 Древо рубинов.<br>🏆 Достижения.<br>💾 Автосохранение.<br>🎮 Промокод: novichokrusturekliker`, true);
+            }, 1000);
+        },
+        descBusiness: () => {
+            addUserMessage('Описание «My Business»');
+            const think = showThinking();
+            setTimeout(() => {
+                removeThinking(think);
+                addBotMessage(`🏢 Ты Босс!<br>💰 Налоги каждые 35 секунд, доход каждые 5 секунд.<br>🎁 Бонусы: каждые 15 минут +1 алмаз, 30 минут +1 рубин.<br>💎 Бесплатный премиум‑магазин.<br>⚡ Супер‑дни — увольняй рабочих с возвратом 50% стоимости найма.<br>🎮 Промокод: novichok`, true);
+            }, 1000);
+        },
+        descMiner: () => {
+            addUserMessage('Описание «Симулятор добычи»');
+            const think = showThinking();
+            setTimeout(() => {
+                removeThinking(think);
+                addBotMessage(`⛏️ Добывай 4 вида ресурсов.<br>📈 Продавай, пока цена высокая.<br>🔧 Улучшай силу добычи.<br>💾 Автосохранение.`, true);
+            }, 1000);
+        },
+        future: () => {
+            addUserMessage('Будет ли компания развиваться?');
+            const think = showThinking();
+            setTimeout(() => {
+                removeThinking(think);
+                addBotMessage(`Да! В планах: свой сервер, таблица лидеров, ежедневные события, переход на Godot, а может, даже создание новой игры. Компания будет расти и радовать игроков.`, false);
+            }, 1000);
+        },
+        licenseText: () => {
+            addUserMessage('Какое лицензионное соглашение?');
+            const think = showThinking();
+            setTimeout(() => {
+                removeThinking(think);
+                addBotMessage(`Полный текст лицензии можно прочитать на главной странице сайта в блоке «Лицензионное соглашение».`, false);
+            }, 1000);
+        },
+        licenseExplain: () => {
+            addUserMessage('Объясни лицензию простыми словами');
+            const think = showThinking();
+            setTimeout(() => {
+                removeThinking(think);
+                addBotMessage(`Простыми словами: ты можешь скачать и играть бесплатно. Нельзя продавать игру, выдавать её за свою или перевыкладывать без спроса. Если что‑то сломалось — мы не несём ответственности, но постараемся всё починить.`, false);
+            }, 1000);
+        },
+        teamSize: () => {
+            addUserMessage('Сколько человек в компании?');
+            const think = showThinking();
+            setTimeout(() => {
+                removeThinking(think);
+                addBotMessage(`В компании 1 человек. Но он ОЧЕНЬ трудолюбивый и преданный своему делу. За 1,5 месяца выпущено 3 игры!`, false);
             }, 1000);
         }
     };
