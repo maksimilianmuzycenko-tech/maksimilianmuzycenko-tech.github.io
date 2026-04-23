@@ -110,7 +110,6 @@
             transform: scale(1.02);
         }
 
-        /* Кнопка «Наверх» */
         .to-top {
             position: fixed;
             bottom: 30px;
@@ -134,8 +133,6 @@
             background: #cc4400;
             transform: scale(1.1);
         }
-
-        /* Индикатор прогресса чтения (полоска сверху) */
         .progress-container {
             position: fixed;
             top: 0;
@@ -151,52 +148,25 @@
             width: 0%;
             transition: width 0.2s ease;
         }
-
-        /* ===== АДАПТАЦИЯ ПОД ВСЕ УСТРОЙСТВА ===== */
-
-        /* Планшет горизонтально и большие телефоны (769px – 1199px) */
         @media (max-width: 1199px) and (min-width: 769px) {
             .container { max-width: 90%; }
             .header { font-size: 26px; }
-            .nav button { font-size: 15px; padding: 9px 18px; }
-            h1 { font-size: 24px; }
         }
-
-        /* Планшет вертикально и телефон горизонтально (481px – 768px) */
         @media (max-width: 768px) and (min-width: 481px) {
             body { padding: 15px; }
-            .container { max-width: 95%; }
             .header { font-size: 24px; }
-            .nav button { font-size: 14px; padding: 8px 15px; }
-            h1 { font-size: 22px; }
-            h2 { font-size: 19px; }
-            p, li { font-size: 15px; }
-            .footer { font-size: 13px; }
-            .to-top { width: 45px; height: 45px; font-size: 26px; }
-            .social-btn { font-size: 14px; padding: 6px 16px; }
         }
-
-        /* Телефон вертикально (до 480px) */
         @media (max-width: 480px) {
             body { padding: 10px; }
-            .container { width: 100%; padding: 0; }
             .header { font-size: 20px; }
-            .nav { gap: 10px; }
             .nav button { font-size: 13px; padding: 6px 12px; }
-            .license { padding: 12px; }
-            h1 { font-size: 20px; }
-            h2 { font-size: 17px; }
-            p, li { font-size: 13px; }
-            .footer { font-size: 11px; }
-            .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; }
-            .social { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
             .social-btn { font-size: 13px; padding: 6px 12px; margin: 0; }
+            .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; }
         }
     </style>
 </head>
 <body>
 
-<!-- Индикатор прогресса -->
 <div class="progress-container">
     <div class="progress-bar" id="progressBar"></div>
 </div>
@@ -210,42 +180,35 @@
         <button onclick="window.location.href='kliker.html'">🎯 Бесконечный кликер</button>
         <button onclick="window.location.href='mybis.html'">🏢 My Business</button>
         <button onclick="window.location.href='dob.html'">⛏️ Симулятор добычи</button>
-        <button onclick="window.location.href='supportgameofmaksim.html'">🛠️ Служба поддержки</button>
+        <button onclick="window.location.href='support.html'">🛠️ Служба поддержки</button>
         <button onclick="window.location.href='bot.html'">🤖 Чат-бот</button>
     </div>
 
     <div class="license">
         <h1>Лицензионное соглашение компании «Игры от Максима»</h1>
         <p><strong>Версия 1.0 от 20 апреля 2026 года</strong></p>
-
         <p>Настоящее лицензионное соглашение (далее — «Соглашение») является публичной офертой компании «Игры от Максима» (далее — «Лицензиар») для любого лица, желающего использовать программное обеспечение, разработанное Лицензиаром (далее — «Программное обеспечение»).</p>
-
         <h2>1. Предмет соглашения</h2>
         <p>1.1. Лицензиар предоставляет пользователю (далее — «Лицензиат») неисключительное право на использование Программного обеспечения на условиях, определённых настоящим Соглашением.</p>
         <p>1.2. Соглашение распространяется на все программные продукты, разработанные компанией «Игры от Максима», включая, но не ограничиваясь: «Бесконечный кликер», «My Business», «Симулятор добычи» и другие игры.</p>
-
         <h2>2. Права Лицензиата (что можно делать)</h2>
         <p>2.1. Устанавливать и использовать Программное обеспечение на любом устройстве.</p>
         <p>2.2. Копировать Программное обеспечение для личного использования.</p>
         <p>2.3. Передавать копии Программного обеспечения третьим лицам при условии сохранения всех уведомлений об авторских правах и настоящего Соглашения.</p>
         <p>2.4. Модифицировать исходный код Программного обеспечения для личного использования.</p>
-
         <h2>3. Ограничения и запреты (чего нельзя делать)</h2>
         <p>3.1. Запрещается продавать Программное обеспечение или его копии любым способом.</p>
         <p>3.2. Запрещается перевыкладывать Программное обеспечение на других сайтах, в магазинах приложений или файлообменниках без письменного разрешения Лицензиара.</p>
         <p>3.3. Запрещается заявлять, что Лицензиат является автором Программного обеспечения.</p>
         <p>3.4. Запрещается удалять или изменять уведомления об авторских правах и условия настоящего Соглашения.</p>
-
         <h2>4. Отказ от гарантий (ответственность)</h2>
         <p>4.1. Программное обеспечение предоставляется «как есть» («AS IS») без каких-либо явных или подразумеваемых гарантий.</p>
         <p>4.2. Лицензиар не гарантирует, что Программное обеспечение будет работать без ошибок, сбоев или прерываний.</p>
         <p>4.3. Лицензиар не гарантирует совместимость Программного обеспечения с любым конкретным устройством или операционной системой.</p>
         <p>4.4. Лицензиар не несёт ответственности за любые убытки, включая потерю данных, возникшие в результате использования или невозможности использования Программного обеспечения.</p>
-
         <h2>5. Срок действия и прекращение</h2>
         <p>5.1. Соглашение действует бессрочно до момента его расторжения.</p>
         <p>5.2. Лицензиар имеет право расторгнуть Соглашение в одностороннем порядке в случае нарушения Лицензиатом условий раздела 3 настоящего Соглашения.</p>
-
         <h2>6. Заключительные положения</h2>
         <p>6.1. Использование Программного обеспечения означает полное и безоговорочное принятие условий настоящего Соглашения.</p>
         <p>6.2. По всем вопросам, связанным с лицензированием, следует обращаться по адресу: <a href="mailto:yaatomshik@mail.ru">yaatomshik@mail.ru</a></p>
@@ -262,14 +225,10 @@
     </div>
 </div>
 
-<!-- Кнопка «Наверх» -->
 <a href="#" class="to-top" id="toTopBtn">↑</a>
 
 <script>
-    // Актуальный год в подвале
     document.getElementById('currentYear').innerText = new Date().getFullYear();
-
-    // Кнопка «Наверх» — появляется при скролле
     window.addEventListener('scroll', function() {
         let btn = document.getElementById('toTopBtn');
         if (window.scrollY > 300) {
@@ -280,8 +239,6 @@
             btn.style.pointerEvents = 'none';
         }
     });
-
-    // Индикатор прогресса чтения (полоска сверху)
     window.addEventListener('scroll', function() {
         const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -289,6 +246,5 @@
         document.getElementById('progressBar').style.width = scrolled + '%';
     });
 </script>
-
 </body>
 </html>
