@@ -18,7 +18,7 @@
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/108723844" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
-    
+
     <meta charset="UTF-8">
     <title>Игры от Максима — Главная</title>
     <style>
@@ -109,7 +109,7 @@
             background: #cc4400;
             transform: scale(1.02);
         }
-        
+
         /* Кнопка «Наверх» */
         .to-top {
             position: fixed;
@@ -134,7 +134,7 @@
             background: #cc4400;
             transform: scale(1.1);
         }
-        
+
         /* Индикатор прогресса чтения (полоска сверху) */
         .progress-container {
             position: fixed;
@@ -150,6 +150,47 @@
             background: #ff5500;
             width: 0%;
             transition: width 0.2s ease;
+        }
+
+        /* ===== АДАПТАЦИЯ ПОД ВСЕ УСТРОЙСТВА ===== */
+        
+        /* Планшет горизонтально и большие телефоны (769px – 1199px) */
+        @media (max-width: 1199px) and (min-width: 769px) {
+            .container { max-width: 90%; }
+            .header { font-size: 26px; }
+            .nav button { font-size: 15px; padding: 9px 18px; }
+            h1 { font-size: 24px; }
+        }
+
+        /* Планшет вертикально и телефон горизонтально (481px – 768px) */
+        @media (max-width: 768px) and (min-width: 481px) {
+            body { padding: 15px; }
+            .container { max-width: 95%; }
+            .header { font-size: 24px; }
+            .nav button { font-size: 14px; padding: 8px 15px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 19px; }
+            p, li { font-size: 15px; }
+            .footer { font-size: 13px; }
+            .to-top { width: 45px; height: 45px; font-size: 26px; }
+            .social-btn { font-size: 14px; padding: 6px 16px; }
+        }
+
+        /* Телефон вертикально (до 480px) */
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { width: 100%; padding: 0; }
+            .header { font-size: 20px; }
+            .nav { gap: 10px; }
+            .nav button { font-size: 13px; padding: 6px 12px; }
+            .license { padding: 12px; }
+            h1 { font-size: 20px; }
+            h2 { font-size: 17px; }
+            p, li { font-size: 13px; }
+            .footer { font-size: 11px; }
+            .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; }
+            .social { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+            .social-btn { font-size: 13px; padding: 6px 12px; margin: 0; }
         }
     </style>
 </head>
@@ -226,7 +267,7 @@
 <script>
     // Актуальный год в подвале
     document.getElementById('currentYear').innerText = new Date().getFullYear();
-    
+
     // Кнопка «Наверх» — появляется при скролле
     window.addEventListener('scroll', function() {
         let btn = document.getElementById('toTopBtn');
@@ -238,7 +279,7 @@
             btn.style.pointerEvents = 'none';
         }
     });
-    
+
     // Индикатор прогресса чтения (полоска сверху)
     window.addEventListener('scroll', function() {
         const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
