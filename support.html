@@ -18,8 +18,9 @@
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/108723844" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
-
+    
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Служба поддержки — Игры от Максима</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,16 +37,28 @@
         .to-top { position: fixed; bottom: 30px; right: 30px; background: #ff5500; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 28px; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 1000; }
         .to-top:hover { background: #cc4400; transform: scale(1.1); }
         .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: #ff5500; width: 0%; z-index: 1000; transition: width 0.2s ease; }
-        @media (max-width: 480px) { .container { padding: 10px; } .header { font-size: 20px; } .buttons a { font-size: 16px; padding: 10px; } .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; } }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .header { font-size: 22px; }
+            .buttons a { font-size: 17px; padding: 10px 20px; }
+            .support-box h1 { font-size: 24px; }
+            .support-box p, .support-box li { font-size: 15px; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 10px; }
+            .header { font-size: 20px; }
+            .buttons a { font-size: 15px; padding: 10px; }
+            .support-box h1 { font-size: 20px; }
+            .support-box p, .support-box li { font-size: 13px; }
+            .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; }
+        }
     </style>
 </head>
 <body>
-
 <div class="progress-bar" id="progressBar"></div>
-
 <div class="container">
     <div class="header">🎮 Игры от Максима — Служба поддержки</div>
-    
     <div class="support-box">
         <h1>СЛУЖБА ПОДДЕРЖКИ</h1>
         <p><strong>Нашли баг, ошибку или просто нужна помощь?</strong></p>
@@ -56,19 +69,15 @@
             <li>Отправьте письмо на e-mail: <strong>yaatomshik@mail.ru</strong></li>
         </ol>
     </div>
-
     <div class="buttons">
         <a href="mailto:yaatomshik@mail.ru?subject=Вопрос%20по%20игре" target="_blank">📧 Написать в поддержку</a>
         <a href="index.html">🏠 На главную</a>
     </div>
-
     <div class="footer">
         <p>© <span id="currentYear"></span> «Игры от Максима». Все права защищены.</p>
     </div>
 </div>
-
 <a href="#" class="to-top" id="toTopBtn">↑</a>
-
 <script>
     document.getElementById('currentYear').innerText = new Date().getFullYear();
     window.addEventListener('scroll', function() {
