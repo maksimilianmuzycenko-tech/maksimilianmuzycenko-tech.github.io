@@ -1,25 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-    m[i].l=1*new Date();
-    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-    ym(108723844, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true,
-        webvisor:true
-    });
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/108723844" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Симулятор добычи — Игры от Максима</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,16 +19,28 @@
         .to-top { position: fixed; bottom: 30px; right: 30px; background: #ff5500; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 28px; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 1000; }
         .to-top:hover { background: #cc4400; transform: scale(1.1); }
         .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: #ff5500; width: 0%; z-index: 1000; transition: width 0.2s ease; }
-        @media (max-width: 480px) { .container { padding: 10px; } .header { font-size: 20px; } .buttons a { font-size: 16px; padding: 10px; } .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; } }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .header { font-size: 22px; }
+            .buttons a { font-size: 17px; padding: 10px 20px; }
+            .game-description h1 { font-size: 24px; }
+            .game-description p { font-size: 15px; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 10px; }
+            .header { font-size: 20px; }
+            .buttons a { font-size: 15px; padding: 10px; }
+            .game-description h1 { font-size: 20px; }
+            .game-description p { font-size: 13px; }
+            .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; }
+        }
     </style>
 </head>
 <body>
-
 <div class="progress-bar" id="progressBar"></div>
-
 <div class="container">
     <div class="header">🎮 Игры от Максима — Симулятор добычи</div>
-    
     <div class="game-description">
         <h1>Симулятор добычи</h1>
         <p><strong>⛏️ Добывай ресурсы и продавай с выгодой</strong><br>Занимайся добычей четырёх видов ресурсов. Продавай их на монеты и наблюдай, как цена меняется — вовремя продавай, чтобы получить максимум!</p>
@@ -53,19 +48,15 @@
         <p><strong>💾 Автосохранение</strong><br>Игра автоматически сохраняет прогресс — можешь продолжать с того места, где остановился.</p>
         <p>🎮 Приятного времяпрепровождения!</p>
     </div>
-
     <div class="buttons">
         <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.energyboss" target="_blank">📱 Скачать в RuStore</a>
         <a href="index.html">🏠 На главную</a>
     </div>
-
     <div class="footer">
         <p>© <span id="currentYear"></span> «Игры от Максима». Все права защищены.</p>
     </div>
 </div>
-
 <a href="#" class="to-top" id="toTopBtn">↑</a>
-
 <script>
     document.getElementById('currentYear').innerText = new Date().getFullYear();
     window.addEventListener('scroll', function() {
