@@ -178,7 +178,7 @@
     function showThinking() {
         const div = document.createElement('div');
         div.className = 'thinking';
-        div.textContent = '🤔 Печатает...';
+        div.textContent = '🤔 1 секунда...';
         messages.appendChild(div);
         messages.scrollTop = messages.scrollHeight;
         return div;
@@ -195,7 +195,7 @@
             setTimeout(() => {
                 removeThinking(think);
                 addBotMessage(`Скачать можно в RuStore:<br>🔹 <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.klikerV" target="_blank">Бесконечный кликер</a><br>🔹 <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.BOSSINVEST" target="_blank">My Business</a><br>🔹 <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.energyboss" target="_blank">Симулятор добычи</a>`, true);
-            }, 1800);
+            }, 1000);
         },
         vk: () => {
             addUserMessage('Дай ссылку на ВК');
@@ -203,7 +203,7 @@
             setTimeout(() => {
                 removeThinking(think);
                 addBotMessage('📢 Сообщество ВКонтакте: <a href="https://vk.com/mygameatom" target="_blank">https://vk.com/mygameatom</a>', true);
-            }, 1500);
+            }, 1000);
         },
         github: () => {
             addUserMessage('Дай ссылку на GitHub');
@@ -211,20 +211,20 @@
             setTimeout(() => {
                 removeThinking(think);
                 addBotMessage('🐙 Профиль GitHub: <a href="https://github.com/maksimilianmuzycenko-tech" target="_blank">github.com/maksimilianmuzycenko-tech</a>', true);
-            }, 1500);
+            }, 1000);
         },
         support: () => {
             addUserMessage('Перенаправь к службе поддержки');
-            const think1 = showThinking();
+            const think = showThinking();
             setTimeout(() => {
-                removeThinking(think1);
+                removeThinking(think);
                 addBotMessage('Соединяю со службой поддержки...');
                 const think2 = showThinking();
                 setTimeout(() => {
                     removeThinking(think2);
-                    addBotMessage('Напишите нам на почту: <a href="mailto:yaatomshik@mail.ru">yaatomshik@mail.ru</a><br>Мы ответим в ближайшее время.', true);
-                }, 1200);
-            }, 1800);
+                    window.location.href = 'mailto:yaatomshik@mail.ru?subject=Вопрос%20по%20игре';
+                }, 1000);
+            }, 1000);
         },
         exit: () => {
             addUserMessage('Выйти из чата');
@@ -232,8 +232,8 @@
             setTimeout(() => {
                 removeThinking(think);
                 addBotMessage('Возвращаемся на главную страницу...');
-                setTimeout(() => { window.location.href = 'index.html'; }, 800);
-            }, 800);
+                setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+            }, 1000);
         }
     };
 
