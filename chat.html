@@ -17,15 +17,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 10px;
+            padding: 0;
+            margin: 0;
         }
         .chat-container {
             width: 100%;
-            max-width: 550px;
-            height: 95vh;
+            height: 100vh;
             background: #f5f5f5;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -141,15 +139,8 @@
             text-decoration: underline;
         }
         
-        /* Адаптация под телефоны */
+        /* Адаптация под телефоны вертикально */
         @media (max-width: 480px) {
-            body {
-                padding: 5px;
-            }
-            .chat-container {
-                height: 98vh;
-                border-radius: 16px;
-            }
             .chat-header {
                 padding: 10px 12px;
                 font-size: 16px;
@@ -192,16 +183,6 @@
                 font-size: 14px;
             }
         }
-        
-        /* Альбомная ориентация телефона */
-        @media (max-width: 850px) and (orientation: landscape) {
-            .chat-container {
-                height: 92vh;
-            }
-            .questions-panel {
-                max-height: 140px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -213,7 +194,7 @@
     <div class="chat-messages" id="chatMessages">
         <div class="bot-message">Привет! Я помощник. Выбери один из вопросов ниже.</div>
     </div>
-    <div class="questions-panel" id="questionsPanel">
+    <div class="questions-panel">
         <button class="question-btn" data-question="download">📱 Где скачать игры?</button>
         <button class="question-btn" data-question="vk">📢 Дай ссылку на ВК</button>
         <button class="question-btn" data-question="github">🐙 Дай ссылку на GitHub</button>
