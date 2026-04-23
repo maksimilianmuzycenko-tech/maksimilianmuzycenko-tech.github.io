@@ -132,17 +132,14 @@
     </style>
 </head>
 <body>
-
 <div class="chat-container">
     <div class="chat-header">
         🤖 Помощник «Игры от Максима»
         <button class="close-chat" id="exitChatBtn">✖</button>
     </div>
-
     <div class="chat-messages" id="chatMessages">
         <div class="bot-message">Привет! Я помощник. Выбери один из вопросов ниже.</div>
     </div>
-
     <div class="questions-panel" id="questionsPanel">
         <button class="question-btn" data-question="download">📱 Где скачать игры?</button>
         <button class="question-btn" data-question="vk">📢 Дай ссылку на ВК</button>
@@ -156,11 +153,9 @@
 </div>
 
 <script>
-    // Элементы
     const messagesContainer = document.getElementById('chatMessages');
     const exitBtn = document.getElementById('exitChatBtn');
 
-    // Добавление сообщения бота
     function addBotMessage(text, isHtml = false) {
         const msgDiv = document.createElement('div');
         msgDiv.className = 'bot-message';
@@ -173,7 +168,6 @@
         scrollToBottom();
     }
 
-    // Добавление сообщения пользователя
     function addUserMessage(text) {
         const msgDiv = document.createElement('div');
         msgDiv.className = 'user-message';
@@ -182,7 +176,6 @@
         scrollToBottom();
     }
 
-    // Показать "печатает"
     function showThinking() {
         const thinkingDiv = document.createElement('div');
         thinkingDiv.className = 'thinking';
@@ -201,15 +194,14 @@
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    // Сценарии ответов (динамические)
     function handleQuestion(questionType) {
         switch (questionType) {
             case 'download':
                 addUserMessage('Где скачать игры?');
-                const thinking1 = showThinking();
+                const t1 = showThinking();
                 setTimeout(() => {
-                    removeThinking(thinking1);
-                    addBotMessage(`Скачать можно в официальном магазине RuStore:<br>
+                    removeThinking(t1);
+                    addBotMessage(`Скачать можно в RuStore:<br>
                         🔹 <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.klikerV" target="_blank">Бесконечный кликер</a><br>
                         🔹 <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.BOSSINVEST" target="_blank">My Business: Строй Империю</a><br>
                         🔹 <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.energyboss" target="_blank">Симулятор добычи</a>`, true);
@@ -218,31 +210,31 @@
 
             case 'vk':
                 addUserMessage('Дай ссылку на ВК');
-                const thinking2 = showThinking();
+                const t2 = showThinking();
                 setTimeout(() => {
-                    removeThinking(thinking2);
+                    removeThinking(t2);
                     addBotMessage('📢 Сообщество ВКонтакте: <a href="https://vk.com/mygameatom" target="_blank">https://vk.com/mygameatom</a>', true);
                 }, 2000);
                 break;
 
             case 'github':
                 addUserMessage('Дай ссылку на GitHub');
-                const thinking3 = showThinking();
+                const t3 = showThinking();
                 setTimeout(() => {
-                    removeThinking(thinking3);
+                    removeThinking(t3);
                     addBotMessage('🐙 Профиль GitHub: <a href="https://github.com/maksimilianmuzycenko-tech" target="_blank">github.com/maksimilianmuzycenko-tech</a>', true);
                 }, 2000);
                 break;
 
             case 'support':
                 addUserMessage('Перенаправь к службе поддержки');
-                const thinking4 = showThinking();
+                const t4 = showThinking();
                 setTimeout(() => {
-                    removeThinking(thinking4);
+                    removeThinking(t4);
                     addBotMessage('Соединяю со службой поддержки...');
-                    const thinking5 = showThinking();
+                    const t5 = showThinking();
                     setTimeout(() => {
-                        removeThinking(thinking5);
+                        removeThinking(t5);
                         addBotMessage('Напишите нам на почту: <a href="mailto:yaatomshik@mail.ru">yaatomshik@mail.ru</a><br>Мы ответим в ближайшее время.', true);
                     }, 1000);
                 }, 2000);
@@ -250,9 +242,9 @@
 
             case 'exit':
                 addUserMessage('Выйти из чата');
-                const thinking6 = showThinking();
+                const t6 = showThinking();
                 setTimeout(() => {
-                    removeThinking(thinking6);
+                    removeThinking(t6);
                     addBotMessage('Возвращаемся на главную страницу...');
                     setTimeout(() => {
                         window.location.href = 'index.html';
@@ -267,20 +259,16 @@
         }
     }
 
-    // Вешаем обработчики на кнопки
-    const allButtons = document.querySelectorAll('.question-btn');
-    allButtons.forEach(btn => {
+    document.querySelectorAll('.question-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const qType = btn.getAttribute('data-question');
             handleQuestion(qType);
         });
     });
 
-    // Кнопка выхода из чата (закрыть страницу/уйти на главную, как решишь)
     exitBtn.addEventListener('click', () => {
         window.location.href = 'index.html';
     });
 </script>
-
 </body>
 </html>
