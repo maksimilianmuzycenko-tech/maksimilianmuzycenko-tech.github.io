@@ -122,6 +122,45 @@
             width: 0%;
             transition: width 0.2s ease;
         }
+
+        /* ===== АДАПТАЦИЯ ПОД ВСЕ УСТРОЙСТВА ===== */
+        
+        /* Планшет горизонтально и большие телефоны (769px – 1199px) */
+        @media (max-width: 1199px) and (min-width: 769px) {
+            .container { max-width: 90%; }
+            .header { font-size: 26px; }
+            button { font-size: 17px; padding: 10px 22px; }
+            h1 { font-size: 24px; }
+        }
+
+        /* Планшет вертикально и телефон горизонтально (481px – 768px) */
+        @media (max-width: 768px) and (min-width: 481px) {
+            body { padding: 15px; }
+            .container { max-width: 95%; }
+            .header { font-size: 24px; }
+            .buttons { gap: 15px; }
+            button { font-size: 17px; padding: 10px 20px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 19px; }
+            p, li { font-size: 15px; }
+            .footer { font-size: 13px; }
+            .to-top { width: 45px; height: 45px; font-size: 26px; }
+        }
+
+        /* Телефон вертикально (до 480px) */
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { width: 100%; padding: 0; }
+            .header { font-size: 20px; }
+            .game-description, .license, .support-box { padding: 12px; }
+            h1 { font-size: 20px; }
+            h2 { font-size: 17px; }
+            p, li { font-size: 13px; }
+            .buttons { flex-direction: column; align-items: stretch; gap: 10px; }
+            button { font-size: 16px; padding: 10px; width: 100%; }
+            .footer { font-size: 11px; }
+            .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; }
+        }
     </style>
 </head>
 <body>
