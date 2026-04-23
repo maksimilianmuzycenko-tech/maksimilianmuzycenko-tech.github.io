@@ -18,7 +18,7 @@
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/108723844" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
-    
+
     <meta charset="UTF-8">
     <title>My Business — Игры от Максима</title>
     <style>
@@ -80,7 +80,7 @@
             border: none;
             border-top: 1px solid #ddd;
         }
-        
+
         /* Кнопка «Наверх» */
         .to-top {
             position: fixed;
@@ -105,7 +105,7 @@
             background: #cc4400;
             transform: scale(1.1);
         }
-        
+
         /* Индикатор прогресса чтения (полоска сверху) */
         .progress-container {
             position: fixed;
@@ -121,6 +121,45 @@
             background: #ff5500;
             width: 0%;
             transition: width 0.2s ease;
+        }
+
+        /* ===== АДАПТАЦИЯ ПОД ВСЕ УСТРОЙСТВА ===== */
+        
+        /* Планшет горизонтально и большие телефоны (769px – 1199px) */
+        @media (max-width: 1199px) and (min-width: 769px) {
+            .container { max-width: 90%; }
+            .header { font-size: 26px; }
+            button { font-size: 17px; padding: 10px 22px; }
+            h1 { font-size: 24px; }
+        }
+
+        /* Планшет вертикально и телефон горизонтально (481px – 768px) */
+        @media (max-width: 768px) and (min-width: 481px) {
+            body { padding: 15px; }
+            .container { max-width: 95%; }
+            .header { font-size: 24px; }
+            .buttons { gap: 15px; }
+            button { font-size: 17px; padding: 10px 20px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 19px; }
+            p, li { font-size: 15px; }
+            .footer { font-size: 13px; }
+            .to-top { width: 45px; height: 45px; font-size: 26px; }
+        }
+
+        /* Телефон вертикально (до 480px) */
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { width: 100%; padding: 0; }
+            .header { font-size: 20px; }
+            .game-description { padding: 12px; }
+            h1 { font-size: 20px; }
+            h2 { font-size: 17px; }
+            p, li { font-size: 13px; }
+            .buttons { flex-direction: column; align-items: stretch; gap: 10px; }
+            button { font-size: 16px; padding: 10px; width: 100%; }
+            .footer { font-size: 11px; }
+            .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; }
         }
     </style>
 </head>
@@ -182,7 +221,7 @@
 <script>
     // Актуальный год в подвале
     document.getElementById('currentYear').innerText = new Date().getFullYear();
-    
+
     // Кнопка «Наверх» — появляется при скролле
     window.addEventListener('scroll', function() {
         let btn = document.getElementById('toTopBtn');
@@ -194,7 +233,7 @@
             btn.style.pointerEvents = 'none';
         }
     });
-    
+
     // Индикатор прогресса чтения (полоска сверху)
     window.addEventListener('scroll', function() {
         const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
