@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Игры от Максима</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: white;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            color: #111;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ff5500;
+            padding-bottom: 10px;
+        }
+        .nav {
+            text-align: center;
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .nav a {
+            background: #ff5500;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: 0.2s;
+            display: inline-block;
+        }
+        .nav a:hover {
+            background: #cc4400;
+            transform: scale(1.02);
+        }
+        .license {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 6px solid #ff5500;
+            margin-top: 20px;
+        }
+        .license h1 {
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+        .license h2 {
+            font-size: 20px;
+            margin: 20px 0 10px;
+            color: #ff5500;
+        }
+        .license p {
+            margin: 10px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 14px;
+            color: #666;
+        }
+        .social {
+            margin: 20px 0;
+        }
+        .social a {
+            display: inline-block;
+            background: #ff5500;
+            color: white;
+            font-size: 16px;
+            padding: 8px 20px;
+            margin: 0 10px;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .social a:hover {
+            background: #cc4400;
+            transform: scale(1.02);
+        }
+        .to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #ff5500;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 28px;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .to-top:hover {
+            background: #cc4400;
+            transform: scale(1.1);
+        }
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #ff5500;
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.2s ease;
+        }
+        @media (max-width: 480px) {
+            .container { padding: 10px; }
+            .header { font-size: 20px; }
+            .nav a { font-size: 13px; padding: 6px 12px; }
+            .social a { font-size: 13px; padding: 6px 12px; margin: 0 5px; }
+            .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="container">
+    <div class="header">🎮 Игры от Максима</div>
+    
+    <div class="nav">
+        <a href="clicker.html">🎯 Бесконечный кликер</a>
+        <a href="business.html">🏢 My Business</a>
+        <a href="miner.html">⛏️ Симулятор добычи</a>
+        <a href="support.html">🛠️ Служба поддержки</a>
+        <a href="chat.html">🤖 Чат-бот</a>
+    </div>
+
+    <div class="license">
+        <h1>Лицензионное соглашение компании «Игры от Максима»</h1>
+        <p><strong>Версия 1.0 от 20 апреля 2026 года</strong></p>
+        <p>Настоящее лицензионное соглашение является публичной офертой компании «Игры от Максима» для любого лица, желающего использовать программное обеспечение, разработанное Лицензиаром.</p>
+        
+        <h2>1. Предмет соглашения</h2>
+        <p>1.1. Лицензиар предоставляет пользователю неисключительное право на использование Программного обеспечения.</p>
+        <p>1.2. Соглашение распространяется на все программные продукты: «Бесконечный кликер», «My Business», «Симулятор добычи».</p>
+        
+        <h2>2. Права Лицензиата</h2>
+        <p>2.1. Устанавливать и использовать Программное обеспечение на любом устройстве.</p>
+        <p>2.2. Копировать Программное обеспечение для личного использования.</p>
+        <p>2.3. Передавать копии третьим лицам при условии сохранения всех уведомлений об авторских правах.</p>
+        <p>2.4. Модифицировать исходный код для личного использования.</p>
+        
+        <h2>3. Ограничения и запреты</h2>
+        <p>3.1. Запрещается продавать Программное обеспечение или его копии любым способом.</p>
+        <p>3.2. Запрещается перевыкладывать Программное обеспечение на других сайтах, в магазинах приложений или файлообменниках без письменного разрешения Лицензиара.</p>
+        <p>3.3. Запрещается заявлять, что Лицензиат является автором Программного обеспечения.</p>
+        <p>3.4. Запрещается удалять или изменять уведомления об авторских правах.</p>
+        
+        <h2>4. Отказ от гарантий</h2>
+        <p>4.1. Программное обеспечение предоставляется «как есть» без каких-либо явных или подразумеваемых гарантий.</p>
+        <p>4.2. Лицензиар не гарантирует, что Программное обеспечение будет работать без ошибок, сбоев или прерываний.</p>
+        <p>4.3. Лицензиар не гарантирует совместимость с любым конкретным устройством или операционной системой.</p>
+        <p>4.4. Лицензиар не несёт ответственности за любые убытки, включая потерю данных.</p>
+        
+        <h2>5. Срок действия и прекращение</h2>
+        <p>5.1. Соглашение действует бессрочно до момента его расторжения.</p>
+        <p>5.2. Лицензиар имеет право расторгнуть Соглашение в одностороннем порядке в случае нарушения условий.</p>
+        
+        <h2>6. Заключительные положения</h2>
+        <p>6.1. Использование Программного обеспечения означает полное и безоговорочное принятие условий Соглашения.</p>
+        <p>6.2. По всем вопросам, связанным с лицензированием, обращаться по адресу: <a href="mailto:yaatomshik@mail.ru">yaatomshik@mail.ru</a></p>
+    </div>
+
+    <div class="footer">
+        <div class="social">
+            <a href="https://vk.com/mygameatom" target="_blank">VK</a>
+            <a href="https://github.com/maksimilianmuzycenko-tech" target="_blank">GitHub</a>
+            <a href="mailto:yaatomshik@mail.ru" target="_blank">Email</a>
+        </div>
+        <p>© <span id="currentYear"></span> «Игры от Максима». Все права защищены.</p>
+    </div>
+</div>
+
+<a href="#" class="to-top" id="toTopBtn">↑</a>
+
+<script>
+    document.getElementById('currentYear').innerText = new Date().getFullYear();
+    
+    window.addEventListener('scroll', function() {
+        let btn = document.getElementById('toTopBtn');
+        if (window.scrollY > 300) {
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+        } else {
+            btn.style.opacity = '0';
+            btn.style.pointerEvents = 'none';
+        }
+        
+        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        let scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+    });
+    
+    document.getElementById('toTopBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+</body>
+</html>

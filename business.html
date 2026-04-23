@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>My Business — Игры от Максима</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: white; font-family: Arial, sans-serif; line-height: 1.5; color: #111; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 30px; border-bottom: 2px solid #ff5500; padding-bottom: 10px; }
+        .game-description { background: #f9f9f9; padding: 20px; border-radius: 16px; margin-bottom: 30px; border-left: 6px solid #ff5500; }
+        .game-description h1 { margin-bottom: 15px; }
+        .game-description p { margin: 10px 0; }
+        .buttons { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin: 30px 0; }
+        .buttons a { background: #ff5500; color: white; font-size: 18px; padding: 12px 24px; text-decoration: none; border-radius: 30px; transition: 0.2s; display: inline-block; }
+        .buttons a:hover { background: #cc4400; transform: scale(1.02); }
+        .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 14px; color: #666; }
+        .to-top { position: fixed; bottom: 30px; right: 30px; background: #ff5500; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 28px; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 1000; }
+        .to-top:hover { background: #cc4400; transform: scale(1.1); }
+        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: #ff5500; width: 0%; z-index: 1000; transition: width 0.2s ease; }
+        @media (max-width: 480px) { .container { padding: 10px; } .header { font-size: 20px; } .buttons a { font-size: 16px; padding: 10px; } .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; } }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="container">
+    <div class="header">🎮 Игры от Максима — My Business</div>
+    
+    <div class="game-description">
+        <h1>My Business: Строй Империю</h1>
+        <p>Любишь чувствовать себя настоящим Боссом? В этой игре ты Босс! И здесь ты принимаешь все решения.</p>
+        <p><strong>🏢 Управляй своим бизнесом</strong><br>Хочешь нанять рабочих 1 или 2 уровня? Или расширить офис? Всё в твоих руках.</p>
+        <p><strong>💰 Экономика и налоги</strong><br>Налоги каждую игровую неделю (35 секунд). Если не сможешь выплатить налог — есть риск потерять весь прогресс. Доход поступает каждый игровой день (5 секунд).</p>
+        <p><strong>🎁 Бонусы за активность</strong><br>Каждые 15 минут — +1 алмаз, каждые 30 минут — +1 рубин.</p>
+        <p><strong>💎 Бесплатный премиум-магазин</strong><br>Всё в магазине покупается за рубины, которые зарабатываются в игре.</p>
+        <p><strong>⚡ Супер-дни</strong><br>В событии «ВСТРЕЧАЙ СУПЕР-ДНИ» можно увольнять рабочих и получать 50% от их стоимости найма, а также ловить хорошие скидки в премиум-магазине.</p>
+        <p><strong>🎮 Промокоды</strong><br>Введи промокод <strong>novichok</strong> и получи стартовый бонус.</p>
+        <p><strong>🔄 Сброс игры</strong><br>Можно сбросить прогресс до момента «как только что из магазина».</p>
+        <p>💾 Автоматические сохранения и их импорт. 🌐 Игра может работать как с Интернетом, так и без него (но некоторые функции ограничены).</p>
+    </div>
+
+    <div class="buttons">
+        <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.BOSSINVEST" target="_blank">📱 Скачать в RuStore</a>
+        <a href="index.html">🏠 На главную</a>
+    </div>
+
+    <div class="footer">
+        <p>© <span id="currentYear"></span> «Игры от Максима». Все права защищены.</p>
+    </div>
+</div>
+
+<a href="#" class="to-top" id="toTopBtn">↑</a>
+
+<script>
+    document.getElementById('currentYear').innerText = new Date().getFullYear();
+    window.addEventListener('scroll', function() {
+        let btn = document.getElementById('toTopBtn');
+        btn.style.opacity = window.scrollY > 300 ? '1' : '0';
+        btn.style.pointerEvents = window.scrollY > 300 ? 'auto' : 'none';
+        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        document.getElementById('progressBar').style.width = (winScroll / height) * 100 + '%';
+    });
+    document.getElementById('toTopBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+</body>
+</html>
