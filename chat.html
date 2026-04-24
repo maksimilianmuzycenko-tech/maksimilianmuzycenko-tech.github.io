@@ -1,153 +1,32 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-    m[i].l=1*new Date();
-    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-    ym(108723844, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true,
-        webvisor:true
-    });
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/108723844" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Помощник — Игры от Максима</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: white;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .chat-header {
-            background: #ff5500;
-            color: white;
-            padding: 14px 16px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .close-chat {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 26px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-        .close-chat:active {
-            background: rgba(255,255,255,0.2);
-        }
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: #ffffff;
-        }
-        .bot-message, .user-message {
-            max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 18px;
-            font-size: 14px;
-            line-height: 1.4;
-            word-wrap: break-word;
-        }
-        .bot-message {
-            background: #f1f1f1;
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-        }
-        .user-message {
-            background: #ff5500;
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-        .thinking {
-            background: #f1f1f1;
-            color: #888;
-            font-style: italic;
-            padding: 10px 14px;
-            border-radius: 18px;
-            font-size: 13px;
-            align-self: flex-start;
-        }
-        .questions-panel {
-            background: white;
-            border-top: 1px solid #e0e0e0;
-            padding: 12px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-        .question-btn {
-            background: #f1f1f1;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 30px;
-            font-size: 13px;
-            cursor: pointer;
-            text-align: left;
-            flex: 1 0 auto;
-        }
-        .question-btn:active {
-            background: #ff5500;
-            color: white;
-        }
-        .footer-note {
-            text-align: center;
-            font-size: 10px;
-            background: #f9f9f9;
-            padding: 6px;
-            color: #aaa;
-            border-top: 1px solid #efefef;
-            flex-shrink: 0;
-        }
-        a {
-            color: #ff5500;
-            text-decoration: none;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0a0a0a; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; height: 100vh; display: flex; flex-direction: column; }
+        .chat-header { background: #ff5500; color: white; padding: 14px 16px; font-size: 18px; font-weight: bold; text-align: center; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .close-chat { background: none; border: none; color: white; font-size: 26px; cursor: pointer; font-weight: bold; width: 40px; height: 40px; border-radius: 50%; }
+        .close-chat:active { background: rgba(255,255,255,0.2); }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; background: #ffffff; }
+        .bot-message, .user-message { max-width: 85%; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+        .bot-message { background: #f1f1f1; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .user-message { background: #ff5500; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .thinking { background: #f1f1f1; color: #888; font-style: italic; padding: 10px 14px; border-radius: 18px; font-size: 13px; align-self: flex-start; }
+        .search-box { background: white; border-bottom: 1px solid #e0e0e0; padding: 12px; flex-shrink: 0; }
+        .search-box input { width: 100%; padding: 10px 12px; font-size: 16px; border: 1px solid #ddd; border-radius: 30px; outline: none; background: white; color: black; }
+        .questions-panel { background: white; border-top: 1px solid #e0e0e0; padding: 12px; display: flex; flex-wrap: wrap; gap: 8px; max-height: 200px; overflow-y: auto; flex-shrink: 0; }
+        .question-btn { background: #f1f1f1; border: none; padding: 8px 14px; border-radius: 30px; font-size: 13px; cursor: pointer; text-align: left; flex: 1 0 auto; }
+        .question-btn:active { background: #ff5500; color: white; }
+        .footer-note { text-align: center; font-size: 10px; background: #f9f9f9; padding: 6px; color: #aaa; border-top: 1px solid #efefef; flex-shrink: 0; }
+        a { color: #ff5500; text-decoration: none; }
         @media (max-width: 480px) {
-            .chat-header {
-                padding: 10px 12px;
-                font-size: 16px;
-            }
-            .bot-message, .user-message {
-                max-width: 90%;
-                font-size: 13px;
-                padding: 8px 12px;
-            }
-            .question-btn {
-                font-size: 12px;
-                padding: 6px 12px;
-            }
+            .chat-header { padding: 10px 12px; font-size: 16px; }
+            .bot-message, .user-message { max-width: 90%; font-size: 13px; padding: 8px 12px; }
+            .question-btn { font-size: 12px; padding: 6px 12px; }
+            .search-box input { font-size: 14px; padding: 8px 12px; }
         }
     </style>
 </head>
@@ -159,32 +38,44 @@
 </div>
 
 <div class="chat-messages" id="chatMessages">
-    <div class="bot-message">Привет! Я помощник. Выбери вопрос ниже.</div>
+    <div class="bot-message">Привет! Я помощник. Выбери вопрос ниже или начни печатать.</div>
 </div>
 
-<div class="questions-panel">
-    <!-- СТАРЫЕ ВОПРОСЫ -->
-    <button class="question-btn" data-question="download">📱 Где скачать игры?</button>
-    <button class="question-btn" data-question="vk">📢 Дай ссылку на ВК</button>
-    <button class="question-btn" data-question="github">🐙 Дай ссылку на GitHub</button>
-    <button class="question-btn" data-question="support">🛠️ Перенаправь к службе поддержки</button>
-    <button class="question-btn" data-question="exit">🚪 Выйти из чата</button>
-    
-    <!-- НОВЫЕ ВОПРОСЫ -->
-    <button class="question-btn" data-question="descClicker">🎮 Описание «Бесконечный кликер»</button>
-    <button class="question-btn" data-question="descBusiness">🏢 Описание «My Business»</button>
-    <button class="question-btn" data-question="descMiner">⛏️ Описание «Симулятор добычи»</button>
-    <button class="question-btn" data-question="future">🚀 Будет ли компания развиваться?</button>
-    <button class="question-btn" data-question="licenseText">📜 Лицензионное соглашение</button>
-    <button class="question-btn" data-question="licenseExplain">🧠 Объясни лицензию простыми словами</button>
-    <button class="question-btn" data-question="teamSize">👥 Сколько человек в компании?</button>
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍 Начни печатать вопрос... (например, «Как сохранить»)">
 </div>
+
+<div class="questions-panel" id="questionsPanel"></div>
 
 <div class="footer-note">Поддержка работает 24/7</div>
 
 <script>
     const messages = document.getElementById('chatMessages');
     const exitBtn = document.getElementById('exitChatBtn');
+    const searchInput = document.getElementById('searchInput');
+    const questionsPanel = document.getElementById('questionsPanel');
+
+    // БАЗА ВОПРОСОВ И ОТВЕТОВ
+    const questionsData = [
+        { text: "📱 Где скачать игры?", handler: "download" },
+        { text: "📢 Дай ссылку на ВК", handler: "vk" },
+        { text: "🐙 Дай ссылку на GitHub", handler: "github" },
+        { text: "🛠️ Перенаправь к службе поддержки", handler: "support" },
+        { text: "🚪 Выйти из чата", handler: "exit" },
+        { text: "🎮 Описание «Бесконечный кликер»", handler: "descClicker" },
+        { text: "🏢 Описание «My Business»", handler: "descBusiness" },
+        { text: "⛏️ Описание «Симулятор добычи»", handler: "descMiner" },
+        { text: "🚀 Будет ли компания развиваться?", handler: "future" },
+        { text: "📜 Лицензионное соглашение", handler: "licenseText" },
+        { text: "🧠 Объясни лицензию простыми словами", handler: "licenseExplain" },
+        { text: "👥 Сколько человек в компании?", handler: "teamSize" },
+        { text: "❓ Почему сайт стал чёрным?", handler: "blackTheme" },
+        { text: "🔄 Как обновить игру до последней версии?", handler: "updateGame" },
+        { text: "📆 Что будет в следующем обновлении?", handler: "nextUpdate" },
+        { text: "🍏 Игра появится на iOS?", handler: "iosQuestion" },
+        { text: "📲 Как связаться с разработчиком кроме почты?", handler: "contactOther" },
+        { text: "📊 Сколько весит сайт?", handler: "siteWeight" }
+    ];
 
     function addBotMessage(text, isHtml = false) {
         const div = document.createElement('div');
@@ -216,120 +107,192 @@
         if (div && div.remove) div.remove();
     }
 
+    // ОТВЕТЫ
     const answers = {
-        // СТАРЫЕ
         download: () => {
             addUserMessage('Где скачать игры?');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t);
                 addBotMessage(`Скачать можно в RuStore:<br>🔹 <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.klikerV" target="_blank">Бесконечный кликер</a><br>🔹 <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.BOSSINVEST" target="_blank">My Business</a><br>🔹 <a href="https://www.rustore.ru/catalog/app/appinventor.ai_maksimilianmuzycenko.energyboss" target="_blank">Симулятор добычи</a>`, true);
             }, 1000);
         },
         vk: () => {
             addUserMessage('Дай ссылку на ВК');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t);
                 addBotMessage('📢 Сообщество ВКонтакте: <a href="https://vk.com/mygameatom" target="_blank">https://vk.com/mygameatom</a>', true);
             }, 1000);
         },
         github: () => {
             addUserMessage('Дай ссылку на GitHub');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t);
                 addBotMessage('🐙 Профиль GitHub: <a href="https://github.com/maksimilianmuzycenko-tech" target="_blank">github.com/maksimilianmuzycenko-tech</a>', true);
             }, 1000);
         },
         support: () => {
             addUserMessage('Перенаправь к службе поддержки');
-            const think = showThinking();
+            const t1 = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t1);
                 addBotMessage('Соединяю со службой поддержки...');
-                const think2 = showThinking();
+                const t2 = showThinking();
                 setTimeout(() => {
-                    removeThinking(think2);
+                    removeThinking(t2);
                     window.location.href = 'mailto:yaatomshik@mail.ru?subject=Вопрос%20по%20игре';
                 }, 1000);
             }, 1000);
         },
         exit: () => {
             addUserMessage('Выйти из чата');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t);
                 addBotMessage('Возвращаемся на главную страницу...');
                 setTimeout(() => { window.location.href = 'index.html'; }, 1000);
             }, 1000);
         },
-        
-        // НОВЫЕ
         descClicker: () => {
             addUserMessage('Описание «Бесконечный кликер»');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
-                addBotMessage(`💰 Зарабатывай очки простыми кликами.<br>⚡ Улучшай силу клика.<br>🤖 Автокликер — твой помощник.<br>🎁 Бонусы каждые 5 минут и 100 кликов.<br>💎 Древо рубинов.<br>🏆 Достижения.<br>💾 Автосохранение.<br>🎮 Промокод: novichokrusturekliker`, true);
+                removeThinking(t);
+                addBotMessage(`💰 Кликай и зарабатывай очки.<br>⚡ Улучшай силу клика.<br>🤖 Автокликер — твой помощник.<br>🎁 Бонусы каждые 5 минут и 100 кликов.<br>💎 Древо рубинов.<br>🏆 Достижения.<br>💾 Автосохранение.<br>🎮 Промокод: novichokrusturekliker`, true);
             }, 1000);
         },
         descBusiness: () => {
             addUserMessage('Описание «My Business»');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t);
                 addBotMessage(`🏢 Ты Босс!<br>💰 Налоги каждые 35 секунд, доход каждые 5 секунд.<br>🎁 Бонусы: каждые 15 минут +1 алмаз, 30 минут +1 рубин.<br>💎 Бесплатный премиум‑магазин.<br>⚡ Супер‑дни — увольняй рабочих с возвратом 50% стоимости найма.<br>🎮 Промокод: novichok`, true);
             }, 1000);
         },
         descMiner: () => {
             addUserMessage('Описание «Симулятор добычи»');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t);
                 addBotMessage(`⛏️ Добывай 4 вида ресурсов.<br>📈 Продавай, пока цена высокая.<br>🔧 Улучшай силу добычи.<br>💾 Автосохранение.`, true);
             }, 1000);
         },
         future: () => {
             addUserMessage('Будет ли компания развиваться?');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t);
                 addBotMessage(`Да! В планах: свой сервер, таблица лидеров, ежедневные события, переход на Godot, а может, даже создание новой игры. Компания будет расти и радовать игроков.`, false);
             }, 1000);
         },
         licenseText: () => {
             addUserMessage('Какое лицензионное соглашение?');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t);
                 addBotMessage(`Полный текст лицензии можно прочитать на главной странице сайта в блоке «Лицензионное соглашение».`, false);
             }, 1000);
         },
         licenseExplain: () => {
             addUserMessage('Объясни лицензию простыми словами');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t);
                 addBotMessage(`Простыми словами: ты можешь скачать и играть бесплатно. Нельзя продавать игру, выдавать её за свою или перевыкладывать без спроса. Если что‑то сломалось — мы не несём ответственности, но постараемся всё починить.`, false);
             }, 1000);
         },
         teamSize: () => {
             addUserMessage('Сколько человек в компании?');
-            const think = showThinking();
+            const t = showThinking();
             setTimeout(() => {
-                removeThinking(think);
+                removeThinking(t);
                 addBotMessage(`В компании 1 человек. Но он ОЧЕНЬ трудолюбивый и преданный своему делу. За 1,5 месяца выпущено 3 игры!`, false);
+            }, 1000);
+        },
+        blackTheme: () => {
+            addUserMessage('Почему сайт стал чёрным?');
+            const t = showThinking();
+            setTimeout(() => {
+                removeThinking(t);
+                addBotMessage(`Мы обновили дизайн — теперь сайт выглядит современно и стильно, чтобы игры было приятнее смотреть. Плюс экономит батарею на OLED-экранах!`, false);
+            }, 1000);
+        },
+        updateGame: () => {
+            addUserMessage('Как обновить игру до последней версии?');
+            const t = showThinking();
+            setTimeout(() => {
+                removeThinking(t);
+                addBotMessage(`Просто переустанови игру через RuStore или скачай свежий APK на GitHub. Лучше сначала сделать экспорт прогресса (чтобы не потерять данные).`, false);
+            }, 1000);
+        },
+        nextUpdate: () => {
+            addUserMessage('Что будет в следующем обновлении?');
+            const t = showThinking();
+            setTimeout(() => {
+                removeThinking(t);
+                addBotMessage(`Скоро: таблица лидеров, свой сервер, ещё больше бонусов и, возможно, многопользовательский режим!`, false);
+            }, 1000);
+        },
+        iosQuestion: () => {
+            addUserMessage('Игра появится на iOS?');
+            const t = showThinking();
+            setTimeout(() => {
+                removeThinking(t);
+                addBotMessage(`Пока в планах нет, но если наберём много запросов — подумаем. Следи за новостями в VK!`, false);
+            }, 1000);
+        },
+        contactOther: () => {
+            addUserMessage('Как связаться с разработчиком кроме почты?');
+            const t = showThinking();
+            setTimeout(() => {
+                removeThinking(t);
+                addBotMessage(`Пиши в сообщество VK: <a href="https://vk.com/mygameatom" target="_blank">https://vk.com/mygameatom</a> — я отвечаю быстро!`, true);
+            }, 1000);
+        },
+        siteWeight: () => {
+            addUserMessage('Сколько весит сайт?');
+            const t = showThinking();
+            setTimeout(() => {
+                removeThinking(t);
+                addBotMessage(`Весь сайт весит чуть больше 1 МБ, а одна страница — около 10-12 КБ. Это очень мало, поэтому сайт летает даже на медленном интернете!`, false);
             }, 1000);
         }
     };
 
-    document.querySelectorAll('.question-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const q = btn.getAttribute('data-question');
-            if (answers[q]) answers[q]();
+    // ОТРИСОВКА КНОПОК (ФИЛЬТР)
+    function renderButtons(filterText = '') {
+        questionsPanel.innerHTML = '';
+        const filtered = questionsData.filter(q => q.text.toLowerCase().includes(filterText.toLowerCase()));
+        if (filtered.length === 0) {
+            const msg = document.createElement('div');
+            msg.style.padding = '10px';
+            msg.style.textAlign = 'center';
+            msg.style.color = '#888';
+            msg.innerText = '❓ Ничего не найдено. Попробуй другие буквы.';
+            questionsPanel.appendChild(msg);
+            return;
+        }
+        filtered.forEach(q => {
+            const btn = document.createElement('button');
+            btn.className = 'question-btn';
+            btn.textContent = q.text;
+            btn.addEventListener('click', () => {
+                const handler = answers[q.handler];
+                if (handler) handler();
+            });
+            questionsPanel.appendChild(btn);
         });
+    }
+
+    // ПОИСК ПРИ ВВОДЕ
+    searchInput.addEventListener('input', (e) => {
+        renderButtons(e.target.value);
     });
+
+    // ПЕРВОНАЧАЛЬНАЯ ОТРИСОВКА
+    renderButtons();
 
     exitBtn.addEventListener('click', () => {
         window.location.href = 'index.html';
