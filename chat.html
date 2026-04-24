@@ -77,7 +77,8 @@
         { text: "📲 Как связаться с разработчиком кроме почты?", handler: "contactOther" },
         { text: "📊 Сколько весит сайт?", handler: "siteWeight" },
         { text: "❓ Почему вы перешли на другую платформу?", handler: "whyMigrate" },
-        { text: "📦 Сколько весят игры в магазине и после установки?", handler: "gameSize" }
+        { text: "📦 Сколько весят игры в магазине и после установки?", handler: "gameSize" },
+        { text: "💡 Предложить идею", handler: "suggest" }
     ];
 
     function addBotMessage(text, isHtml = false) {
@@ -267,6 +268,24 @@
             setTimeout(() => {
                 removeThinking(t);
                 addBotMessage(`В RuStore игровой файл (.apk/.aab) весит всего около 5 МБ. После установки на телефон игра «распаковывается» и может занимать примерно 20 МБ — это связано с оптимизацией и работой ресурсов.`);
+            }, 1000);
+        },
+        suggest: () => {
+            addUserMessage('Предложить идею');
+            const think1 = showThinking();
+            setTimeout(() => {
+                removeThinking(think1);
+                addBotMessage(`Отлично! Я перенаправлю тебя на страницу предложений...`, false);
+                const think2 = showThinking();
+                setTimeout(() => {
+                    removeThinking(think2);
+                    addBotMessage(`Возможно, твоя идея попадёт в новую версию игры!`, false);
+                    const think3 = showThinking();
+                    setTimeout(() => {
+                        removeThinking(think3);
+                        addBotMessage(`👉 <a href="suggest.html" target="_self">Перейти к форме предложений</a>`, true);
+                    }, 500);
+                }, 500);
             }, 1000);
         }
     };
