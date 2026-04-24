@@ -43,7 +43,7 @@
 </div>
 
 <div class="search-box">
-    <input type="text" id="searchInput" placeholder="🔍 Начни печатать вопрос... (например, «Как сохранить»)">
+    <input type="text" id="searchInput" placeholder="🔍 Начни печатать вопрос...">
 </div>
 
 <div class="questions-panel" id="questionsPanel"></div>
@@ -56,7 +56,6 @@
     const searchInput = document.getElementById('searchInput');
     const questionsPanel = document.getElementById('questionsPanel');
 
-    // БАЗА ВОПРОСОВ И ОТВЕТОВ
     const questionsData = [
         { text: "📱 Где скачать игры?", handler: "download" },
         { text: "📢 Дай ссылку на ВК", handler: "vk" },
@@ -74,7 +73,9 @@
         { text: "📆 Что будет в следующем обновлении?", handler: "nextUpdate" },
         { text: "🍏 Игра появится на iOS?", handler: "iosQuestion" },
         { text: "📲 Как связаться с разработчиком кроме почты?", handler: "contactOther" },
-        { text: "📊 Сколько весит сайт?", handler: "siteWeight" }
+        { text: "📊 Сколько весит сайт?", handler: "siteWeight" },
+        { text: "❓ Почему вы перешли на другую платформу?", handler: "whyMigrate" },
+        { text: "📦 Сколько весят игры в магазине и после установки?", handler: "gameSize" }
     ];
 
     function addBotMessage(text, isHtml = false) {
@@ -107,7 +108,6 @@
         if (div && div.remove) div.remove();
     }
 
-    // ОТВЕТЫ
     const answers = {
         download: () => {
             addUserMessage('Где скачать игры?');
@@ -184,7 +184,7 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Да! В планах: свой сервер, таблица лидеров, ежедневные события, переход на Godot, а может, даже создание новой игры. Компания будет расти и радовать игроков.`, false);
+                addBotMessage(`Да! В планах: свой сервер, таблица лидеров, ежедневные события, переход на Godot, а может, даже создание новой игры. Компания будет расти и радовать игроков.`);
             }, 1000);
         },
         licenseText: () => {
@@ -192,7 +192,7 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Полный текст лицензии можно прочитать на главной странице сайта в блоке «Лицензионное соглашение».`, false);
+                addBotMessage(`Полный текст лицензии можно прочитать на главной странице сайта в блоке «Лицензионное соглашение».`);
             }, 1000);
         },
         licenseExplain: () => {
@@ -200,7 +200,7 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Простыми словами: ты можешь скачать и играть бесплатно. Нельзя продавать игру, выдавать её за свою или перевыкладывать без спроса. Если что‑то сломалось — мы не несём ответственности, но постараемся всё починить.`, false);
+                addBotMessage(`Простыми словами: ты можешь скачать и играть бесплатно. Нельзя продавать игру, выдавать её за свою или перевыкладывать без спроса. Если что‑то сломалось — мы не несём ответственности, но постараемся всё починить.`);
             }, 1000);
         },
         teamSize: () => {
@@ -208,7 +208,7 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`В компании 1 человек. Но он ОЧЕНЬ трудолюбивый и преданный своему делу. За 1,5 месяца выпущено 3 игры!`, false);
+                addBotMessage(`В компании 1 человек. Но он ОЧЕНЬ трудолюбивый и преданный своему делу. За 1,5 месяца выпущено 3 игры!`);
             }, 1000);
         },
         blackTheme: () => {
@@ -216,7 +216,7 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Мы обновили дизайн — теперь сайт выглядит современно и стильно, чтобы игры было приятнее смотреть. Плюс экономит батарею на OLED-экранах!`, false);
+                addBotMessage(`Мы обновили дизайн — теперь сайт выглядит современно и стильно, чтобы игры было приятнее смотреть. Плюс экономит батарею на OLED-экранах!`);
             }, 1000);
         },
         nextUpdate: () => {
@@ -224,7 +224,7 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Скоро: таблица лидеров, свой сервер, ещё больше бонусов и, возможно, многопользовательский режим!`, false);
+                addBotMessage(`Скоро: таблица лидеров, свой сервер, ещё больше бонусов и, возможно, многопользовательский режим!`);
             }, 1000);
         },
         iosQuestion: () => {
@@ -232,7 +232,7 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Пока в планах нет, но если наберём много запросов — подумаем. Следи за новостями в VK!`, false);
+                addBotMessage(`Пока в планах нет, но если наберём много запросов — подумаем. Следи за новостями в VK!`);
             }, 1000);
         },
         contactOther: () => {
@@ -248,12 +248,27 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Весь сайт весит чуть больше 1 МБ, а одна страница — около 10-12 КБ. Это очень мало, поэтому сайт летает даже на медленном интернете!`, false);
+                addBotMessage(`Весь сайт весит чуть больше 1 МБ, а одна страница — около 10-12 КБ. Это очень мало, поэтому сайт летает даже на медленном интернете!`);
+            }, 1000);
+        },
+        whyMigrate: () => {
+            addUserMessage('Почему вы перешли на другую платформу?');
+            const t = showThinking();
+            setTimeout(() => {
+                removeThinking(t);
+                addBotMessage(`Раньше сайт был на Tilda, но бесплатная версия не позволяла вставлять свой HTML-код (например, для чат‑бота и кастомных виджетов). GitHub Pages дал полную свободу и 100% контроль над кодом, плюс это отличный опыт для портфолио разработчика.`);
+            }, 1000);
+        },
+        gameSize: () => {
+            addUserMessage('Сколько весят игры в магазине и после установки?');
+            const t = showThinking();
+            setTimeout(() => {
+                removeThinking(t);
+                addBotMessage(`В RuStore игровой файл (.apk/.aab) весит всего около 5 МБ. После установки на телефон игра «распаковывается» и может занимать примерно 20 МБ — это связано с оптимизацией и работой ресурсов.`);
             }, 1000);
         }
     };
 
-    // ОТРИСОВКА КНОПОК (ФИЛЬТР)
     function renderButtons(filterText = '') {
         questionsPanel.innerHTML = '';
         const filtered = questionsData.filter(q => q.text.toLowerCase().includes(filterText.toLowerCase()));
@@ -278,12 +293,10 @@
         });
     }
 
-    // ПОИСК ПРИ ВВОДЕ
     searchInput.addEventListener('input', (e) => {
         renderButtons(e.target.value);
     });
 
-    // ПЕРВОНАЧАЛЬНАЯ ОТРИСОВКА
     renderButtons();
 
     exitBtn.addEventListener('click', () => {
