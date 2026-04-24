@@ -14,7 +14,9 @@
         .bot-message, .user-message { max-width: 85%; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
         .bot-message { background: #222; color: #f0f0f0; align-self: flex-start; border-bottom-left-radius: 4px; }
         .user-message { background: #ff5500; color: black; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .thinking { background: #222; color: #aaa; font-style: italic; padding: 10px 14px; border-radius: 18px; font-size: 13px; align-self: flex-start; }
+        .thinking { background: #222; color: #aaa; font-style: italic; padding: 10px 14px; border-radius: 18px; font-size: 13px; align-self: flex-start; display: flex; align-items: center; gap: 8px; }
+        .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #ff5500; border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .search-box { background: #111; border-bottom: 1px solid #333; padding: 12px; flex-shrink: 0; }
         .search-box input { width: 100%; padding: 10px 12px; font-size: 16px; border: 1px solid #333; border-radius: 30px; outline: none; background: #222; color: #f0f0f0; }
         .search-box input::placeholder { color: #888; }
@@ -98,7 +100,7 @@
     function showThinking() {
         const div = document.createElement('div');
         div.className = 'thinking';
-        div.textContent = '🤔 1 секунда...';
+        div.innerHTML = '<div class="spinner"></div> 💭 думаю...';
         messages.appendChild(div);
         messages.scrollTop = messages.scrollHeight;
         return div;
@@ -135,15 +137,15 @@
         },
         support: () => {
             addUserMessage('Перенаправь к службе поддержки');
-            const t1 = showThinking();
+            const think1 = showThinking();
             setTimeout(() => {
-                removeThinking(t1);
+                removeThinking(think1);
                 addBotMessage('Соединяю со службой поддержки...');
-                const t2 = showThinking();
+                const think2 = showThinking();
                 setTimeout(() => {
-                    removeThinking(t2);
+                    removeThinking(think2);
                     window.location.href = 'mailto:yaatomshik@mail.ru?subject=Вопрос%20по%20игре';
-                }, 1000);
+                }, 500);
             }, 1000);
         },
         exit: () => {
