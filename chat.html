@@ -124,13 +124,23 @@
         if (div && div.remove) div.remove();
     }
 
+    // Вспомогательная функция для случайного выбора варианта
+    function getRandomVariant(variants) {
+        return variants[Math.floor(Math.random() * variants.length)];
+    }
+
     const answers = {
         download: () => {
             addUserMessage('Где скачать игры?');
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Скачать можно в RuStore:<br>🔹 <a href="https://www.rustore.ru/catalog/developer/fdq1kz" target="_blank">Наша компания в RuStore</a>`, true);
+                const variants = [
+                    `Скачать можно в RuStore:<br>🔹 <a href="https://www.rustore.ru/catalog/developer/fdq1kz" target="_blank">Наша компания в RuStore</a>`,
+                    `Все игры здесь:<br>📦 <a href="https://www.rustore.ru/catalog/developer/fdq1kz" target="_blank">Game Command Studio в RuStore</a>`,
+                    `Лови ссылку — и в путь! 🚀<br>👉 <a href="https://www.rustore.ru/catalog/developer/fdq1kz" target="_blank">Скачать наши игры</a>`
+                ];
+                addBotMessage(getRandomVariant(variants), true);
             }, 1000);
         },
         vk: () => {
@@ -138,7 +148,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage('📢 Сообщество ВКонтакте: <a href="https://vk.com/gamecommandstudio" target="_blank">https://vk.com/gamecommandstudio</a>', true);
+                const variants = [
+                    '📢 Наше VK-сообщество: <a href="https://vk.com/gamecommandstudio" target="_blank">https://vk.com/gamecommandstudio</a>',
+                    'Заходи в гости в ВК — там анонсы и общение: <a href="https://vk.com/gamecommandstudio" target="_blank">vk.com/gamecommandstudio</a>',
+                    'Вот ссылка на паблик VK, подписывайся 🔥 <a href="https://vk.com/gamecommandstudio" target="_blank">Game Command Studio VK</a>'
+                ];
+                addBotMessage(getRandomVariant(variants), true);
             }, 1000);
         },
         github: () => {
@@ -146,7 +161,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage('🐙 Профиль GitHub: <a href="https://github.com/maksimilianmuzycenko-tech" target="_blank">github.com/maksimilianmuzycenko-tech</a>', true);
+                const variants = [
+                    '🐙 GitHub профиль: <a href="https://github.com/maksimilianmuzycenko-tech" target="_blank">github.com/maksimilianmuzycenko-tech</a>',
+                    'Код и исходники тут: <a href="https://github.com/maksimilianmuzycenko-tech" target="_blank">GitHub студии</a>',
+                    'Наш GitHub — смотри, форкай, звёздочки ставь ⭐ <a href="https://github.com/maksimilianmuzycenko-tech" target="_blank">тык</a>'
+                ];
+                addBotMessage(getRandomVariant(variants), true);
             }, 1000);
         },
         support: () => {
@@ -154,7 +174,12 @@
             const think1 = showThinking();
             setTimeout(() => {
                 removeThinking(think1);
-                addBotMessage('Соединяю со службой поддержки...');
+                const variants = [
+                    'Соединяю со службой поддержки...',
+                    'Переключаю на отдел заботы о пользователях 👨‍💻',
+                    'Набираю номер горячей линии... (шучу, просто открываю почту)'
+                ];
+                addBotMessage(getRandomVariant(variants));
                 const think2 = showThinking();
                 setTimeout(() => {
                     removeThinking(think2);
@@ -167,7 +192,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage('Возвращаемся на главную страницу...');
+                const variants = [
+                    'Возвращаемся на главную страницу...',
+                    'Закрываю чат, пока! 👋',
+                    'До новых встреч! Перенаправляю на главную.'
+                ];
+                addBotMessage(getRandomVariant(variants));
                 setTimeout(() => { window.location.href = 'index.html'; }, 1000);
             }, 1000);
         },
@@ -176,7 +206,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`💰 Кликай и зарабатывай очки.<br>⚡ Улучшай силу клика.<br>🤖 Автокликер — твой помощник.<br>🎁 Бонусы каждые 5 минут и 100 кликов.<br>💎 Древо рубинов.<br>🏆 Достижения.<br>💾 Автосохранение.<br>🎮 Промокод: novichokrusturekliker`, true);
+                const variants = [
+                    `💰 Кликай и зарабатывай очки.<br>⚡ Улучшай силу клика.<br>🤖 Автокликер — твой помощник.<br>🎁 Бонусы каждые 5 минут и 100 кликов.<br>💎 Древо рубинов.<br>🏆 Достижения.<br>💾 Автосохранение.<br>🎮 Промокод: novichokrusturekliker`,
+                    `Игра «Бесконечный кликер»: простой клик приносит очки. Прокачивай клик и автокликер, получай бонусы за активность, расти рубиновое дерево, выполняй достижения — всё с автосохранением. Промокод: novichokrusturekliker`,
+                    `Классический кликер с глубокой прокачкой: сила клика, автокликер, бонусы каждый 5 минут, рубиновое дерево, достижения. Промокод для старта: novichokrusturekliker`
+                ];
+                addBotMessage(getRandomVariant(variants), true);
             }, 1000);
         },
         descBusiness: () => {
@@ -184,7 +219,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`🏢 Ты Босс!<br>💰 Налоги каждые 35 секунд, доход каждые 5 секунд.<br>🎁 Бонусы: каждые 15 минут +1 алмаз, 30 минут +1 рубин.<br>💎 Бесплатный премиум‑магазин.<br>⚡ Супер‑дни — увольняй рабочих с возвратом 50% стоимости найма.<br>🎮 Промокод: novichok`, true);
+                const variants = [
+                    `🏢 Ты Босс!<br>💰 Налоги каждые 35 секунд, доход каждые 5 секунд.<br>🎁 Бонусы: +1 алмаз за 15 минут, +1 рубин за 30 минут.<br>💎 Бесплатный премиум-магазин за рубины.<br>⚡ Супер-дни — увольняй рабочих с возвратом 50% стоимости найма.<br>🎮 Промокод: novichok`,
+                    `My Business: Строй Империю. Управляй офисом, нанимай рабочих, плати налоги раз в 35 секунд, получай доход каждые 5 секунд. Бонусы за активность, премиум за рубины, супер-дни и сброс прогресса. Промокод novichok.`,
+                    `Стань боссом! Нанял рабочих — получай доход. Не забывай про налоги (каждые 35 сек). Алмазы и рубины капают со временем, трать их в премиум-магазине. В супер-дни можно уволить с возвратом половины денег. Промокод для старта: novichok`
+                ];
+                addBotMessage(getRandomVariant(variants), true);
             }, 1000);
         },
         descMiner: () => {
@@ -192,7 +232,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`⛏️ Добывай 4 вида ресурсов.<br>📈 Продавай, пока цена высокая.<br>🔧 Улучшай силу добычи.<br>💾 Автосохранение.`, true);
+                const variants = [
+                    `⛏️ Добывай 4 вида ресурсов.<br>📈 Продавай, пока цена высокая.<br>🔧 Улучшай силу добычи.<br>💾 Автосохранение.`,
+                    `Симулятор добычи: копай ресурсы (4 вида), следи за рыночными ценами, продавай дороже. Улучшай оборудование для большей эффективности. Прогресс сохраняется автоматически.`,
+                    `Ресурсы, цены, апгрейды — всё как у взрослых шахтёров, только веселее. Добывай, спекулируй на бирже, качай силу добычи. Автосохранение.`
+                ];
+                addBotMessage(getRandomVariant(variants), true);
             }, 1000);
         },
         future: () => {
@@ -200,7 +245,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Да! В планах: свой сервер, таблица лидеров, ежедневные события, переход на Godot, а может, даже создание новой игры. Компания будет расти и радовать игроков.`);
+                const variants = [
+                    `Да! В планах: свой сервер, таблица лидеров, ежедневные события, переход на Godot, а может, даже создание новой игры. Компания будет расти и радовать игроков.`,
+                    `Конечно! Мы работаем над серверной частью, таблицами лидеров, ивентами и новыми проектами. В будущем — Godot и многопользовательские режимы.`,
+                    `Развитие — наше всё. Готовим сервер, доску почёта, ежедневки, присматриваемся к Godot. И новая игра уже маячит на горизонте.`
+                ];
+                addBotMessage(getRandomVariant(variants));
             }, 1000);
         },
         licenseText: () => {
@@ -208,7 +258,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Полный текст лицензии можно прочитать на главной странице сайта в блоке «Лицензионное соглашение».`);
+                const variants = [
+                    `Полный текст лицензии можно прочитать на главной странице сайта в блоке «Лицензионное соглашение».`,
+                    `Лицензия размещена на главной странице нашего сайта — раздел «Лицензионное соглашение».`,
+                    `Загляни на index.html, там есть блок с лицензией — все права и обязанности описаны.`
+                ];
+                addBotMessage(getRandomVariant(variants));
             }, 1000);
         },
         licenseExplain: () => {
@@ -216,7 +271,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Простыми словами: ты можешь скачать и играть бесплатно. Нельзя продавать игру, выдавать её за свою или перевыкладывать без спроса. Если что‑то сломалось — мы не несём ответственности, но постараемся всё починить.`);
+                const variants = [
+                    `Простыми словами: ты можешь скачать и играть бесплатно. Нельзя продавать игру, выдавать её за свою или перевыкладывать без спроса. Если что‑то сломалось — мы не несём ответственности, но постараемся всё починить.`,
+                    `Короче: играть можно бесплатно и как угодно, но продавать игру или выдавать себя за автора — нельзя. Перевыкладывать на других сайтах без разрешения тоже запрещено. Если игра вылетит — не ругайтесь, мы быстро чиним.`,
+                    `Лицензия разрешает свободно пользоваться игрой, но не продавать её и не копировать без спроса. Авторство наше. Если баг — мы не звери, починим, но юридически ответственности нет.`
+                ];
+                addBotMessage(getRandomVariant(variants));
             }, 1000);
         },
         teamSize: () => {
@@ -224,7 +284,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`В компании 2 человека. Но они ОЧЕНЬ трудолюбивые и преданные своему делу. За 1,5 месяца выпущено 3 игры!`);
+                const variants = [
+                    `В компании 2 человека. Но они ОЧЕНЬ трудолюбивые и преданные своему делу. За 1,5 месяца выпущено 3 игры!`,
+                    `Нас двое, и мы работаем как пчёлки. За полтора месяца — три игры в RuStore.`,
+                    `Небольшая, но гордая команда из двух человек. За 45 дней — три полноценных проекта.`
+                ];
+                addBotMessage(getRandomVariant(variants));
             }, 1000);
         },
         blackTheme: () => {
@@ -232,7 +297,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Мы обновили дизайн — теперь сайт выглядит современно и стильно, чтобы игры было приятнее смотреть. Плюс экономит батарею на OLED-экранах!`);
+                const variants = [
+                    `Мы обновили дизайн — теперь сайт выглядит современно и стильно, чтобы игры было приятнее смотреть. Плюс экономит батарею на OLED-экранах!`,
+                    `Чёрный цвет — это новый чёрный. Стильно, глаза не устают, да и батарею на OLED экономит. Решили, что так круче.`,
+                    `Тёмная тема — модно, удобно и не жрёт аккумулятор на амолед-экранах. И игры на таком фоне сочнее выглядят.`
+                ];
+                addBotMessage(getRandomVariant(variants));
             }, 1000);
         },
         nextUpdate: () => {
@@ -240,7 +310,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Скоро: таблица лидеров, свой сервер, ещё больше бонусов и, возможно, многопользовательский режим!`);
+                const variants = [
+                    `Скоро: таблица лидеров, свой сервер, ещё больше бонусов и, возможно, многопользовательский режим!`,
+                    `Готовим таблицу рекордов, свой сервер, ежедневные ивенты и даже многопользовательскую часть.`,
+                    `В планах: лидерборды, серверная статистика, новые бонусы и зачатки мультиплеера. Следи за новостями.`
+                ];
+                addBotMessage(getRandomVariant(variants));
             }, 1000);
         },
         iosQuestion: () => {
@@ -248,7 +323,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Пока в планах нет, но если наберём много запросов — подумаем. Следи за новостями в VK!`);
+                const variants = [
+                    `Пока в планах нет, но если наберём много запросов — подумаем. Следи за новостями в VK!`,
+                    `iOS пока не поддерживаем, но если вы очень попросите — может быть, когда-нибудь.`,
+                    `Портировать на айфон сложно, поэтому сначала Android. Но от ваших голосов в VK многое зависит.`
+                ];
+                addBotMessage(getRandomVariant(variants));
             }, 1000);
         },
         contactOther: () => {
@@ -256,7 +336,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Пиши в сообщество VK: <a href="https://vk.com/gamecommandstudio" target="_blank">https://vk.com/gamecommandstudio</a> — я отвечаю быстро!`, true);
+                const variants = [
+                    `Пиши в сообщество VK: <a href="https://vk.com/gamecommandstudio" target="_blank">https://vk.com/gamecommandstudio</a> — я отвечаю быстро!`,
+                    `ВКонтакте — лучший способ: <a href="https://vk.com/gamecommandstudio" target="_blank">паблик Game Command Studio</a>. Отвечаем там почти моментально.`,
+                    `Заходи в наше VK-комьюнити, там можно написать лично: <a href="https://vk.com/gamecommandstudio" target="_blank">тык</a>`
+                ];
+                addBotMessage(getRandomVariant(variants), true);
             }, 1000);
         },
         siteWeight: () => {
@@ -264,7 +349,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Весь сайт весит чуть больше 1 МБ, а одна страница — около 10-12 КБ. Это очень мало, поэтому сайт летает даже на медленном интернете!`);
+                const variants = [
+                    `Весь сайт весит чуть больше 1 МБ, а одна страница — около 10-12 КБ. Это очень мало, поэтому сайт летает даже на медленном интернете!`,
+                    `Суперлёгкий: весь сайт ~1 МБ, страница ~10-12 КБ. Открывается мгновенно даже при плохом сигнале.`,
+                    `Мы за скорость: весь сайт весит как одна средняя фотография — чуть больше мегабайта. Страницы по 10-12 КБ.`
+                ];
+                addBotMessage(getRandomVariant(variants));
             }, 1000);
         },
         whyMigrate: () => {
@@ -272,7 +362,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`Раньше сайт был на Tilda, но бесплатная версия не позволяла вставлять свой HTML-код (например, для чат‑бота и кастомных виджетов). GitHub Pages дал полную свободу и 100% контроль над кодом, плюс это отличный опыт для портфолио разработчика.`);
+                const variants = [
+                    `Раньше сайт был на Tilda, но бесплатная версия не позволяла вставлять свой HTML-код (например, для чат‑бота и кастомных виджетов). GitHub Pages дал полную свободу и 100% контроль над кодом, плюс это отличный опыт для портфолио разработчика.`,
+                    `На Tilda мы упёрлись в ограничения — нельзя было добавить чат-бота и свои скрипты. GitHub Pages дал полную свободу, плюс это крутой опыт для портфолио.`,
+                    `Переезд на GitHub Pages случился из-за того, что Tilda не давала вставлять произвольный HTML/CSS/JS. А здесь мы сами хозяева, и ещё и портфолио пополняется.`
+                ];
+                addBotMessage(getRandomVariant(variants));
             }, 1000);
         },
         gameSize: () => {
@@ -280,7 +375,12 @@
             const t = showThinking();
             setTimeout(() => {
                 removeThinking(t);
-                addBotMessage(`В RuStore игровой файл (.apk/.aab) весит всего около 5 МБ. После установки на телефон игра «распаковывается» и может занимать примерно 20 МБ — это связано с оптимизацией и работой ресурсов.`);
+                const variants = [
+                    `В RuStore игровой файл (.apk/.aab) весит всего около 5 МБ. После установки на телефон игра «распаковывается» и может занимать примерно 20 МБ — это связано с оптимизацией и работой ресурсов.`,
+                    `Файл в магазине ~5 МБ, на телефоне после установки ~20 МБ. Разница из-за распаковки и оптимизации под устройство.`,
+                    `.apk легонький — 5 МБ. А после установки игра займёт около 20 МБ, так как раскладывает файлы по папкам.`
+                ];
+                addBotMessage(getRandomVariant(variants));
             }, 1000);
         },
         suggest: () => {
@@ -288,11 +388,16 @@
             const think1 = showThinking();
             setTimeout(() => {
                 removeThinking(think1);
-                addBotMessage(`Отлично! Я перенаправлю тебя на страницу предложений...`, false);
+                const variants = [
+                    `Отлично! Я перенаправлю тебя на страницу предложений...`,
+                    `Круто! Любим идеи. Секундочку, открываю форму...`,
+                    `Йееес! Жми дальше, там форма для идей.`
+                ];
+                addBotMessage(getRandomVariant(variants));
                 const think2 = showThinking();
                 setTimeout(() => {
                     removeThinking(think2);
-                    addBotMessage(`Возможно, твоя идея попадёт в новую версию игры!`, false);
+                    addBotMessage(`Возможно, твоя идея попадёт в новую версию игры!`);
                     const think3 = showThinking();
                     setTimeout(() => {
                         removeThinking(think3);
