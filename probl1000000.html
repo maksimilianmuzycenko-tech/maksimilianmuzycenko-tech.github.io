@@ -14,10 +14,24 @@
         .resource-label { font-size: 0.7rem; color: #bbccaa; }
         .scale-area { background: #02100e; border-radius: 60px; padding: 15px; text-align: center; margin-bottom: 20px; }
         .scale-container { position: relative; height: 60px; margin: 12px 0; }
-        .scale-bg { position: absolute; width: 100%; height: 40px; background: linear-gradient(90deg, #b33, #f5b642, #6a994e, #f5b642, #b33); border-radius: 60px; top: 10px; }
+        .scale-bg { 
+            position: absolute; 
+            width: 100%; 
+            height: 40px; 
+            background: #b33; 
+            border-radius: 60px; 
+            top: 10px;
+            display: flex;
+            overflow: hidden;
+        }
+        .zone-red-1 { width: 20%; background: #b33; height: 100%; }
+        .zone-yellow-1 { width: 20%; background: #f5b642; height: 100%; }
+        .zone-green { width: 20%; background: #6a994e; height: 100%; }
+        .zone-yellow-2 { width: 20%; background: #f5b642; height: 100%; }
+        .zone-red-2 { width: 20%; background: #b33; height: 100%; border-radius: 0 60px 60px 0; }
         .scale-marker { position: absolute; width: 6px; height: 50px; background: white; top: 5px; border-radius: 3px; box-shadow: 0 0 8px #88ffaa; left: 50%; transform: translateX(-50%); }
         .action-buttons { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
-        button { background: #2a6b5e; border: none; padding: 10px 20px; border-radius: 60px; color: white; font-weight: bold; font-size: 0.8rem; cursor: pointer; }
+        button { background: #2a6b5e; border: none; padding: 16px 24px; border-radius: 60px; color: white; font-weight: bold; font-size: 0.9rem; cursor: pointer; }
         button:active { transform: scale(0.96); }
         .upgrade-scale-btn { background: #d49b3a; }
         .area-buy { background: #072a23; border-radius: 28px; padding: 10px; text-align: center; margin: 12px 0; }
@@ -32,28 +46,191 @@
         .export-import-panel textarea { width: 100%; height: 100px; background: #1a3a34; color: #ffd966; border: 1px solid #2a6b5e; border-radius: 16px; padding: 8px; font-size: 0.7rem; font-family: monospace; resize: vertical; }
         footer { font-size: 0.6rem; text-align: center; margin-top: 16px; color: #78a090; }
         .positive { color: #8bc34a; font-size: 0.7rem; }
+        
+        /* Окно лицензии */
+        .license-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .license-content {
+            background: #0f2a24;
+            border-radius: 32px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+            border: 2px solid #ffd966;
+        }
+        .license-content h2 {
+            color: #ffd966;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .license-text {
+            font-size: 0.75rem;
+            line-height: 1.5;
+            color: #e0e0e0;
+            white-space: pre-line;
+            margin-bottom: 20px;
+            background: #07201c;
+            padding: 16px;
+            border-radius: 24px;
+        }
+        .license-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+        .license-buttons button {
+            padding: 12px 24px;
+            font-size: 1rem;
+        }
+        .btn-accept { background: #4a8b6e; }
+        .btn-decline { background: #8b3a3a; }
+        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: #0f2a24; padding: 20px; border-radius: 32px; max-width: 400px; margin: 20px; border: 2px solid #ffd966; }
         .close-btn { background: #d49b3a; margin-top: 10px; }
         .link-row { margin: 10px 0; text-align: center; font-size: 0.7rem; }
         .link-row a { color: #ffd966; text-decoration: none; }
         .reset-ach-btn { background: #8b3a3a; margin-top: 8px; width: 100%; }
-        .btn-small { background: #3a6b5e; padding: 8px 16px; font-size: 0.7rem; }
+        .btn-small { background: #3a6b5e; padding: 12px 20px; font-size: 0.8rem; }
         .btn-green { background: #4a8b6e; }
+        .btn-orange { background: #d49b3a; }
+        .reward-info { background: #07201c; border-radius: 28px; padding: 8px 12px; margin-bottom: 16px; text-align: center; font-size: 0.9rem; display: flex; justify-content: space-between; gap: 10px; }
+        .reward-box { background: #1a3a34; border-radius: 20px; padding: 8px 12px; flex: 1; }
+        .reward-yellow { color: #f5b642; font-weight: bold; }
+        .reward-green { color: #6a994e; font-weight: bold; }
+        
+        /* Стиль для ссылки-кнопки */
+        .license-link {
+            background: none;
+            border: none;
+            color: #ffd966;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 0;
+            font-size: inherit;
+            font-weight: inherit;
+        }
+        .license-link:active {
+            transform: none;
+        }
     </style>
 </head>
 <body>
-<div class="game-container">
+
+<div id="licenseModal" class="license-modal">
+    <div class="license-content">
+        <h2>Лицензионное соглашение</h2>
+        <div class="license-text">
+            <strong>Game Command Studio</strong><br>
+            Версия 1.0 от 20 апреля 2026 года<br><br>
+            Настоящее лицензионное соглашение является публичной офертой компании «Game Command Studio» для любого лица, желающего использовать программное обеспечение, разработанное Лицензиаром.<br><br>
+            <strong>1. Предмет соглашения</strong><br>
+            1.1. Лицензиар предоставляет пользователю неисключительное право на использование Программного обеспечения.<br>
+            1.2. Соглашение распространяется на все программные продукты: «Бесконечный кликер», «My Business», «Симулятор добычи», «Stop, Earn and Build».<br><br>
+            <strong>2. Права Лицензиата</strong><br>
+            2.1. Устанавливать и использовать Программное обеспечение на любом устройстве.<br>
+            2.2. Копировать Программное обеспечение для личного использования.<br>
+            2.3. Передавать копии третьим лицам при условии сохранения всех уведомлений об авторских правах.<br>
+            2.4. Модифицировать исходный код для личного использования.<br><br>
+            <strong>3. Ограничения и запреты</strong><br>
+            3.1. Запрещается продавать Программное обеспечение или его копии любым способом.<br>
+            3.2. Запрещается перевыкладывать Программное обеспечение на других сайтах, в магазинах приложений или файлообменниках без письменного разрешения Лицензиара.<br>
+            3.3. Запрещается заявлять, что Лицензиат является автором Программного обеспечения.<br>
+            3.4. Запрещается удалять или изменять уведомления об авторских правах.<br><br>
+            <strong>4. Отказ от гарантий</strong><br>
+            4.1. Программное обеспечение предоставляется «как есть» без каких-либо явных или подразумеваемых гарантий.<br>
+            4.2. Лицензиар не гарантирует, что Программное обеспечение будет работать без ошибок, сбоев или прерываний.<br>
+            4.3. Лицензиар не гарантирует совместимость с любым конкретным устройством или операционной системой.<br>
+            4.4. Лицензиар не несёт ответственности за любые убытки, включая потерю данных.<br><br>
+            <strong>5. Срок действия и прекращение</strong><br>
+            5.1. Соглашение действует бессрочно до момента его расторжения.<br>
+            5.2. Лицензиар имеет право расторгнуть Соглашение в одностороннем порядке в случае нарушения условий.<br><br>
+            <strong>6. Заключительные положения</strong><br>
+            6.1. Использование Программного обеспечения означает полное и безоговорочное принятие условий Соглашения.<br>
+            6.2. По всем вопросам, связанным с лицензированием, обращаться по адресу: yaatomshik@mail.ru
+        </div>
+        <div class="license-buttons">
+            <button class="btn-accept" id="acceptLicense">Принимаю</button>
+            <button class="btn-decline" id="declineLicense">Не согласен</button>
+        </div>
+    </div>
+</div>
+
+<div id="secondLicenseModal" class="license-modal" style="display: none;">
+    <div class="license-content">
+        <h2>Лицензионное соглашение</h2>
+        <div class="license-text">
+            <strong>Game Command Studio</strong><br>
+            Версия 1.0 от 20 апреля 2026 года<br><br>
+            Настоящее лицензионное соглашение является публичной офертой компании «Game Command Studio» для любого лица, желающего использовать программное обеспечение, разработанное Лицензиаром.<br><br>
+            <strong>1. Предмет соглашения</strong><br>
+            1.1. Лицензиар предоставляет пользователю неисключительное право на использование Программного обеспечения.<br>
+            1.2. Соглашение распространяется на все программные продукты: «Бесконечный кликер», «My Business», «Симулятор добычи», «Stop, Earn and Build».<br><br>
+            <strong>2. Права Лицензиата</strong><br>
+            2.1. Устанавливать и использовать Программное обеспечение на любом устройстве.<br>
+            2.2. Копировать Программное обеспечение для личного использования.<br>
+            2.3. Передавать копии третьим лицам при условии сохранения всех уведомлений об авторских правах.<br>
+            2.4. Модифицировать исходный код для личного использования.<br><br>
+            <strong>3. Ограничения и запреты</strong><br>
+            3.1. Запрещается продавать Программное обеспечение или его копии любым способом.<br>
+            3.2. Запрещается перевыкладывать Программное обеспечение на других сайтах, в магазинах приложений или файлообменниках без письменного разрешения Лицензиара.<br>
+            3.3. Запрещается заявлять, что Лицензиат является автором Программного обеспечения.<br>
+            3.4. Запрещается удалять или изменять уведомления об авторских правах.<br><br>
+            <strong>4. Отказ от гарантий</strong><br>
+            4.1. Программное обеспечение предоставляется «как есть» без каких-либо явных или подразумеваемых гарантий.<br>
+            4.2. Лицензиар не гарантирует, что Программное обеспечение будет работать без ошибок, сбоев или прерываний.<br>
+            4.3. Лицензиар не гарантирует совместимость с любым конкретным устройством или операционной системой.<br>
+            4.4. Лицензиар не несёт ответственности за любые убытки, включая потерю данных.<br><br>
+            <strong>5. Срок действия и прекращение</strong><br>
+            5.1. Соглашение действует бессрочно до момента его расторжения.<br>
+            5.2. Лицензиар имеет право расторгнуть Соглашение в одностороннем порядке в случае нарушения условий.<br><br>
+            <strong>6. Заключительные положения</strong><br>
+            6.1. Использование Программного обеспечения означает полное и безоговорочное принятие условий Соглашения.<br>
+            6.2. По всем вопросам, связанным с лицензированием, обращаться по адресу: yaatomshik@mail.ru
+        </div>
+        <div class="license-buttons">
+            <button class="btn-accept" id="closeSecondLicense">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<div class="game-container" id="gameContainer" style="display: none;">
     <div class="resource-panel" id="resourcesPanel"></div>
+    
+    <div class="reward-info">
+        <div class="reward-box"> Жёлтая зона: <span class="reward-yellow" id="yellowReward">30</span> монет</div>
+        <div class="reward-box"> Зелёная зона: <span class="reward-green" id="greenReward">100</span> монет</div>
+    </div>
     
     <div class="scale-area">
         <div class="scale-container" id="scaleContainer">
-            <div class="scale-bg"></div>
+            <div class="scale-bg">
+                <div class="zone-red-1"></div>
+                <div class="zone-yellow-1"></div>
+                <div class="zone-green"></div>
+                <div class="zone-yellow-2"></div>
+                <div class="zone-red-2"></div>
+            </div>
             <div class="scale-marker" id="scaleMarker"></div>
         </div>
         <div class="action-buttons">
-            <button id="stopBtn">Остановить</button>
-            <button id="upgradeScaleBtn" class="upgrade-scale-btn">Улучшить шкалу (+5%) - 1000 монет</button>
+            <button id="stopBtn">Остановить бегунок</button>
+            <button id="upgradeScaleBtn" class="upgrade-scale-btn">Улучшить награду +1 уровень (+100 зелёной, +30 жёлтой)</button>
+            <button id="upgradeScale10Btn" class="upgrade-scale-btn">Улучшить награду +10 уровней</button>
+            <button id="upgradeScale100Btn" class="upgrade-scale-btn">Улучшить награду +100 уровней</button>
             <button id="tutorialBtn">Обучение</button>
         </div>
     </div>
@@ -81,7 +258,7 @@
 
     <div class="export-import-panel">
         <div style="margin-bottom:8px;">Экспорт / Импорт сохранения</div>
-        <textarea id="saveDataText" placeholder="Здесь появится код сохранения. Нажми Экспорт"></textarea>
+        <textarea id="saveDataText" placeholder="Здесь появится код сохранения. Нажмите Экспорт, чтобы скопировать сохранение в поле."></textarea>
         <div class="save-load" style="margin-top:8px;">
             <button id="exportBtn">Экспорт в поле</button>
             <button id="importBtn">Импорт из поля</button>
@@ -90,34 +267,75 @@
     <div class="link-row">
         <a href="https://maksimilianmuzycenko-tech.github.io" target="_blank" rel="noopener noreferrer">Наш сайт</a> | 
         <a href="https://www.rustore.ru/catalog/developer/fdq1kz" target="_blank" rel="noopener noreferrer">Наши игры в RuStore</a> |
-        <a href="https://maksimilianmuzycenko-tech.github.io" target="_blank" rel="noopener noreferrer">Лицензионное соглашение</a>
+        <button class="license-link" id="showLicenseBtn">Лицензионное соглашение</button>
     </div>
-    <footer>Автосохранение | Алмаз +1 в минуту | +5% за 1000 монет | Цены зданий +1% после покупки</footer>
+    <footer>Автосохранение | Алмаз +1 в минуту | Улучшение шкалы дорожает на +50 монет за уровень | Цены зданий +10 после покупки</footer>
 </div>
 
 <div id="tutorialModal" class="modal">
     <div class="modal-content">
         <h3>Обучение</h3>
-        <p>1. Останавливай бегунок в жёлтой или зелёной зоне, чтобы получить монеты.</p>
-        <p>2. Улучшай шкалу за 1000 монет (+5% к награде).</p>
-        <p>3. Покупай здания — они дают доход каждую секунду.</p>
-        <p>4. Каждое здание дорожает на 1% после покупки.</p>
-        <p>5. Покупай площадь, чтобы строить больше зданий.</p>
+        <p>1. Останавливайте бегунок в жёлтой или зелёной зоне, чтобы получить монеты.</p>
+        <p>2. Улучшайте награду (каждый уровень даёт +30 к жёлтой зоне и +100 к зелёной зоне). Стоимость улучшения увеличивается на 50 монет за каждый уровень.</p>
+        <p>3. Покупайте здания — они дают доход каждую секунду.</p>
+        <p>4. Каждое здание дорожает на 10 монет после покупки.</p>
+        <p>5. Покупайте площадь, чтобы строить больше зданий.</p>
         <p>6. Алмазы даются раз в минуту, их можно обменять на монеты или площадь.</p>
-        <p>7. Выполняй достижения, получай награды.</p>
+        <p>7. Выполняйте достижения, получайте награды.</p>
         <p>8. За 5 алмазов можно сбросить достижения и пройти их заново.</p>
-        <p>9. В поле экспорт/импорт ты можешь делать страховочные сохранения, а также переносить прогресс между устройствами.</p>
-        <button class="close-btn" id="closeModal">Понятно!</button>
+        <button class="close-btn" id="closeModal">Понятно</button>
     </div>
 </div>
 
 <script>
+    // ----- ПРОВЕРКА ПРИНЯТИЯ ЛИЦЕНЗИИ -----
+    let licenseAccepted = localStorage.getItem('licenseAccepted');
+    const licenseModal = document.getElementById('licenseModal');
+    const secondLicenseModal = document.getElementById('secondLicenseModal');
+    const gameContainer = document.getElementById('gameContainer');
+    
+    function acceptLicense() {
+        localStorage.setItem('licenseAccepted', 'true');
+        licenseModal.style.display = 'none';
+        gameContainer.style.display = 'block';
+        initGame();
+    }
+    
+    function declineLicense() {
+        alert('Вы не приняли лицензионное соглашение. Игра не может быть запущена.');
+        if (window.cordova) {
+            navigator.app.exitApp();
+        }
+    }
+    
+    function showSecondLicense() {
+        secondLicenseModal.style.display = 'flex';
+    }
+    
+    function closeSecondLicense() {
+        secondLicenseModal.style.display = 'none';
+    }
+    
+    if (licenseAccepted === 'true') {
+        licenseModal.style.display = 'none';
+        gameContainer.style.display = 'block';
+    } else {
+        licenseModal.style.display = 'flex';
+        gameContainer.style.display = 'none';
+    }
+    
+    document.getElementById('acceptLicense').addEventListener('click', acceptLicense);
+    document.getElementById('declineLicense').addEventListener('click', declineLicense);
+    
     // ----- ИГРОВЫЕ ДАННЫЕ -----
     let coins = 500;
     let freeArea = 100;
     let usedArea = 0;
     let diamonds = 0;
-    let scaleBonusPercent = 0;
+    let yellowReward = 30;
+    let greenReward = 100;
+    let upgradeCost = 1000;
+    let upgradeLevel = 0;
     let totalIncome = 0;
     
     let markerPos = 50;
@@ -133,13 +351,18 @@
         { name: "Киберцентр", price: 150, income: 18, count: 0, area: 1 }
     ];
     
-    // ----- ДОСТИЖЕНИЯ (каждый со своим счётчиком) -----
+    function updateRewardDisplay() {
+        document.getElementById('yellowReward').innerText = yellowReward;
+        document.getElementById('greenReward').innerText = greenReward;
+    }
+    
+    // ----- ДОСТИЖЕНИЯ -----
     let achievements = [];
     
     const achTemplates = [
         { id: 0, name: "Миллионер", desc: "Заработать 1 000 000 монет", need: 1000000, rewardCoins: 0, rewardDiamonds: 10, count: 0, done: false },
         { id: 1, name: "Стоп-машина", desc: "Остановить шкалу 1000 раз", need: 1000, rewardCoins: 10000, rewardDiamonds: 0, count: 0, done: false },
-        { id: 2, name: "Мастер шкалы", desc: "Улучшить шкалу 1000 раз", need: 1000, rewardCoins: 10000, rewardDiamonds: 10, count: 0, done: false },
+        { id: 2, name: "Мастер шкалы", desc: "Улучшить награду 50 раз", need: 50, rewardCoins: 10000, rewardDiamonds: 10, count: 0, done: false },
         { id: 3, name: "Начинающий застройщик", desc: "Построить 100 зданий", need: 100, rewardCoins: 50000, rewardDiamonds: 0, count: 0, done: false },
         { id: 4, name: "Опытный застройщик", desc: "Построить 1000 зданий", need: 1000, rewardCoins: 0, rewardDiamonds: 10, count: 0, done: false },
         { id: 5, name: "Легендарный застройщик", desc: "Построить 10000 зданий", need: 10000, rewardCoins: 0, rewardDiamonds: 100, count: 0, done: false }
@@ -188,7 +411,7 @@
         if (!container) return;
         container.innerHTML = "";
         for (let a of achievements) {
-            let status = a.done ? "Выполнено!" : `${a.count}/${a.need}`;
+            let status = a.done ? "Выполнено" : `${a.count}/${a.need}`;
             let rewardText = "";
             if (a.rewardCoins > 0 && a.rewardDiamonds > 0) rewardText = `Награда: ${a.rewardCoins} монет + ${a.rewardDiamonds} алмазов`;
             else if (a.rewardCoins > 0) rewardText = `Награда: ${a.rewardCoins} монет`;
@@ -230,9 +453,9 @@
     
     function getReward(pos) {
         if (pos <= 20) return 0;
-        if (pos <= 40) return 10;
-        if (pos <= 60) return 50;
-        if (pos <= 80) return 10;
+        if (pos <= 40) return yellowReward;
+        if (pos <= 60) return greenReward;
+        if (pos <= 80) return yellowReward;
         return 0;
     }
     
@@ -240,8 +463,6 @@
         if (!markerMoving) return;
         markerMoving = false;
         let reward = getReward(markerPos);
-        let bonus = 1 + scaleBonusPercent / 100;
-        reward = Math.floor(reward * bonus);
         if (reward > 0) {
             coins += reward;
             addEarnedCoins(reward);
@@ -252,17 +473,33 @@
         setTimeout(() => { markerMoving = true; }, 500);
     }
     
-    function upgradeScaleHandler() {
-        if (coins >= 1000) {
-            coins -= 1000;
-            scaleBonusPercent += 5;
-            addAchievementCount(2, 1);
+    function doUpgrade(count) {
+        let totalCost = 0;
+        let tempCost = upgradeCost;
+        for (let i = 0; i < count; i++) {
+            totalCost += tempCost;
+            tempCost += 50;
+        }
+        if (coins >= totalCost) {
+            coins -= totalCost;
+            for (let i = 0; i < count; i++) {
+                yellowReward += 30;
+                greenReward += 100;
+                upgradeLevel++;
+                upgradeCost += 50;
+                addAchievementCount(2, 1);
+            }
             updateUI();
+            updateRewardDisplay();
             saveAll();
         } else {
-            alert("Не хватает 1000 монет");
+            alert(`Не хватает монет для ${count} улучшений. Нужно ${totalCost} монет.`);
         }
     }
+    
+    function upgradeScaleHandler() { doUpgrade(1); }
+    function upgradeScale10Handler() { doUpgrade(10); }
+    function upgradeScale100Handler() { doUpgrade(100); }
     
     // ----- ОСНОВНЫЕ ДЕЙСТВИЯ -----
     function buyAreaHandler() {
@@ -276,7 +513,6 @@
         }
     }
     
-    // Построить 1 здание
     function buyBuilding(index) {
         let b = buildings[index];
         let currentPrice = Math.floor(b.price);
@@ -286,8 +522,7 @@
             usedArea += b.area;
             b.count++;
             totalIncome += b.income;
-            b.price = Math.floor(b.price * 1.01);
-            if (b.price <= currentPrice) b.price = currentPrice + 1;
+            b.price = currentPrice + 10;
             addAchievementCount(3, 1);
             addAchievementCount(4, 1);
             addAchievementCount(5, 1);
@@ -298,11 +533,15 @@
         }
     }
     
-    // Построить 10 зданий (цена × 10)
     function buyBuilding10(index) {
         let b = buildings[index];
         let currentPrice = Math.floor(b.price);
-        let totalPrice = currentPrice * 10;
+        let totalPrice = 0;
+        let tempPrice = currentPrice;
+        for (let i = 0; i < 10; i++) {
+            totalPrice += tempPrice;
+            tempPrice += 10;
+        }
         let totalArea = b.area * 10;
         
         if (coins >= totalPrice && freeArea >= totalArea) {
@@ -313,16 +552,46 @@
             for (let i = 0; i < 10; i++) {
                 b.count++;
                 totalIncome += b.income;
-                b.price = Math.floor(b.price * 1.01);
+                b.price += 10;
                 addAchievementCount(3, 1);
                 addAchievementCount(4, 1);
                 addAchievementCount(5, 1);
             }
-            if (b.price <= currentPrice) b.price = currentPrice + 1;
             updateUI();
             saveAll();
         } else {
             alert("Не хватает монет или площади для 10 зданий");
+        }
+    }
+    
+    function buyBuilding100(index) {
+        let b = buildings[index];
+        let currentPrice = Math.floor(b.price);
+        let totalPrice = 0;
+        let tempPrice = currentPrice;
+        for (let i = 0; i < 100; i++) {
+            totalPrice += tempPrice;
+            tempPrice += 10;
+        }
+        let totalArea = b.area * 100;
+        
+        if (coins >= totalPrice && freeArea >= totalArea) {
+            coins -= totalPrice;
+            freeArea -= totalArea;
+            usedArea += totalArea;
+            
+            for (let i = 0; i < 100; i++) {
+                b.count++;
+                totalIncome += b.income;
+                b.price += 10;
+                addAchievementCount(3, 1);
+                addAchievementCount(4, 1);
+                addAchievementCount(5, 1);
+            }
+            updateUI();
+            saveAll();
+        } else {
+            alert("Не хватает монет или площади для 100 зданий");
         }
     }
     
@@ -369,7 +638,18 @@
                 else if (b.count % 10 >= 2 && b.count % 10 <= 4 && (b.count % 100 < 10 || b.count % 100 >= 20)) wordEnding = "здания";
                 else wordEnding = "зданий";
                 let price1 = Math.floor(b.price);
-                let price10 = price1 * 10;
+                let price10 = 0;
+                let temp = price1;
+                for (let j = 0; j < 10; j++) {
+                    price10 += temp;
+                    temp += 10;
+                }
+                let price100 = 0;
+                temp = price1;
+                for (let j = 0; j < 100; j++) {
+                    price100 += temp;
+                    temp += 10;
+                }
                 let div = document.createElement("div");
                 div.className = "card";
                 div.innerHTML = `
@@ -379,8 +659,9 @@
                         Доход: +${b.income}/сек
                     </div>
                     <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                        <button class="btn-small buy1" data-idx="${i}">+1 (${price1})</button>
-                        <button class="btn-small btn-green buy10" data-idx="${i}">+10 (${price10})</button>
+                        <button class="btn-small buy1" data-idx="${i}">Построить +1 (${price1})</button>
+                        <button class="btn-small btn-green buy10" data-idx="${i}">Построить +10 (${price10})</button>
+                        <button class="btn-small btn-orange buy100" data-idx="${i}">Построить +100 (${price100})</button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -397,7 +678,14 @@
                     buyBuilding10(idx);
                 });
             });
+            document.querySelectorAll('.buy100').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    let idx = parseInt(btn.dataset.idx);
+                    buyBuilding100(idx);
+                });
+            });
         }
+        updateRewardDisplay();
     }
     
     // ----- ИНТЕРВАЛЫ -----
@@ -426,7 +714,7 @@
     
     // ----- СОХРАНЕНИЕ -----
     function getSave() {
-        return { coins, freeArea, usedArea, diamonds, scaleBonusPercent, totalIncome, buildings, achievements, markerPos, markerDir };
+        return { coins, freeArea, usedArea, diamonds, yellowReward, greenReward, upgradeCost, upgradeLevel, totalIncome, buildings, achievements, markerPos, markerDir };
     }
     
     function loadSave(data) {
@@ -434,7 +722,10 @@
         freeArea = data.freeArea ?? 100;
         usedArea = data.usedArea ?? 0;
         diamonds = data.diamonds ?? 0;
-        scaleBonusPercent = data.scaleBonusPercent ?? 0;
+        yellowReward = data.yellowReward ?? 30;
+        greenReward = data.greenReward ?? 100;
+        upgradeCost = data.upgradeCost ?? 1000;
+        upgradeLevel = data.upgradeLevel ?? 0;
         totalIncome = data.totalIncome ?? 0;
         if (data.buildings) buildings = data.buildings;
         if (data.achievements) achievements = data.achievements;
@@ -444,13 +735,15 @@
         if (marker) marker.style.left = markerPos + '%';
         updateUI();
         renderAchievements();
+        updateRewardDisplay();
     }
     
-    function saveAll() { localStorage.setItem('BuildAndLookSaveV6', JSON.stringify(getSave())); }
+    function saveAll() { localStorage.setItem('BuildAndLookFinalSave', JSON.stringify(getSave())); }
     function loadAll() {
-        let raw = localStorage.getItem('BuildAndLookSaveV6');
+        let raw = localStorage.getItem('BuildAndLookFinalSave');
         if (raw) { try { let data = JSON.parse(raw); loadSave(data); } catch(e) {} }
         if (!achievements.length) resetAch();
+        updateRewardDisplay();
     }
     
     // ----- ЭКСПОРТ И ИМПОРТ -----
@@ -458,13 +751,13 @@
         let saveData = getSave();
         let jsonStr = JSON.stringify(saveData, null, 2);
         let textarea = document.getElementById('saveDataText');
-        if (textarea) { textarea.value = jsonStr; alert("Скопируй сохранение из поля и сохрани в надёжном месте."); }
+        if (textarea) { textarea.value = jsonStr; alert("Сохранение скопировано в поле. Выделите и скопируйте его в надёжное место."); }
     }
     function importFromTextarea() {
         let textarea = document.getElementById('saveDataText');
-        if (!textarea || !textarea.value.trim()) { alert("Поле пусто."); return; }
-        try { let data = JSON.parse(textarea.value); loadSave(data); alert("Импорт выполнен"); saveAll(); } 
-        catch(err) { alert("Ошибка: неверный формат данных"); }
+        if (!textarea || !textarea.value.trim()) { alert("Поле пусто. Сначала экспортируйте сохранение или вставьте данные."); return; }
+        try { let data = JSON.parse(textarea.value); loadSave(data); alert("Импорт выполнен. Игра восстановлена."); saveAll(); } 
+        catch(err) { alert("Ошибка: неверный формат данных. Убедитесь, что в поле правильный JSON."); }
     }
     
     // ----- ОБУЧЕНИЕ -----
@@ -472,13 +765,15 @@
     function closeTutorial() { document.getElementById('tutorialModal').style.display = 'none'; }
     
     // ----- ЗАПУСК -----
-    function init() {
+    function initGame() {
         loadAll();
         startIncomeLoop();
         startDiamondLoop();
         animateMarker();
         document.getElementById('stopBtn').addEventListener('click', stopScale);
         document.getElementById('upgradeScaleBtn').addEventListener('click', upgradeScaleHandler);
+        document.getElementById('upgradeScale10Btn').addEventListener('click', upgradeScale10Handler);
+        document.getElementById('upgradeScale100Btn').addEventListener('click', upgradeScale100Handler);
         document.getElementById('buyAreaBtn').addEventListener('click', buyAreaHandler);
         document.getElementById('exchangeDiamondToCoin').addEventListener('click', diamondToCoin);
         document.getElementById('exchangeDiamondsToArea').addEventListener('click', diamondToArea);
@@ -491,9 +786,17 @@
         window.addEventListener('beforeunload', () => saveAll());
         updateUI();
         renderAchievements();
+        updateRewardDisplay();
     }
     
-    init();
+    // Кнопка показа лицензии внутри игры
+    document.getElementById('showLicenseBtn').addEventListener('click', showSecondLicense);
+    document.getElementById('closeSecondLicense').addEventListener('click', closeSecondLicense);
+    
+    // Если лицензия уже принята, запускаем игру сразу
+    if (licenseAccepted === 'true') {
+        initGame();
+    }
 </script>
 </body>
 </html>
