@@ -216,19 +216,26 @@
         </div>
     </div>
     <script>
+    let currentAudio = null;
+
     const playButtons = document.querySelectorAll('.play-btn');
 
     playButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             e.preventDefault();
             const audioFile = button.getAttribute('data-audio');
+            
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+            
             if (audioFile) {
-                const audio = new Audio(audioFile);
-                audio.play();
+                currentAudio = new Audio(audioFile);
+                currentAudio.play();
             }
         });
     });
-</script>
+    </script>
 </body>
 </html>
-
