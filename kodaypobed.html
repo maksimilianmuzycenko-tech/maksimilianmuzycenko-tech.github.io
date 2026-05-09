@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Великая Отечественная война</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #ffffff;
+            font-family: Arial;
+            line-height: 1.5;
+            color: #070000;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .nav {
+            text-align: center;
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .nav a {
+            display: inline-block;
+            background: #9c1b1b;
+            color: white;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .nav a:hover {
+            background: #000000;
+            transform: scale(1.02);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 5px solid #000000;
+            padding-bottom: 10px;
+        }
+        
+        .fact {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            text-align: center;
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .buttons a {
+            background: #9c1b1b;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: 0.2s;
+            display: inline-block;
+        }
+        .buttons a:hover {
+            background: #000000;
+            transform: scale(1.02);
+        }
+        .text {
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            border: 5px solid #9c1b1b;
+            margin-top: 20px;
+        }
+        .text h1 {
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+        .text h2 {
+            font-size: 20px;
+            margin: 20px 0 10px;
+            color: #000000;
+        }
+        .text p {
+            margin: 10px 0;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .header { font-size: 26px; }
+            .nav a { font-size: 15px; padding: 8px 16px; }
+            .license h1 { font-size: 24px; }
+            .license h2 { font-size: 19px; }
+            .license p, .license li { font-size: 15px; }
+            .social a { font-size: 15px; padding: 7px 18px; margin: 0 8px; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 10px; }
+            .header { font-size: 20px; }
+            .nav a { font-size: 13px; padding: 6px 12px; }
+            .license h1 { font-size: 20px; }
+            .license h2 { font-size: 17px; }
+            .license p, .license li { font-size: 13px; }
+            .social a { font-size: 13px; padding: 6px 12px; margin: 0 5px; }
+            .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Великая Отечественная война</div>
+        <div class="fact"  id="facts">Факты</div>
+        <div class="nav">
+            <a href="#fact1">1</a>
+            <a href="#fact2">2</a>
+            <a href="#fact3">3</a>
+            <a href="#fact4">4</a>
+            <a href="#fact5">5</a>
+            <a href="#fact6">6</a>
+            <a href="#fact7">7</a>
+            <a href="#fact8">8</a>
+            <a href="#fact9">9</a>
+            <a href="#fact10">10</a>
+        </div>
+        <div class="text" id="fact1">
+            <h2>1. Тишина перед бурей и «Директива № 1»</h2>
+            <p>Всего за несколько часов до вторжения, в 00:30 22 июня, военные округа получили директиву за подписью маршала Тимошенко. В ней предупреждали о возможной провокации немцев 22–23 июня, но приказывали: «войскам не поддаваться ни на какие провокационные действия» . Это требование сыграло трагическую роль — на многих заставах первым ударом врага встретили, не приведя артиллерию в полную боевую готовность.</p>
+            <div class="nav">
+                <a href="#facts">Ко всем фактам</a>
+            </div>
+            <div class="buttons">
+                <a href="javascript:void(0)" data-audio="timbrica-1.mp3">Озвучить факт</a>
+            </div>
+        </div>
+        <div class="text" id="fact2">
+            <h2>2. Первый удар в 4:15 утра</h2>
+            <p>В 4 часа утра началась артподготовка, а в 4:15 войска вермахта перешли границу . Авиация наносила массированные удары по аэродромам, железнодорожным узлам и городам. Западные регионы страны — от Балтики до Черного моря — были объяты пламенем. Самыми первыми удары приняли на себя Брест, Гродно и Волковыск .</p>
+            <div class="nav">
+                <a href="#facts">Ко всем фактам</a>
+            </div>
+        </div>
+        <div class="text" id="fact3">
+            <h2>3. Кровавое небо: потеря «птичек»</h2>
+            <p>Первый день стал катастрофой для советской авиации. Из-за внезапности нападения и скученности самолетов на аэродромах (запрещено было рассредоточивать) потери были чудовищными. Только за 22 июня люфтваффе уничтожили более 1 200 советских самолетов, из которых 800 даже не успели взлететь . Однако и враг почувствовал силу советских летчиков: немцы потеряли в тот день не менее 35–78 своих машин, а главное — столкнулись с невиданным явлением — воздушными таранами .</p>
+            <div class="nav">
+                <a href="#facts">Ко всем фактам</a>
+            </div>
+        </div>
+        <div class="text" id="fact4">
+            <h2>4. Им было всего 11 лет</h2>
+            <p>Брестская крепость приняла на себя первый шквал огня в 4:25 утра . Среди ее защитников были не только взрослые бойцы, но и дети командиров. Петр Котельников, которому в 1941 году было всего 11 лет, вспоминал: «Пробило крышу. Меня оглушило. Большинство солдат нашей казармы погибли в первые секунды». Вместе со взрослыми он тушил пожары, носил боеприпасы и воду в подвалы, став одним из тысяч безымянных героев первого дня войны .</p>
+            <div class="nav">
+                <a href="#facts">Ко всем фактам</a>
+            </div>
+        </div>
+        <div class="text" id="fact5">
+            <h2>5. Садовники против танков</h2>
+            <p>Несмотря на панику и неразбериху, пограничники стояли насмерть. Войска группы армий «Центр» наступали на белорусском направлении. Известен случай, когда личный состав одной из застав лег под гусеницами вражеских танков, но не отошел ни на шаг. Врагу не удалось сходу захватить мосты, их взрывали буквально перед носом наступающих колонн.</p>
+            <div class="nav">
+                <a href="#facts">Ко всем фактам</a>
+            </div>
+        </div>
+        <div class="text" id="fact6">
+            <h2>6. Ошибка Сталина</h2>
+            <p>Первые часы войны в Кремле прошли в растерянности. И.В. Сталин сначала отказывался верить, что это именно полномасштабная война, считая происходящее провокацией немецких генералов. Позже Н.С. Хрущев в мемуарах приводил слова Сталина: «Ленин оставил нам пролетарское Советское государство, а мы его потеряли» . Это состояние шока парализовало управление войсками в первые, самые критические, часы.</p>
+            <div class="nav">
+                <a href="#facts">Ко всем фактам</a>
+            </div>
+        </div>
+        <div class="text" id="fact7">
+            <h2>7. Прослезившийся дипломат</h2>
+            <p>В 5 утра посол Германии граф фон Шуленбург прибыл к наркому Молотову, чтобы вручить ноту об объявлении войны. Интересно, что, зачитывая бумагу о «невыносимой угрозе со стороны СССР», сотрудник посольства Хильгер, по воспоминаниям Молотова, прослезился . Возможно, он осознавал катастрофичность начавшейся авантюры для самой Германии.</p>
+            <div class="nav">
+                <a href="#facts">Ко всем фактам</a>
+            </div>
+        </div>
+        <div class="text" id="fact8">
+            <h2>8. Речь, которую ждали к полудню</h2>
+            <p>Советские люди узнали о войне не из сводок Генштаба. Обычные граждане в городах и селах услышали страшную новость в 12 часов дня по радио. Выступление наркома иностранных дел Вячеслава Молотова транслировалось на всю страну. Именно тогда прозвучала ставшая легендарной фраза: «Наше дело правое. Враг будет разбит. Победа будет за нами!» . Голос диктора Юрия Левитана, зачитавший эту речь, знала вся страна.</p>
+            <div class="nav">
+                <a href="#facts">Ко всем фактам</a>
+            </div>
+        </div>
+        <div class="text" id="fact9">
+            <h2>9. Планы на воскресенье</h2>
+            <p>1. 22 июня 1941 года пришлось на воскресенье. В школах накануне прошли выпускные балы.</p>
+            <p>2. В Москве кинотеатры готовились к премьере лирической комедии «Сердца четырех» </p>
+            <p>3. Миллионы юношей и девушек строили планы на будущее, которым не суждено было сбыться...</p>
+            <div class="nav">
+                <a href="#facts">Ко всем фактам</a>
+            </div>
+        </div>
+        <div class="text" id="fact10">
+            <h2>10. Цена одного дня</h2>
+            <p>Первый день войны унес тысячи жизней. Но самое страшное было впереди. Враг продвинулся вглубь территории, полностью оккупировав за несколько дней такие города, как Гродно и Кобрин. Долгая война только начиналась. Именно 22 июня в обиход вошло слово, ставшее обозначением всех ужасов XX века — «Великая Отечественная». Начался отсчет 1418 дней мужества, боли и Победы .</p>
+            <div class="nav">
+                <a href="#facts">Ко всем фактам</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
