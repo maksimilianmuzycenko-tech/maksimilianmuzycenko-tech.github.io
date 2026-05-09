@@ -145,7 +145,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">22 июня 1941 года - Начало Великой Отечественной войны</div>
+        <div class="header" id="nach">22 июня 1941 года - Начало Великой Отечественной войны</div>
         <div style="text-align: center;">
             <img src="1250803.gif" alt="Плохой Интернет" style="max-width: 100%; height: auto;">
         </div>
@@ -366,5 +366,22 @@
         });
     });
     </script>
+<script>
+    
+    window.addEventListener('load', function() {
+        const targetId = 'nach'; 
+        
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            setTimeout(function() {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 100);
+        }
+    });
+</script>
 </body>
 </html>
