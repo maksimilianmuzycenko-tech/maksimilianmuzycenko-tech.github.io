@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <!-- Yandex.Metrika counter -->
+        <!-- Yandex.Metrika counter -->
     <script type="text/javascript">
         (function(m,e,t,r,i,k,a){
             m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -14,163 +14,105 @@
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/108723844" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Game Command Studio</title>
     <style>
-        * {
+        html, body {
+            height: 100%;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
         body {
-            background: #0a0a0a;
-            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #000000 0%, #a318fa 100%) no-repeat fixed;
+            font-family: Arial;
             line-height: 1.5;
-            color: #f0f0f0;
+            color: #ffffff;
         }
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px;
         }
         .header {
             text-align: center;
-            font-size: 28px;
+            font-size: 32px;
             font-weight: bold;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #ff5500;
-            padding-bottom: 10px;
+            margin-bottom: 24px;
+            border-bottom: 7px solid #ffffff;
+            border-radius: 15px;
+            background: linear-gradient(70deg, #ff0000 0%, #ff8c00 100%); 
+            padding-bottom: 14px;
+            transition: 1s;
         }
+        .header:hover { background: linear-gradient(70deg, #ff0000 0%, #c971ff 100%); transform: scale(1.05); }
         .nav {
-            text-align: center;
-            margin: 30px 0;
             display: flex;
+            text-align: center;
+            margin: 34px 0;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            gap: 19px;
         }
         .nav a {
-            background: #ff5500;
-            color: white;
-            font-size: 16px;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 30px;
-            transition: 0.2s;
+            flex: 1;
             display: inline-block;
+            background: linear-gradient(70deg, #ff0000 0%, #ff8c00 100%);
+            color: white;
+            padding: 16px 16px;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 30px;
+            transition: 1s;
         }
         .nav a:hover {
-            background: #cc4400;
-            transform: scale(1.02);
+            background: linear-gradient(70deg, #ff0000 0%, #c971ff 100%);
+            transform: scale(1.08);
         }
         .license {
-            background: #1a1a1a;
-            padding: 20px;
+            background: linear-gradient(90deg, #ff0000 0%, #ff8c00 100%);
+            padding: 28px;
             border-radius: 16px;
-            border-left: 6px solid #ff5500;
-            margin-top: 20px;
+            margin-top: 24px;
+            transition: 1s;
         }
         .license h1 {
-            font-size: 26px;
-            margin-bottom: 15px;
+            font-size: 30px;
+            margin-bottom: 19px;
         }
         .license h2 {
-            font-size: 20px;
-            margin: 20px 0 10px;
-            color: #ff5500;
+            font-size: 24px;
+            margin: 24px 0 14px;
+            color: #ffffff;
         }
         .license p {
-            margin: 10px 0;
+            margin: 14px 0;
         }
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #333;
-            font-size: 14px;
-            color: #aaa;
-        }
-        .social {
-            margin: 20px 0;
-        }
-        .social a {
-            display: inline-block;
-            background: #ff5500;
-            color: white;
-            font-size: 16px;
-            padding: 8px 20px;
-            margin: 0 10px;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .social a:hover {
-            background: #cc4400;
-            transform: scale(1.02);
-        }
-        .to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #ff5500;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 28px;
-            opacity: 0;
-            transition: 0.3s;
-            pointer-events: none;
-            z-index: 1000;
-        }
-        .to-top:hover {
-            background: #cc4400;
-            transform: scale(1.1);
-        }
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: #ff5500;
-            width: 0%;
-            z-index: 1000;
-            transition: width 0.2s ease;
-        }
+        .license:hover { background: linear-gradient(90deg, #ff0000 0%, #c971ff 100%); transform: scale(1.017); }
+        .author p { font-size: 19px; text-align: center; color: #ffffff; }
         @media (max-width: 768px) {
-            .container { padding: 15px; }
+            .container { padding: 19px; }
             .header { font-size: 26px; }
-            .nav a { font-size: 15px; padding: 8px 16px; }
-            .license h1 { font-size: 24px; }
-            .license h2 { font-size: 19px; }
-            .license p, .license li { font-size: 15px; }
-            .social a { font-size: 15px; padding: 7px 18px; margin: 0 8px; }
+            .nav a { padding: 14px 16px; font-size: 18px; }
+           .license h1 { font-size: 24px; }
+            .license h2 { font-size: 22px; }
+            .license p { font-size: 18px; }
         }
+
         @media (max-width: 480px) {
-            .container { padding: 10px; }
-            .header { font-size: 20px; }
-            .nav a { font-size: 13px; padding: 6px 12px; }
-            .license h1 { font-size: 20px; }
-            .license h2 { font-size: 17px; }
-            .license p, .license li { font-size: 13px; }
-            .social a { font-size: 13px; padding: 6px 12px; margin: 0 5px; }
-            .to-top { width: 38px; height: 38px; font-size: 22px; bottom: 15px; right: 15px; }
+        .container { padding: 14px; }
+        .header { font-size: 22px; }
+        .nav a { padding: 12px 14px; font-size: 16px; }
+        .license { padding: 16px; }
+        .license h1 { font-size: 22px; }
+        .license h2 { font-size: 20px; }
+        .license p { font-size: 16px; }
         }
     </style>
 </head>
 <body>
-
-<div class="progress-bar" id="progressBar"></div>
-
 <div class="container">
-    <div class="header">🎮 Game Command Studio</div>
-
+    <div class="header">Game Command Studio</div>
     <div class="nav">
         <a href="clicker.html">🎯 Бесконечный кликер</a>
         <a href="business.html">🏢 My Business</a>
@@ -178,8 +120,7 @@
         <a href="support.html">🛠️ Служба поддержки</a>
         <a href="chat.html">🤖 Чат-бот помощник</a>
     </div>
-
-    <div class="license">
+        <div class="license">
         <h1>Лицензионное соглашение компании «Game Command Studio»</h1>
         <p><strong>Версия 1.0 от 20 апреля 2026 года</strong></p>
         <p>Настоящее лицензионное соглашение является публичной офертой компании «Game Command Studio» для любого лица, желающего использовать программное обеспечение, разработанное Лицензиаром.</p>
@@ -213,43 +154,15 @@
         <h2>6. Заключительные положения</h2>
         <p>6.1. Использование Программного обеспечения означает полное и безоговорочное принятие условий Соглашения.</p>
         <p>6.2. По всем вопросам, связанным с лицензированием, обращаться по адресу: <a href="mailto:yaatomshik@mail.ru">yaatomshik@mail.ru</a></p>
-    </div>
-
-    <div class="footer">
-        <div class="social">
+    </div> 
+        <div class="nav">
             <a href="https://vk.com/gamecommandstudio" target="_blank">VK</a>
             <a href="https://github.com/maksimilianmuzycenko-tech" target="_blank">GitHub</a>
             <a href="mailto:yaatomshik@mail.ru" target="_blank">Email</a>
         </div>
-        <p>© <span id="currentYear"></span> «Game Command Studio». Все права защищены.</p>
-    </div>
+        <div class=author>
+            <p>© 2026 Game Command Studio все права защищены</p>
+        </div>
 </div>
-
-<a href="#" class="to-top" id="toTopBtn">↑</a>
-
-<script>
-    document.getElementById('currentYear').innerText = new Date().getFullYear();
-
-    window.addEventListener('scroll', function() {
-        let btn = document.getElementById('toTopBtn');
-        if (window.scrollY > 300) {
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'auto';
-        } else {
-            btn.style.opacity = '0';
-            btn.style.pointerEvents = 'none';
-        }
-
-        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        let scrolled = (winScroll / height) * 100;
-        document.getElementById('progressBar').style.width = scrolled + '%';
-    });
-
-    document.getElementById('toTopBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-</script>
 </body>
 </html>
