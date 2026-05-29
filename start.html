@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>GCS DevStart — Стартовая панель разработчика</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #0A0F1C, #03050A);
+            font-family: 'Segoe UI', 'Inter', 'Roboto', system-ui, sans-serif;
+            min-height: 100vh;
+            padding: 24px 20px;
+            /* главное: контент начинается от верха, не уезжает */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* контейнер — просто ограничение ширины, без вертикального выравнивания */
+        .gcs-dashboard {
+            max-width: 1300px;
+            width: 100%;
+            background: rgba(6, 12, 24, 0.82);
+            backdrop-filter: blur(12px);
+            border-radius: 56px;
+            padding: 28px 32px 44px;
+            border: 1px solid rgba(255, 200, 80, 0.45);
+            box-shadow: 0 25px 42px rgba(0, 0, 0, 0.5);
+        }
+
+        /* переключатель режимов — плавный, жирный */
+        .search-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .tab-switch {
+            display: flex;
+            background: #0F172A;
+            padding: 6px;
+            border-radius: 90px;
+            gap: 8px;
+            border: 1px solid #3A4870;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 34px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            color: #C6D4FF;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #1E2F50, #0F1A32);
+            color: #FFE2A5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            border: 0.5px solid rgba(255, 210, 90, 0.8);
+        }
+
+
+/* ПОИСКОВАЯ СТРОКА — ИСПРАВЛЕНА (не съезжает) */
+.search-wrapper {
+    display: flex;
+    background: #070E1C;
+    border-radius: 100px;
+    padding: 4px;
+    border: 1px solid #3A4A70;
+    margin-bottom: 28px;
+    transition: 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search-wrapper:focus-within {
+    border-color: #FFC857;
+    box-shadow: 0 0 0 4px rgba(255, 200, 80, 0.25);
+}
+
+.search-wrapper input {
+    flex: 1;
+    min-width: 0;          /* важно: не даёт вылезать за пределы */
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    padding: 14px 20px;
+    color: #F0F4FF;
+    outline: none;
+    font-weight: 500;
+    border-radius: 100px;
+}
+
+.search-wrapper input::placeholder {
+    color: #6E81AD;
+    font-size: 0.95rem;
+}
+
+.search-wrapper button {
+    background: linear-gradient(135deg, #F5B042, #D98A1F);
+    border: none;
+    padding: 0 28px;
+    border-radius: 100px;
+    color: #0A0F1C;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin: 4px;
+}
+
+.search-wrapper button:hover {
+    background: linear-gradient(135deg, #FFC25C, #E59828);
+    transform: scale(0.97);
+}
+
+        /* панель результатов поиска (GCS) */
+        .results-panel {
+            margin: 8px 0 28px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 40px;
+            padding: 18px 24px;
+            border-left: 5px solid #FFC857;
+        }
+
+        .results-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #FFE0A0;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .results-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .result-chip {
+            background: #101826;
+            padding: 8px 22px;
+            border-radius: 60px;
+            color: #FFE5B5;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid rgba(255, 200, 70, 0.6);
+            font-size: 0.9rem;
+            transition: 0.15s;
+        }
+
+        .result-chip:hover {
+            background: #FFC85720;
+            border-color: #F5B042;
+            transform: translateY(-2px);
+        }
+
+        .empty-results {
+            color: #B2C2EB;
+            font-style: italic;
+            padding: 6px 0;
+        }
+
+        /* библиотека постоянных ссылок */
+        .dev-library {
+            margin-top: 28px;
+            background: #03081270;
+            border-radius: 44px;
+            padding: 22px 28px;
+            border: 1px solid #324166;
+        }
+
+        .library-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            border-bottom: 1px dashed #FFC85770;
+            margin-bottom: 22px;
+            padding-bottom: 10px;
+        }
+
+        .library-header h3 {
+            color: #FFDFA0;
+            font-size: 1.35rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 14px;
+        }
+
+        .dev-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #0A1022;
+            padding: 12px 20px;
+            border-radius: 70px;
+            text-decoration: none;
+            border: 1px solid #2F4068;
+            transition: 0.2s;
+        }
+
+        .dev-link:hover {
+            background: #121C34;
+            border-color: #FFBC4A;
+            transform: translateX(5px);
+        }
+
+        .link-icon {
+            font-size: 1.7rem;
+        }
+
+        .link-name {
+            font-weight: 600;
+            color: #F2E5C9;
+            font-size: 0.95rem;
+        }
+
+        .link-url {
+            font-size: 0.7rem;
+            color: #9AABD5;
+            word-break: break-word;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 38px;
+            color: #7A8BB2;
+        }
+
+        /* небольшая адаптивность — только ширина, ничего не ломается */
+        @media (max-width: 750px) {
+            .gcs-dashboard {
+                padding: 20px;
+            }
+            .tab-btn {
+                padding: 6px 20px;
+                font-size: 0.9rem;
+            }
+            .search-wrapper input {
+                font-size: 0.95rem;
+            }
+            .search-wrapper button {
+                padding: 0 18px;
+            }
+            .library-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+            body {
+                padding: 12px;
+            }
+            .tab-btn {
+                padding: 5px 14px;
+                font-size: 0.75rem;
+            }
+            .search-wrapper {
+                padding-left: 16px;
+            }
+            .result-chip {
+                padding: 5px 14px;
+                font-size: 0.75rem;
+            }
+            .dev-link {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="gcs-dashboard">
+    <!-- ПЕРЕКЛЮЧЕНИЕ ПОИСКА (GCS / Яндекс) -->
+    <div class="search-tabs">
+        <div class="tab-switch">
+            <button class="tab-btn active" id="gcsModeBtn">🔍 GCS поиск</button>
+            <button class="tab-btn" id="yandexModeBtn">🌐 Яндекс поиск</button>
+        </div>
+    </div>
+
+    <!-- ПОИСКОВАЯ СТРОКА -->
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="Например: RuStore, Gradle, PEP 8, Android" autocomplete="off">
+        <button id="searchExecuteBtn">Найти →</button>
+    </div>
+
+    <!-- БЛОК РЕЗУЛЬТАТОВ (ТОЛЬКО ДЛЯ GCS) -->
+    <div class="results-panel" id="gcsResultsPanel">
+        <div class="results-title">📌 РЕЗУЛЬТАТЫ ПОИСКА (GCS)</div>
+        <div class="results-list" id="gcsResultsList">
+            <div class="empty-results">⚡ Напиши запрос — и я покажу ссылки из библиотеки разработчика</div>
+        </div>
+    </div>
+
+    <!-- БИБЛИОТЕКА ПОСТОЯННЫХ РЕСУРСОВ (ВСЕГДА ВИДНА) -->
+    <div class="dev-library">
+        <div class="library-header">
+            <h3>📚 Библиотека разработчика GCS</h3>
+            <span style="font-size: 12px; background:#00000050; padding: 4px 14px; border-radius: 40px;">dev-tools</span>
+        </div>
+        <div class="library-grid" id="libraryContainer"></div>
+        <div style="margin-top: 14px; font-size: 12px; text-align: right; color: #D4AF6A;">⚡ GCS поиск работает по названиям / ссылкам / тегам</div>
+    </div>
+    <footer>⚙️ Game Command Studio — быстрый старт для разработчика | твои главные ссылки</footer>
+</div>
+
+<script>
+    // СПИСОК РЕСУРСОВ (РАСШИРЯЕМЫЙ)
+    const DEV_LIBRARY = [
+        { name: "RuStore консоль", url: "https://console.rustore.ru", tags: ["rustore", "консоль", "магазин"] },
+        { name: "Oracle (Java)", url: "https://www.oracle.com", tags: ["oracle", "java", "jdk"] },
+        { name: "GitHub", url: "https://github.com", tags: ["github", "git", "репозиторий"] },
+        { name: "RuStore Help", url: "https://www.rustore.ru/help", tags: ["rustore", "помощь"] },
+        { name: "Stepik", url: "https://stepik.org", tags: ["stepik", "курсы", "обучение"] },
+        { name: "Python.org", url: "https://python.org", tags: ["python", "документация"] },
+        { name: "PEP 8 — стиль кода", url: "https://peps.python.org/pep-0008/", tags: ["pep8", "стиль"] },
+        { name: "Android Developers", url: "https://developer.android.com", tags: ["android", "aab", "apk"] },
+        { name: "Gradle официальный", url: "https://gradle.org", tags: ["gradle", "build"] },
+        { name: "Firefox (скачать)", url: "https://www.mozilla.org/firefox/", tags: ["firefox", "browser"] },
+        { name: "GitHub Pages docs", url: "https://pages.github.com", tags: ["github pages"] },
+        { name: "Web.dev (оптимизация)", url: "https://web.dev", tags: ["web", "оптимизация"] }
+    ];
+
+    let currentMode = 'gcs';   // 'gcs' или 'yandex'
+
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchExecuteBtn');
+    const gcsTab = document.getElementById('gcsModeBtn');
+    const yandexTab = document.getElementById('yandexModeBtn');
+    const resultsListDiv = document.getElementById('gcsResultsList');
+    const resultsPanel = document.getElementById('gcsResultsPanel');
+    const libraryContainer = document.getElementById('libraryContainer');
+
+    // Отрисовка всех ссылок (всегда видимы)
+    function renderFullLibrary() {
+        libraryContainer.innerHTML = '';
+        DEV_LIBRARY.forEach(item => {
+            let icon = '🔗';
+            if (item.name.toLowerCase().includes('rustore')) icon = '📱';
+            else if (item.name.toLowerCase().includes('github')) icon = '🐙';
+            else if (item.name.toLowerCase().includes('python')) icon = '🐍';
+            else if (item.name.toLowerCase().includes('oracle')) icon = '☕';
+            else if (item.name.toLowerCase().includes('stepik')) icon = '📖';
+            else if (item.name.toLowerCase().includes('firefox')) icon = '🦊';
+            else if (item.name.toLowerCase().includes('gradle')) icon = '📦';
+            else if (item.name.toLowerCase().includes('android')) icon = '📱';
+            const linkDiv = document.createElement('a');
+            linkDiv.className = 'dev-link';
+            linkDiv.href = item.url;
+            linkDiv.target = '_blank';
+            linkDiv.rel = 'noopener noreferrer';
+            linkDiv.innerHTML = `
+                <div class="link-icon">${icon}</div>
+                <div class="link-info">
+                    <div class="link-name">${escapeHtml(item.name)}</div>
+                    <div class="link-url">${escapeHtml(item.url)}</div>
+                </div>
+            `;
+            libraryContainer.appendChild(linkDiv);
+        });
+    }
+
+    function searchInLibrary(query) {
+        if (!query.trim()) return [];
+        const low = query.trim().toLowerCase();
+        return DEV_LIBRARY.filter(item =>
+            item.name.toLowerCase().includes(low) ||
+            item.url.toLowerCase().includes(low) ||
+            (item.tags && item.tags.some(t => t.toLowerCase().includes(low)))
+        );
+    }
+
+    function renderGCSResults(query) {
+        if (!query.trim()) {
+            resultsListDiv.innerHTML = '<div class="empty-results">🔎 Введи запрос — я найду ссылки из библиотеки разработчика.</div>';
+            resultsPanel.style.display = 'block';
+            return;
+        }
+        const found = searchInLibrary(query);
+        if (found.length === 0) {
+            resultsListDiv.innerHTML = '<div class="empty-results">❌ Ничего не найдено. Попробуй: rustore, gradle, java, python, android.</div>';
+        } else {
+            resultsListDiv.innerHTML = '';
+            found.forEach(res => {
+                const chip = document.createElement('a');
+                chip.className = 'result-chip';
+                chip.href = res.url;
+                chip.target = '_blank';
+                chip.rel = 'noopener noreferrer';
+                chip.innerHTML = `📌 ${escapeHtml(res.name)}`;
+                resultsListDiv.appendChild(chip);
+            });
+        }
+        resultsPanel.style.display = 'block';
+    }
+
+    function executeSearch() {
+        const rawQuery = searchInput.value;
+        if (!rawQuery.trim()) {
+            if (currentMode === 'gcs') renderGCSResults('');
+            return;
+        }
+        if (currentMode === 'yandex') {
+            const yandexUrl = `https://yandex.ru/search/?text=${encodeURIComponent(rawQuery.trim())}`;
+            window.open(yandexUrl, '_blank');
+        } else {
+            renderGCSResults(rawQuery);
+        }
+    }
+
+    function setMode(mode) {
+        currentMode = mode;
+        if (mode === 'gcs') {
+            gcsTab.classList.add('active');
+            yandexTab.classList.remove('active');
+            resultsPanel.style.display = 'block';
+            const cur = searchInput.value;
+            if (cur.trim()) renderGCSResults(cur);
+            else resultsListDiv.innerHTML = '<div class="empty-results">⚡ GCS режим: ищу среди твоих ресурсов (Rustore, Gradle, PEP 8...)</div>';
+        } else {
+            yandexTab.classList.add('active');
+            gcsTab.classList.remove('active');
+            resultsPanel.style.display = 'block';
+            resultsListDiv.innerHTML = '<div class="empty-results">🌐 Яндекс режим: поиск в интернете откроется в новой вкладке.</div>';
+        }
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // события
+    searchBtn.addEventListener('click', executeSearch);
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            executeSearch();
+        }
+    });
+    gcsTab.addEventListener('click', () => setMode('gcs'));
+    yandexTab.addEventListener('click', () => setMode('yandex'));
+
+    renderFullLibrary();
+    setMode('gcs');
+</script>
+</body>
+</html>
