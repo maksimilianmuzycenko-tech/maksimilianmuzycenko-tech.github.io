@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>GCS — Урок 2: Горячие клавиши</title>
+    <style>
+        * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
+        body { background: linear-gradient(60deg, #ffffff 0%, #AEFF00 100%); font-family: system-ui, sans-serif; min-height: 100vh; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; font-size: 24px; font-weight: bold; border-bottom: 3px solid #5600FF; padding-bottom: 10px; margin-bottom: 20px; }
+        .content { background: #ffffff; padding: 30px; border-radius: 30px; border: 5px solid #5600FF; }
+        button { background: #5600FF; color: white; font-weight: bold; padding: 12px 24px; border: none; border-radius: 40px; font-size: 18px; cursor: pointer; margin-top: 20px; }
+        button:hover { transform: scale(1.02); background: #3c00b3; }
+        .completed { color: green; font-weight: bold; margin-top: 15px; }
+        .lessons-link { display: inline-block; margin-top: 20px; color: #5600FF; font-weight: bold; text-decoration: none; }
+        hr { margin: 20px 0; border-color: #5600FF; }
+        .hotkey { background: #1e1e2f; color: #AEFF00; font-family: monospace; font-size: 18px; padding: 8px 16px; border-radius: 20px; display: inline-block; margin: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header"><h1>⌨️ Урок 2: Горячие клавиши</h1></div>
+    <div class="content" id="contentArea">
+        <p>⚡ Загрузка...</p>
+    </div>
+</div>
+<script>
+    const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
+
+    function loadUser() {
+        const raw = sessionStorage.getItem('gcs_user');
+        if (!raw) return null;
+        try { return JSON.parse(raw); } catch(e) { return null; }
+    }
+
+    function loadProgress() {
+        const raw = sessionStorage.getItem('gcs_progress');
+        if (!raw) return null;
+        try { return JSON.parse(raw); } catch(e) { return null; }
+    }
+
+    function saveProgress(progress) {
+        sessionStorage.setItem('gcs_progress', JSON.stringify(progress));
+    }
+
+    function render() {
+        const user = loadUser();
+        if (!user) {
+            window.location.href = BASE + 'vhod.html';
+            return;
+        }
+        let progress = loadProgress();
+        if (!progress) return;
+
+        const userName = user.user || 'Гость';
+        const stepDone = progress.steps?.card2h1 === 'yes';
+        const cardWin = progress.cards?.card2 === 'win';
+
+        const contentDiv = document.getElementById('contentArea');
+
+        if (stepDone && cardWin) {
+            contentDiv.innerHTML = `
+                <p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
+                <p>✅ Ты уже завершил этот шаг. Баллы получены. Молодец!</p>
+                <hr>
+                <a href="${BASE}lessons.html" class="lessons-link">← Вернуться к урокам</a>
+            `;
+            return;
+        }
+
+        contentDiv.innerHTML = `
+            <p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
+            <p>Горячие клавиши — это комбинации на клавиатуре, которые ускоряют работу за компьютером.</p>
+            <p>🔥 Вот самые важные (запомни их):</p>
+            <p><span class="hotkey">Ctrl + C</span> — копировать</p>
+            <p><span class="hotkey">Ctrl + V</span> — вставить</p>
+            <p><span class="hotkey">Ctrl + X</span> — вырезать</p>
+            <p><span class="hotkey">Ctrl + Z</span> — отменить</p>
+            <p><span class="hotkey">Ctrl + S</span> — сохранить</p>
+            <hr>
+            <p><strong>🎯 Задание:</strong> Напиши, какая комбинация копирует текст?</p>
+            <input type="text" id="answerInput" placeholder="Например: Ctrl + C" style="width:100%; padding:12px; margin:20px 0; border-radius:30px; border:2px solid #5600FF;">
+            <button id="completeBtn">✅ Проверить и завершить шаг</button>
+            <div id="completeMsg"></div>
+        `;
+
+        const btn = document.getElementById('completeBtn');
+        const answerInput = document.getElementById('answerInput');
+        const msgDiv = document.getElementById('completeMsg');
+
+        btn.addEventListener('click', () => {
+            if (stepDone) {
+                msgDiv.innerHTML = '<p class="completed">⏳ Шаг уже завершён. Баллы не начисляются.</p>';
+                return;
+            }
+
+            const answer = answerInput.value.trim().toLowerCase();
+            const correct = (answer === 'ctrl + c' || answer === 'ctrl+c' || answer === 'ctrl c');
+
+            if (!correct) {
+                msgDiv.innerHTML = '<p style="color:red;">❌ Неправильно. Попробуй ещё раз. (Подсказка: Ctrl + C)</p>';
+                return;
+            }
+
+            // Обновляем прогресс
+            if (!progress.steps) progress.steps = {};
+            if (!progress.cards) progress.cards = {};
+
+            progress.steps.card2h1 = 'yes';
+            progress.cards.card2 = 'win';
+            progress.points = (progress.points || 0) + 1;
+
+            saveProgress(progress);
+
+            msgDiv.innerHTML = `
+                <p class="completed">✅ Правильно! +1 балл. Урок 2 пройден.</p>
+                <a href="${BASE}lessons.html" class="lessons-link">📚 Перейти к урокам →</a>
+            `;
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+    }
+
+    render();
+</script>
+</body>
+</html>
