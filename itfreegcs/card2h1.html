@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GCS — Урок 2: Горячие клавиши</title>
     <style>
         * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
@@ -55,19 +55,8 @@
 
         const userName = user.user || 'Гость';
         const stepDone = progress.steps?.card2h1 === 'yes';
-        const cardWin = progress.cards?.card2 === 'win';
 
         const contentDiv = document.getElementById('contentArea');
-
-        if (stepDone && cardWin) {
-            contentDiv.innerHTML = `
-                <p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
-                <p>✅ Ты уже завершил этот шаг. Баллы получены. Молодец!</p>
-                <hr>
-                <a href="${BASE}lessons.html" class="lessons-link">← Вернуться к урокам</a>
-            `;
-            return;
-        }
 
         contentDiv.innerHTML = `
             <p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
@@ -90,11 +79,6 @@
         const msgDiv = document.getElementById('completeMsg');
 
         btn.addEventListener('click', () => {
-            if (stepDone) {
-                msgDiv.innerHTML = '<p class="completed">⏳ Шаг уже завершён. Баллы не начисляются.</p>';
-                return;
-            }
-
             const answer = answerInput.value.trim().toLowerCase();
             const correct = (answer === 'ctrl + c' || answer === 'ctrl+c' || answer === 'ctrl c');
 
@@ -103,7 +87,11 @@
                 return;
             }
 
-            // Обновляем прогресс
+            if (stepDone) {
+                msgDiv.innerHTML = '<p class="completed">⏳ Ты уже проходил этот урок. Баллы не начислены, но ты молодец, что повторяешь!</p><a href="' + BASE + 'lessons.html" class="lessons-link">📚 К урокам →</a>';
+                return;
+            }
+
             if (!progress.steps) progress.steps = {};
             if (!progress.cards) progress.cards = {};
 
