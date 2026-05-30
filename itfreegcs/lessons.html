@@ -8,7 +8,7 @@
         * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
         body { background: linear-gradient(60deg, #ffffff 0%, #AEFF00 100%); font-family: system-ui, sans-serif; min-height: 100vh; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; font-size: 24px; font-weight: bold; border-bottom: 3px solid #5600FF; padding-bottom: 10px; }
+        .header { text-align: center; font-size: 24px; font-weight: bold; border-bottom: 3px solid #5600FF; padding-bottom: 10px; cursor: pointer; }
         .user-info { background: #ffffff; padding: 20px; border-radius: 30px; border: 5px solid #5600FF; margin-bottom: 30px; text-align: center; }
         .user-info p { margin: 8px 0; }
         .info-row { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
@@ -31,7 +31,9 @@
 </head>
 <body>
 <div class="container">
-    <div class="header"><h1>📚 Твои уроки</h1></div>
+    <div class="header" id="debugHeader">
+        <h1>📚 Твои уроки</h1>
+    </div>
     <div class="user-info" id="userInfo">⚡ Загрузка...</div>
     <div class="cards-grid" id="cardsGrid"></div>
     <a href="https://maksimilianmuzycenko-tech.github.io/itfreegcs/index.html" class="back-link">← На главную сайта</a>
@@ -39,7 +41,80 @@
 <script>
     const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
     
-    // Эталонная структура (то, что должно быть)
+    // ========== ОТЛАДКА ==========
+    let clickCount = 0;
+    let clickTimer = null;
+    
+    function resetClickCount() {
+        clickCount = 0;
+        if (clickTimer) clearTimeout(clickTimer);
+        clickTimer = null;
+    }
+    
+    function showDebugAlert() {
+        // Собираем диагностическую информацию
+        const userRaw = sessionStorage.getItem('gcs_user');
+        const progressRaw = sessionStorage.getItem('gcs_progress');
+        
+        let userInfo = 'Нет';
+        let progressInfo = 'Нет';
+        let progressParsed = null;
+        
+        if (userRaw) {
+            try {
+                const u = JSON.parse(userRaw);
+                userInfo = `user: "${u.user}"`;
+            } catch(e) { userInfo = 'Ошибка парсинга'; }
+        }
+        
+        if (progressRaw) {
+            try {
+                progressParsed = JSON.parse(progressRaw);
+                progressInfo = JSON.stringify(progressParsed, null, 2);
+            } catch(e) { progressInfo = 'Ошибка парсинга'; }
+        }
+        
+        const message = 
+            '🔧 ДИАГНОСТИКА GCS\n\n' +
+            '📦 sessionStorage:\n' +
+            '━━━━━━━━━━━━━━━━━━━━\n' +
+            'gcs_user: ' + userInfo + '\n\n' +
+            'gcs_progress: ' + (progressRaw ? '✅ есть' : '❌ нет') + '\n\n' +
+            '📄 Содержимое прогресса:\n' + progressInfo + '\n\n' +
+            '━━━━━━━━━━━━━━━━━━━━\n' +
+            '💡 Если gcs_progress нет — проблема во входе.\n' +
+            '💡 Если есть, но нет баллов — проблема в сохранении прогресса.\n' +
+            '💡 Если всё есть, но карточки не показывают — проблема в отображении.';
+        
+        alert(message);
+    }
+    
+    // Обработчик нажатий на заголовок
+    document.addEventListener('DOMContentLoaded', () => {
+        const header = document.getElementById('debugHeader');
+        if (header) {
+            header.addEventListener('click', () => {
+                // Сбрасываем таймер при каждом нажатии
+                if (clickTimer) clearTimeout(clickTimer);
+                
+                clickCount++;
+                
+                // Запускаем таймер на 15 секунд
+                clickTimer = setTimeout(() => {
+                    resetClickCount();
+                }, 15000);
+                
+                // Если 10 нажатий — показываем отладку
+                if (clickCount >= 10) {
+                    resetClickCount();
+                    showDebugAlert();
+                }
+            });
+        }
+    });
+    
+    // ========== ОСНОВНОЙ КОД ==========
+    
     const DEFAULT_CARDS = { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" };
     const DEFAULT_STEPS = { card1h1: "no" };
     const DEFAULT_PROGRESS = { user: "Гость", points: 0, cards: DEFAULT_CARDS, steps: DEFAULT_STEPS };
@@ -50,13 +125,9 @@
         try { return JSON.parse(raw); } catch(e) { return null; }
     }
 
-    // Функция, которая дополняет прогресс до правильной структуры
     function normalizeProgress(progress) {
         if (!progress) return JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
-        
         let updated = false;
-        
-        // Дополняем карточки
         for (let key of Object.keys(DEFAULT_CARDS)) {
             if (!progress.cards || progress.cards[key] === undefined) {
                 if (!progress.cards) progress.cards = {};
@@ -64,8 +135,6 @@
                 updated = true;
             }
         }
-        
-        // Дополняем шаги
         for (let key of Object.keys(DEFAULT_STEPS)) {
             if (!progress.steps || progress.steps[key] === undefined) {
                 if (!progress.steps) progress.steps = {};
@@ -73,31 +142,19 @@
                 updated = true;
             }
         }
-        
-        // Проверяем points
-        if (progress.points === undefined) {
-            progress.points = 0;
-            updated = true;
-        }
-        
-        // Проверяем user
+        if (progress.points === undefined) { progress.points = 0; updated = true; }
         if (!progress.user) {
             const user = loadUser();
             progress.user = user?.user || "Гость";
             updated = true;
         }
-        
-        if (updated) {
-            sessionStorage.setItem('gcs_progress', JSON.stringify(progress));
-        }
-        
+        if (updated) sessionStorage.setItem('gcs_progress', JSON.stringify(progress));
         return progress;
     }
 
     function loadProgress() {
         let prog = sessionStorage.getItem('gcs_progress');
         let progress;
-        
         if (!prog) {
             const user = loadUser();
             progress = JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
@@ -110,8 +167,6 @@
                 progress = JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
             }
         }
-        
-        // Применяем нормализацию (дополняем недостающие поля)
         progress = normalizeProgress(progress);
         return progress;
     }
@@ -120,9 +175,9 @@
         const progress = loadProgress();
         const jsonStr = JSON.stringify(progress, null, 2);
         navigator.clipboard.writeText(jsonStr).then(() => {
-            alert('✅ JSON прогресса скопирован в буфер обмена! Сохрани его в надёжном месте.');
+            alert('✅ JSON прогресса скопирован в буфер обмена!');
         }).catch(() => {
-            alert('❌ Не удалось скопировать. Попробуй вручную.');
+            alert('❌ Не удалось скопировать.');
         });
     }
 
