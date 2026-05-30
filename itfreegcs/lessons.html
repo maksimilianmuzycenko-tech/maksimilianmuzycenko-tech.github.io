@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GCS — Уроки</title>
     <style>
         * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
@@ -31,100 +31,45 @@
 </head>
 <body>
 <div class="container">
-    <div class="header" id="debugHeader">
-        <h1>📚 Твои уроки</h1>
-    </div>
+    <div class="header" id="debugHeader"><h1>📚 Твои уроки</h1></div>
     <div class="user-info" id="userInfo">⚡ Загрузка...</div>
     <div class="cards-grid" id="cardsGrid"></div>
-    <a href="https://maksimilianmuzycenko-tech.github.io/itfreegcs/index.html" class="back-link">← На главную сайта</a>
+    <a href="indecs.html" class="back-link">← На главную сайта</a>
 </div>
 <script>
     const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
     
-    // ========== ОТЛАДКА ==========
     let clickCount = 0;
     let clickTimer = null;
-    
-    function resetClickCount() {
-        clickCount = 0;
-        if (clickTimer) clearTimeout(clickTimer);
-        clickTimer = null;
-    }
-    
+    function resetClickCount() { clickCount = 0; if (clickTimer) clearTimeout(clickTimer); clickTimer = null; }
     function showDebugAlert() {
-        // Собираем диагностическую информацию
         const userRaw = sessionStorage.getItem('gcs_user');
         const progressRaw = sessionStorage.getItem('gcs_progress');
-        
-        let userInfo = 'Нет';
-        let progressInfo = 'Нет';
-        let progressParsed = null;
-        
-        if (userRaw) {
-            try {
-                const u = JSON.parse(userRaw);
-                userInfo = `user: "${u.user}"`;
-            } catch(e) { userInfo = 'Ошибка парсинга'; }
-        }
-        
-        if (progressRaw) {
-            try {
-                progressParsed = JSON.parse(progressRaw);
-                progressInfo = JSON.stringify(progressParsed, null, 2);
-            } catch(e) { progressInfo = 'Ошибка парсинга'; }
-        }
-        
-        const message = 
-            '🔧 ДИАГНОСТИКА GCS\n\n' +
-            '📦 sessionStorage:\n' +
-            '━━━━━━━━━━━━━━━━━━━━\n' +
-            'gcs_user: ' + userInfo + '\n\n' +
-            'gcs_progress: ' + (progressRaw ? '✅ есть' : '❌ нет') + '\n\n' +
-            '📄 Содержимое прогресса:\n' + progressInfo + '\n\n' +
-            '━━━━━━━━━━━━━━━━━━━━\n' +
-            '💡 Если gcs_progress нет — проблема во входе.\n' +
-            '💡 Если есть, но нет баллов — проблема в сохранении прогресса.\n' +
-            '💡 Если всё есть, но карточки не показывают — проблема в отображении.';
-        
-        alert(message);
+        let userInfo = 'Нет', progressInfo = 'Нет';
+        if (userRaw) try { const u = JSON.parse(userRaw); userInfo = `user: "${u.user}"`; } catch(e) { userInfo = 'Ошибка'; }
+        if (progressRaw) try { progressInfo = JSON.stringify(JSON.parse(progressRaw), null, 2); } catch(e) { progressInfo = 'Ошибка'; }
+        alert('🔧 ДИАГНОСТИКА GCS\n\n📦 sessionStorage:\ngcs_user: ' + userInfo + '\n\ngcs_progress: ' + (progressRaw ? '✅ есть' : '❌ нет') + '\n\n📄 Содержимое:\n' + progressInfo);
     }
-    
-    // Обработчик нажатий на заголовок
     document.addEventListener('DOMContentLoaded', () => {
         const header = document.getElementById('debugHeader');
-        if (header) {
-            header.addEventListener('click', () => {
-                // Сбрасываем таймер при каждом нажатии
-                if (clickTimer) clearTimeout(clickTimer);
-                
-                clickCount++;
-                
-                // Запускаем таймер на 15 секунд
-                clickTimer = setTimeout(() => {
-                    resetClickCount();
-                }, 15000);
-                
-                // Если 10 нажатий — показываем отладку
-                if (clickCount >= 10) {
-                    resetClickCount();
-                    showDebugAlert();
-                }
-            });
-        }
+        if (header) header.addEventListener('click', () => {
+            if (clickTimer) clearTimeout(clickTimer);
+            clickCount++;
+            clickTimer = setTimeout(() => resetClickCount(), 15000);
+            if (clickCount >= 10) { resetClickCount(); showDebugAlert(); }
+        });
     });
     
-    // ========== ОСНОВНОЙ КОД ==========
-    
     const DEFAULT_CARDS = { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" };
-    const DEFAULT_STEPS = { card1h1: "no" };
+    const DEFAULT_STEPS = { card1h1: "no", card2h1: "no" };
     const DEFAULT_PROGRESS = { user: "Гость", points: 0, cards: DEFAULT_CARDS, steps: DEFAULT_STEPS };
-
+    
     function loadUser() {
         const raw = sessionStorage.getItem('gcs_user');
         if (!raw) return null;
         try { return JSON.parse(raw); } catch(e) { return null; }
     }
-
+    
     function normalizeProgress(progress) {
         if (!progress) return JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
         let updated = false;
@@ -151,7 +96,7 @@
         if (updated) sessionStorage.setItem('gcs_progress', JSON.stringify(progress));
         return progress;
     }
-
+    
     function loadProgress() {
         let prog = sessionStorage.getItem('gcs_progress');
         let progress;
@@ -161,33 +106,23 @@
             if (user) progress.user = user.user;
             sessionStorage.setItem('gcs_progress', JSON.stringify(progress));
         } else {
-            try {
-                progress = JSON.parse(prog);
-            } catch(e) {
-                progress = JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
-            }
+            try { progress = JSON.parse(prog); } catch(e) { progress = JSON.parse(JSON.stringify(DEFAULT_PROGRESS)); }
         }
         progress = normalizeProgress(progress);
         return progress;
     }
-
+    
     function exportProgress() {
         const progress = loadProgress();
         const jsonStr = JSON.stringify(progress, null, 2);
-        navigator.clipboard.writeText(jsonStr).then(() => {
-            alert('✅ JSON прогресса скопирован в буфер обмена!');
-        }).catch(() => {
-            alert('❌ Не удалось скопировать.');
-        });
+        navigator.clipboard.writeText(jsonStr).then(() => alert('✅ JSON прогресса скопирован!'));
     }
-
+    
     function render() {
         const user = loadUser();
         if (!user) { window.location.href = BASE + 'vhod.html'; return; }
         const progress = loadProgress();
-        
-        const userInfoDiv = document.getElementById('userInfo');
-        userInfoDiv.innerHTML = `
+        document.getElementById('userInfo').innerHTML = `
             <p>👤 <strong>${escapeHtml(progress.user)}</strong></p>
             <div class="info-row">
                 <span>⭐ Баллы: <strong>${progress.points || 0}</strong></span>
@@ -195,25 +130,21 @@
                 <button id="logoutBtn" class="logout-btn">🚪 Выйти</button>
             </div>
         `;
-        
         document.getElementById('exportBtn')?.addEventListener('click', exportProgress);
         document.getElementById('logoutBtn')?.addEventListener('click', () => {
             sessionStorage.removeItem('gcs_user');
             sessionStorage.removeItem('gcs_progress');
             window.location.href = BASE + 'vhod.html';
         });
-
         const cards = [
             { id: 'card1', name: 'Начало', link: 'card1h1.html' },
-            { id: 'card2', name: 'Урок 2', link: 'card2.html' },
+            { id: 'card2', name: 'Урок 2', link: 'card2h1.html' },
             { id: 'card3', name: 'Урок 3', link: 'card3.html' },
             { id: 'card4', name: 'Урок 4', link: 'card4.html' },
             { id: 'card5', name: 'Урок 5', link: 'card5.html' }
         ];
-        
         const grid = document.getElementById('cardsGrid');
         grid.innerHTML = '';
-        
         cards.forEach((card, idx) => {
             const available = idx === 0 || progress.cards[`card${idx}`] === 'win';
             const isWin = progress.cards[card.id] === 'win';
@@ -228,7 +159,6 @@
             grid.appendChild(div);
         });
     }
-
     function escapeHtml(s) { if (!s) return ''; return s.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
     render();
 </script>
