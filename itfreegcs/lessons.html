@@ -38,7 +38,11 @@
 </div>
 <script>
     const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
-    const DEFAULT_PROGRESS = { user: "Гость", points: 0, cards: { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" }, steps: { card1h1: "no" } };
+    
+    // Эталонная структура (то, что должно быть)
+    const DEFAULT_CARDS = { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" };
+    const DEFAULT_STEPS = { card1h1: "no" };
+    const DEFAULT_PROGRESS = { user: "Гость", points: 0, cards: DEFAULT_CARDS, steps: DEFAULT_STEPS };
 
     function loadUser() {
         const raw = sessionStorage.getItem('gcs_user');
@@ -46,26 +50,70 @@
         try { return JSON.parse(raw); } catch(e) { return null; }
     }
 
+    // Функция, которая дополняет прогресс до правильной структуры
+    function normalizeProgress(progress) {
+        if (!progress) return JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
+        
+        let updated = false;
+        
+        // Дополняем карточки
+        for (let key of Object.keys(DEFAULT_CARDS)) {
+            if (!progress.cards || progress.cards[key] === undefined) {
+                if (!progress.cards) progress.cards = {};
+                progress.cards[key] = DEFAULT_CARDS[key];
+                updated = true;
+            }
+        }
+        
+        // Дополняем шаги
+        for (let key of Object.keys(DEFAULT_STEPS)) {
+            if (!progress.steps || progress.steps[key] === undefined) {
+                if (!progress.steps) progress.steps = {};
+                progress.steps[key] = DEFAULT_STEPS[key];
+                updated = true;
+            }
+        }
+        
+        // Проверяем points
+        if (progress.points === undefined) {
+            progress.points = 0;
+            updated = true;
+        }
+        
+        // Проверяем user
+        if (!progress.user) {
+            const user = loadUser();
+            progress.user = user?.user || "Гость";
+            updated = true;
+        }
+        
+        if (updated) {
+            sessionStorage.setItem('gcs_progress', JSON.stringify(progress));
+        }
+        
+        return progress;
+    }
+
     function loadProgress() {
         let prog = sessionStorage.getItem('gcs_progress');
+        let progress;
+        
         if (!prog) {
-            const newProg = JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
             const user = loadUser();
-            if (user) newProg.user = user.user;
-            sessionStorage.setItem('gcs_progress', JSON.stringify(newProg));
-            return newProg;
+            progress = JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
+            if (user) progress.user = user.user;
+            sessionStorage.setItem('gcs_progress', JSON.stringify(progress));
+        } else {
+            try {
+                progress = JSON.parse(prog);
+            } catch(e) {
+                progress = JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
+            }
         }
-        try {
-            let parsed = JSON.parse(prog);
-            let updated = false;
-            if (!parsed.cards) { parsed.cards = DEFAULT_PROGRESS.cards; updated = true; }
-            if (!parsed.steps) { parsed.steps = DEFAULT_PROGRESS.steps; updated = true; }
-            if (parsed.points === undefined) { parsed.points = 0; updated = true; }
-            for (let k of Object.keys(DEFAULT_PROGRESS.cards)) if (!parsed.cards[k]) { parsed.cards[k] = DEFAULT_PROGRESS.cards[k]; updated = true; }
-            for (let k of Object.keys(DEFAULT_PROGRESS.steps)) if (!parsed.steps[k]) { parsed.steps[k] = DEFAULT_PROGRESS.steps[k]; updated = true; }
-            if (updated) sessionStorage.setItem('gcs_progress', JSON.stringify(parsed));
-            return parsed;
-        } catch(e) { return JSON.parse(JSON.stringify(DEFAULT_PROGRESS)); }
+        
+        // Применяем нормализацию (дополняем недостающие поля)
+        progress = normalizeProgress(progress);
+        return progress;
     }
 
     function exportProgress() {
@@ -107,8 +155,10 @@
             { id: 'card4', name: 'Урок 4', link: 'card4.html' },
             { id: 'card5', name: 'Урок 5', link: 'card5.html' }
         ];
+        
         const grid = document.getElementById('cardsGrid');
         grid.innerHTML = '';
+        
         cards.forEach((card, idx) => {
             const available = idx === 0 || progress.cards[`card${idx}`] === 'win';
             const isWin = progress.cards[card.id] === 'win';
