@@ -22,7 +22,7 @@
 <div class="container">
     <div class="header"><h1>🔐 Вход</h1></div>
     <div class="text">
-        <textarea id="jsonInput" rows="6" placeholder='{"user":"Максим"}'></textarea>
+        <textarea id="jsonInput" rows="6" placeholder='{"user":"Максим"} или полный JSON из экспорта'></textarea>
         <button id="loginBtn">Войти</button>
         <div id="errorMsg" class="error"></div>
         <div id="successBlock"></div>
@@ -30,32 +30,88 @@
     </div>
 </div>
 <script>
+    const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
     const loginBtn = document.getElementById('loginBtn');
     const jsonInput = document.getElementById('jsonInput');
     const errorMsg = document.getElementById('errorMsg');
     const successBlock = document.getElementById('successBlock');
 
+    function isValidUserData(data) {
+        return data && typeof data.user === 'string' && data.user.trim().length > 0;
+    }
+
+    function createDefaultProgress(username) {
+        return {
+            user: username,
+            points: 0,
+            cards: {
+                card1: "no",
+                card2: "no",
+                card3: "no",
+                card4: "no",
+                card5: "no"
+            },
+            steps: {
+                card1h1: "no"
+            }
+        };
+    }
+
     loginBtn.addEventListener('click', () => {
         const rawJson = jsonInput.value.trim();
         if (!rawJson) { errorMsg.innerText = '❌ Вставьте JSON'; return; }
+        
         try {
-            const userData = JSON.parse(rawJson);
-            if (!userData.user) throw new Error();
-            sessionStorage.setItem('gcs_user', rawJson);
+            const parsed = JSON.parse(rawJson);
+            
+            // Проверяем, есть ли поле user (обязательно)
+            if (!parsed.user || typeof parsed.user !== 'string') {
+                throw new Error('Нет поля user');
+            }
+            
+            let progressData;
+            
+            // Если в JSON есть поля points, cards, steps — значит это полный экспорт
+            if (parsed.hasOwnProperty('points') || parsed.hasOwnProperty('cards') || parsed.hasOwnProperty('steps')) {
+                // Восстанавливаем прогресс из экспорта
+                progressData = {
+                    user: parsed.user,
+                    points: parsed.points || 0,
+                    cards: { ...parsed.cards },
+                    steps: { ...parsed.steps }
+                };
+                // Проверяем, что все необходимые карточки есть
+                const defaultCards = { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" };
+                const defaultSteps = { card1h1: "no" };
+                for (let k of Object.keys(defaultCards)) if (!progressData.cards[k]) progressData.cards[k] = defaultCards[k];
+                for (let k of Object.keys(defaultSteps)) if (!progressData.steps[k]) progressData.steps[k] = defaultSteps[k];
+            } else {
+                // Только имя пользователя — создаём новый прогресс
+                progressData = createDefaultProgress(parsed.user);
+            }
+            
+            // Сохраняем в sessionStorage
+            sessionStorage.setItem('gcs_user', JSON.stringify({ user: parsed.user }));
+            sessionStorage.setItem('gcs_progress', JSON.stringify(progressData));
+            
             errorMsg.innerText = '';
             successBlock.innerHTML = `
-                <p style="color:green;">✅ Добро пожаловать, ${escapeHtml(userData.user)}!</p>
+                <p style="color:green;">✅ Добро пожаловать, ${escapeHtml(parsed.user)}!</p>
+                <p style="font-size:14px; margin-top:5px;">⭐ Баллов: ${progressData.points}</p>
                 <button id="goToLessons" class="success-btn">📖 К урокам →</button>
             `;
             document.getElementById('goToLessons').addEventListener('click', () => {
-                window.location.href = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/lessons.html';
+                window.location.href = BASE + 'lessons.html';
             });
         } catch(e) {
-            errorMsg.innerText = '❌ Неверный JSON-ключ';
+            errorMsg.innerText = '❌ Неверный JSON. Вставь ключ, полученный при регистрации или экспорте.';
             successBlock.innerHTML = '';
         }
     });
-    function escapeHtml(str) { return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
+    
+    function escapeHtml(str) { 
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); 
+    }
 </script>
 </body>
 </html>
