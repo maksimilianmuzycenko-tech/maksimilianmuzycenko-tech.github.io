@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <base href="/itfreegcs/">
     <title>GCS — Уроки</title>
     <style>
         * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
@@ -28,9 +27,10 @@
     <div class="header"><h1>📚 Твои уроки</h1></div>
     <div class="user-info" id="userInfo">⚡ Загрузка...</div>
     <div class="cards-grid" id="cardsGrid"></div>
-    <a href="index.html" class="back-link">← На главную сайта</a>
+    <a href="https://maksimilianmuzycenko-tech.github.io/itfreegcs/index.html" class="back-link">← На главную сайта</a>
 </div>
 <script>
+    const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
     const DEFAULT_PROGRESS = { user: "Гость", points: 0, cards: { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" }, steps: { card1h1: "no" } };
 
     function loadUser() {
@@ -63,7 +63,7 @@
 
     function render() {
         const user = loadUser();
-        if (!user) { window.location.href = 'vhod.html'; return; }
+        if (!user) { window.location.href = BASE + 'vhod.html'; return; }
         const progress = loadProgress();
         document.getElementById('userInfo').innerHTML = `
             <p>👤 <strong>${escapeHtml(progress.user)}</strong></p>
@@ -73,7 +73,7 @@
         document.getElementById('logoutBtn')?.addEventListener('click', () => {
             sessionStorage.removeItem('gcs_user');
             sessionStorage.removeItem('gcs_progress');
-            window.location.href = 'vhod.html';
+            window.location.href = BASE + 'vhod.html';
         });
 
         const cards = [
@@ -90,7 +90,7 @@
             const isWin = progress.cards[card.id] === 'win';
             const div = document.createElement('div');
             div.className = `card ${!available ? 'locked' : ''} ${isWin ? 'win' : ''}`;
-            if (available && !isWin) div.addEventListener('click', () => window.location.href = card.link);
+            if (available && !isWin) div.addEventListener('click', () => window.location.href = BASE + card.link);
             let status = '';
             if (!available) status = '🔒 Заблокирован';
             else if (isWin) status = '✅ Пройдено';
