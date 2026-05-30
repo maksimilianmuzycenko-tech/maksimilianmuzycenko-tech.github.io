@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>GCS — Вход</title>
+    <style>
+        * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
+        body { background: linear-gradient(60deg, #ffffff 0%, #AEFF00 100%); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px; border-bottom: 3px solid #5600FF; padding-bottom: 10px; }
+        .text { background: #ffffff; padding: 30px 25px; border-radius: 30px; border: 5px solid #5600FF; margin-top: 20px; color: #000000; font-size: 18px; }
+        textarea { width: 100%; padding: 14px; font-family: monospace; font-size: 14px; border: 2px solid #5600FF; border-radius: 20px; margin: 15px 0; resize: vertical; }
+        button { background: #5600FF; color: white; font-weight: bold; padding: 12px 20px; border: none; border-radius: 40px; font-size: 18px; cursor: pointer; transition: 0.2s; width: 100%; }
+        button:hover { transform: scale(1.02); background: #3c00b3; }
+        .success-btn { background: #AEFF00; color: #000; margin-top: 15px; }
+        .error { color: red; margin-top: 12px; font-size: 15px; }
+        .back-link { display: inline-block; margin-top: 20px; color: #5600FF; font-weight: bold; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header"><h1>🔐 Вход</h1></div>
+    <div class="text">
+        <p>Вставьте JSON-ключ, полученный при регистрации:</p>
+        <textarea id="jsonInput" rows="6" placeholder='{"user":"Максим"}'></textarea>
+        <button id="loginBtn">Войти</button>
+        <div id="errorMsg" class="error"></div>
+        <div id="successBlock" style="margin-top: 20px;"></div>
+        <a href="itfreegcs/index.html" class="back-link">← На главную</a>
+    </div>
+</div>
+<script>
+    const loginBtn = document.getElementById('loginBtn');
+    const jsonInput = document.getElementById('jsonInput');
+    const errorMsg = document.getElementById('errorMsg');
+    const successBlock = document.getElementById('successBlock');
+
+    loginBtn.addEventListener('click', () => {
+        const rawJson = jsonInput.value.trim();
+        if (!rawJson) {
+            errorMsg.innerText = '❌ Поле пустое. Вставьте JSON.';
+            return;
+        }
+
+        try {
+            const userData = JSON.parse(rawJson);
+            if (!userData.user) {
+                throw new Error('В JSON нет поля "user"');
+            }
+            // Сохраняем в sessionStorage
+            sessionStorage.setItem('gcs_user', rawJson);
+            errorMsg.innerText = '';
+            // Показываем кнопку перехода к урокам
+            successBlock.innerHTML = `
+                <p style="color:green; margin-bottom:12px;">✅ Добро пожаловать, ${escapeHtml(userData.user)}!</p>
+                <button id="goToLessons" class="success-btn">📖 Перейти к урокам →</button>
+            `;
+            const goBtn = document.getElementById('goToLessons');
+            goBtn.addEventListener('click', () => {
+                window.location.href = 'itfreegcs/lessons.html';
+            });
+        } catch(e) {
+            errorMsg.innerText = '❌ Неверный формат JSON. Убедитесь, что это точная копия ключа.';
+            successBlock.innerHTML = '';
+        }
+    });
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+</script>
+</body>
+</html>
