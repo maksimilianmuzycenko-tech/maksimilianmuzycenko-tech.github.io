@@ -8,10 +8,44 @@
         * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
         body { background: linear-gradient(60deg, #ffffff 0%, #AEFF00 100%); font-family: system-ui, sans-serif; min-height: 100vh; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; font-size: 24px; font-weight: bold; border-bottom: 3px solid #5600FF; padding-bottom: 10px; cursor: pointer; }
-        .user-info { background: #ffffff; padding: 20px; border-radius: 30px; border: 5px solid #5600FF; margin-bottom: 30px; text-align: center; }
-        .user-info p { margin: 8px 0; }
-        .info-row { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
+        
+        /* ШАПКА — отдельно, без слияния */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #5600FF;
+            background: #ffffff;
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: 3px solid #5600FF;
+        }
+        
+        /* Блок пользователя */
+        .user-info { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-radius: 30px; 
+            border: 5px solid #5600FF; 
+            margin-bottom: 30px; 
+            text-align: center; 
+        }
+        .user-info p { margin: 8px 0; font-size: 18px; }
+        .info-row { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 20px; 
+            flex-wrap: wrap; 
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #5600FF;
+        }
+        
         .cards-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; margin-top: 20px; }
         .card { background: #fff; width: 220px; height: 220px; border-radius: 30px; border: 5px solid #5600FF; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; transition: 0.3s; }
         .card:hover { transform: scale(1.05); background: #f5f5ff; }
@@ -20,19 +54,28 @@
         .card.win { background: #d4ffd4; border-color: #00aa00; }
         .card-title { font-size: 22px; font-weight: bold; color: #5600FF; }
         .card-status { font-size: 16px; margin-top: 10px; }
+        
         button { background: #5600FF; color: white; font-weight: bold; padding: 8px 18px; border: none; border-radius: 40px; cursor: pointer; }
         button:hover { background: #3c00b3; transform: scale(1.02); }
         .logout-btn { background: #ff4444; }
         .logout-btn:hover { background: #cc0000; }
         .export-btn { background: #00aa66; }
         .export-btn:hover { background: #008844; }
-        .back-link { display: inline-block; margin-top: 30px; color: #5600FF; text-decoration: none; }
+        
+        .back-link { display: inline-block; margin-top: 30px; color: #5600FF; text-decoration: none; font-weight: bold; }
+        .debug-header { cursor: pointer; }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="header" id="debugHeader"><h1>📚 Твои уроки</h1></div>
+    <!-- ШАПКА ОТДЕЛЬНО -->
+    <div class="page-header" id="debugHeader">
+        <h1>📚 Твои уроки</h1>
+    </div>
+    
+    <!-- БЛОК ПОЛЬЗОВАТЕЛЯ ОТДЕЛЬНО -->
     <div class="user-info" id="userInfo">⚡ Загрузка...</div>
+    
     <div class="cards-grid" id="cardsGrid"></div>
     <a href="index.html" class="back-link">← На главную сайта</a>
 </div>
@@ -151,7 +194,6 @@
         grid.innerHTML = '';
         
         cards.forEach((card, idx) => {
-            // Доступность: первая всегда, либо предыдущая пройдена, либо эта уже пройдена
             const available = idx === 0 || progress.cards[`card${idx}`] === 'win' || progress.cards[card.id] === 'win';
             const isWin = progress.cards[card.id] === 'win';
             const div = document.createElement('div');
