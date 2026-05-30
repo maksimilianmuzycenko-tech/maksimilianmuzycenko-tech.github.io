@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>GCS — Уроки</title>
+    <style>
+        * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
+        body { background: linear-gradient(60deg, #ffffff 0%, #AEFF00 100%); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px; border-bottom: 3px solid #5600FF; padding-bottom: 10px; }
+        .user-info { background: #ffffff; padding: 20px; border-radius: 30px; border: 5px solid #5600FF; margin-bottom: 30px; text-align: center; }
+        .user-info p { margin: 8px 0; font-size: 18px; }
+        .cards-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; margin-top: 20px; }
+        .card { background: #ffffff; width: 220px; height: 220px; border-radius: 30px; border: 5px solid #5600FF; display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; cursor: pointer; text-align: center; padding: 20px; }
+        .card:hover { transform: scale(1.05); background: #f5f5ff; }
+        .card.locked { opacity: 0.6; cursor: not-allowed; filter: grayscale(0.2); }
+        .card.locked:hover { transform: none; background: #ffffff; }
+        .card.win { background: #d4ffd4; border-color: #00aa00; }
+        .card-title { font-size: 22px; font-weight: bold; color: #5600FF; margin-bottom: 15px; }
+        .card-status { font-size: 16px; color: #333; margin-top: 10px; }
+        .card.win .card-status { color: #00aa00; font-weight: bold; }
+        .locked .card-title { color: #999; }
+        .back-link { display: inline-block; margin-top: 30px; color: #5600FF; font-weight: bold; text-decoration: none; font-size: 16px; }
+        .logout-btn { background: #ff4444; color: white; border: none; border-radius: 30px; padding: 8px 20px; cursor: pointer; font-weight: bold; margin-left: 20px; }
+        .logout-btn:hover { background: #cc0000; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📚 Главная страница — уроки</h1>
+    </div>
+    <div class="user-info" id="userInfo">
+        <p>⚡ Загрузка...</p>
+    </div>
+    <div class="cards-grid" id="cardsGrid"></div>
+    <a href="index.html" class="back-link">← На главную сайта</a>
+</div>
+<script>
+    // Базовая структура прогресса (если чего-то нет — дополняем)
+    const DEFAULT_PROGRESS = {
+        user: "Гость",
+        points: 0,
+        cards: {
+            card1: "no",        // no / started / win
+            card2: "no",
+            card3: "no",
+            card4: "no",
+            card5: "no"
+        },
+        steps: {
+            card1h1: "no"       // no / yes
+        }
+    };
+
+    // Загрузка пользователя из sessionStorage
+    function loadUserFromSession() {
+        const raw = sessionStorage.getItem('gcs_user');
+        if (!raw) return null;
+        try {
+            const userData = JSON.parse(raw);
+            if (!userData.user) return null;
+            return userData;
+        } catch(e) { return null; }
+    }
+
+    // Загрузка прогресса (если нет — создаём)
+    function loadProgress() {
+        let progress = sessionStorage.getItem('gcs_progress');
+        if (!progress) {
+            // Новый пользователь — создаём дефолтный прогресс
+            const newProgress = JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
+            const user = loadUserFromSession();
+            if (user) newProgress.user = user.user;
+            sessionStorage.setItem('gcs_progress', JSON.stringify(newProgress));
+            return newProgress;
+        }
+        try {
+            let parsed = JSON.parse(progress);
+            // Дополняем недостающие поля
+            let updated = false;
+            if (!parsed.cards) { parsed.cards = DEFAULT_PROGRESS.cards; updated = true; }
+            if (!parsed.steps) { parsed.steps = DEFAULT_PROGRESS.steps; updated = true; }
+            if (parsed.points === undefined) { parsed.points = 0; updated = true; }
+            for (let key of Object.keys(DEFAULT_PROGRESS.cards)) {
+                if (!parsed.cards[key]) { parsed.cards[key] = DEFAULT_PROGRESS.cards[key]; updated = true; }
+            }
+            for (let key of Object.keys(DEFAULT_PROGRESS.steps)) {
+                if (!parsed.steps[key]) { parsed.steps[key] = DEFAULT_PROGRESS.steps[key]; updated = true; }
+            }
+            if (updated) sessionStorage.setItem('gcs_progress', JSON.stringify(parsed));
+            return parsed;
+        } catch(e) {
+            const newProgress = JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
+            sessionStorage.setItem('gcs_progress', JSON.stringify(newProgress));
+            return newProgress;
+        }
+    }
+
+    // Сохранение прогресса
+    function saveProgress(progress) {
+        sessionStorage.setItem('gcs_progress', JSON.stringify(progress));
+    }
+
+    // Проверка, доступна ли карточка
+    function isCardAvailable(cardId, index, progress) {
+        if (index === 0) return true; // Первая карточка всегда доступна
+        const prevCardId = `card${index}`;
+        return progress.cards[prevCardId] === 'win';
+    }
+
+    // Получение статуса карточки для отображения
+    function getCardDisplayStatus(card, progress) {
+        if (progress.cards[card] === 'win') return '✅ Пройдено';
+        if (progress.cards[card] === 'started') return '📖 В процессе';
+        return '🔒 Заблокирован';
+    }
+
+    // Обновление страницы
+    function render() {
+        const user = loadUserFromSession();
+        if (!user) {
+            window.location.href = 'vhod.html';
+            return;
+        }
+
+        const progress = loadProgress();
+        
+        // Отображение информации о пользователе
+        const userInfoDiv = document.getElementById('userInfo');
+        userInfoDiv.innerHTML = `
+            <p>👤 <strong>${escapeHtml(progress.user)}</strong></p>
+            <p>⭐ Баллы: <strong>${progress.points || 0}</strong></p>
+            <button id="logoutBtn" class="logout-btn">🚪 Выйти</button>
+        `;
+        
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            sessionStorage.removeItem('gcs_user');
+            sessionStorage.removeItem('gcs_progress');
+            window.location.href = 'vhod.html';
+        });
+
+        // Список карточек
+        const cardsList = [
+            { id: 'card1', name: 'Начало', stepKey: null, link: 'card1h1.html' },
+            { id: 'card2', name: 'Урок 2', stepKey: null, link: 'card2.html' },
+            { id: 'card3', name: 'Урок 3', stepKey: null, link: 'card3.html' },
+            { id: 'card4', name: 'Урок 4', stepKey: null, link: 'card4.html' },
+            { id: 'card5', name: 'Урок 5', stepKey: null, link: 'card5.html' }
+        ];
+
+        const grid = document.getElementById('cardsGrid');
+        grid.innerHTML = '';
+
+        cardsList.forEach((card, idx) => {
+            const available = isCardAvailable(card.id, idx, progress);
+            const isWin = progress.cards[card.id] === 'win';
+            
+            const cardDiv = document.createElement('div');
+            cardDiv.className = `card ${!available ? 'locked' : ''} ${isWin ? 'win' : ''}`;
+            
+            if (available) {
+                cardDiv.style.cursor = 'pointer';
+                cardDiv.addEventListener('click', () => {
+                    window.location.href = card.link;
+                });
+            } else {
+                cardDiv.style.cursor = 'not-allowed';
+            }
+            
+            let statusText = '';
+            if (!available) statusText = '🔒 Заблокирован';
+            else if (isWin) statusText = '✅ Пройдено';
+            else statusText = '📖 Доступен';
+            
+            cardDiv.innerHTML = `
+                <div class="card-title">${card.name}</div>
+                <div class="card-status">${statusText}</div>
+            `;
+            grid.appendChild(cardDiv);
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    render();
+</script>
+</body>
+</html>
