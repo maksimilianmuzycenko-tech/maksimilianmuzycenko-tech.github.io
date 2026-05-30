@@ -58,6 +58,25 @@
 
         const contentDiv = document.getElementById('contentArea');
 
+        if (stepDone) {
+            // Режим "только теория" после прохождения
+            contentDiv.innerHTML = `
+                <p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
+                <p>Горячие клавиши — это комбинации на клавиатуре, которые ускоряют работу за компьютером.</p>
+                <p>🔥 Вот самые важные:</p>
+                <p><span class="hotkey">Ctrl + C</span> — копировать</p>
+                <p><span class="hotkey">Ctrl + V</span> — вставить</p>
+                <p><span class="hotkey">Ctrl + X</span> — вырезать</p>
+                <p><span class="hotkey">Ctrl + Z</span> — отменить</p>
+                <p><span class="hotkey">Ctrl + S</span> — сохранить</p>
+                <p>🎉 Ты уже прошёл этот урок! Можешь повторить теорию в любое время.</p>
+                <hr>
+                <a href="${BASE}lessons.html" class="lessons-link">← Вернуться к урокам</a>
+            `;
+            return;
+        }
+
+        // Режим "с заданием" до прохождения
         contentDiv.innerHTML = `
             <p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
             <p>Горячие клавиши — это комбинации на клавиатуре, которые ускоряют работу за компьютером.</p>
@@ -84,11 +103,6 @@
 
             if (!correct) {
                 msgDiv.innerHTML = '<p style="color:red;">❌ Неправильно. Попробуй ещё раз. (Подсказка: Ctrl + C)</p>';
-                return;
-            }
-
-            if (stepDone) {
-                msgDiv.innerHTML = '<p class="completed">⏳ Ты уже проходил этот урок. Баллы не начислены, но ты молодец, что повторяешь!</p><a href="' + BASE + 'lessons.html" class="lessons-link">📚 К урокам →</a>';
                 return;
             }
 
