@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>GCS — Уроки</title>
     <style>
         * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
@@ -34,11 +34,12 @@
     <div class="header" id="debugHeader"><h1>📚 Твои уроки</h1></div>
     <div class="user-info" id="userInfo">⚡ Загрузка...</div>
     <div class="cards-grid" id="cardsGrid"></div>
-    <a href="indecs.html" class="back-link">← На главную сайта</a>
+    <a href="index.html" class="back-link">← На главную сайта</a>
 </div>
 <script>
     const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
     
+    // ========== ОТЛАДКА ==========
     let clickCount = 0;
     let clickTimer = null;
     function resetClickCount() { clickCount = 0; if (clickTimer) clearTimeout(clickTimer); clickTimer = null; }
@@ -60,6 +61,7 @@
         });
     });
     
+    // ========== ОСНОВНОЙ КОД ==========
     const DEFAULT_CARDS = { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" };
     const DEFAULT_STEPS = { card1h1: "no", card2h1: "no" };
     const DEFAULT_PROGRESS = { user: "Гость", points: 0, cards: DEFAULT_CARDS, steps: DEFAULT_STEPS };
@@ -136,6 +138,7 @@
             sessionStorage.removeItem('gcs_progress');
             window.location.href = BASE + 'vhod.html';
         });
+        
         const cards = [
             { id: 'card1', name: 'Начало', link: 'card1h1.html' },
             { id: 'card2', name: 'Урок 2', link: 'card2h1.html' },
@@ -143,14 +146,22 @@
             { id: 'card4', name: 'Урок 4', link: 'card4.html' },
             { id: 'card5', name: 'Урок 5', link: 'card5.html' }
         ];
+        
         const grid = document.getElementById('cardsGrid');
         grid.innerHTML = '';
+        
         cards.forEach((card, idx) => {
-            const available = idx === 0 || progress.cards[`card${idx}`] === 'win';
+            // Доступность: первая всегда, либо предыдущая пройдена, либо эта уже пройдена
+            const available = idx === 0 || progress.cards[`card${idx}`] === 'win' || progress.cards[card.id] === 'win';
             const isWin = progress.cards[card.id] === 'win';
             const div = document.createElement('div');
             div.className = `card ${!available ? 'locked' : ''} ${isWin ? 'win' : ''}`;
-            if (available && !isWin) div.addEventListener('click', () => window.location.href = BASE + card.link);
+            if (available) {
+                div.style.cursor = 'pointer';
+                div.addEventListener('click', () => window.location.href = BASE + card.link);
+            } else {
+                div.style.cursor = 'not-allowed';
+            }
             let status = '';
             if (!available) status = '🔒 Заблокирован';
             else if (isWin) status = '✅ Пройдено';
@@ -159,6 +170,7 @@
             grid.appendChild(div);
         });
     }
+    
     function escapeHtml(s) { if (!s) return ''; return s.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
     render();
 </script>
