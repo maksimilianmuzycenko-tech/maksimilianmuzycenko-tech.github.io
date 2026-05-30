@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <base href="/itfreegcs/">
     <title>GCS — Вход</title>
     <style>
         * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
@@ -27,7 +26,7 @@
         <button id="loginBtn">Войти</button>
         <div id="errorMsg" class="error"></div>
         <div id="successBlock"></div>
-        <a href="index.html" class="back-link">← На главную</a>
+        <a href="https://maksimilianmuzycenko-tech.github.io/itfreegcs/index.html" class="back-link">← На главную</a>
     </div>
 </div>
 <script>
@@ -49,7 +48,7 @@
                 <button id="goToLessons" class="success-btn">📖 К урокам →</button>
             `;
             document.getElementById('goToLessons').addEventListener('click', () => {
-                window.location.href = 'lessons.html';
+                window.location.href = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/lessons.html';
             });
         } catch(e) {
             errorMsg.innerText = '❌ Неверный JSON-ключ';
