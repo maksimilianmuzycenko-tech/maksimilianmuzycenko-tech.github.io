@@ -10,6 +10,8 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .header { text-align: center; font-size: 24px; font-weight: bold; border-bottom: 3px solid #5600FF; padding-bottom: 10px; }
         .user-info { background: #ffffff; padding: 20px; border-radius: 30px; border: 5px solid #5600FF; margin-bottom: 30px; text-align: center; }
+        .user-info p { margin: 8px 0; }
+        .info-row { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
         .cards-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; margin-top: 20px; }
         .card { background: #fff; width: 220px; height: 220px; border-radius: 30px; border: 5px solid #5600FF; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; transition: 0.3s; }
         .card:hover { transform: scale(1.05); background: #f5f5ff; }
@@ -18,7 +20,12 @@
         .card.win { background: #d4ffd4; border-color: #00aa00; }
         .card-title { font-size: 22px; font-weight: bold; color: #5600FF; }
         .card-status { font-size: 16px; margin-top: 10px; }
-        .logout-btn { background: #ff4444; color: white; border: none; border-radius: 30px; padding: 8px 20px; cursor: pointer; margin-left: 20px; }
+        button { background: #5600FF; color: white; font-weight: bold; padding: 8px 18px; border: none; border-radius: 40px; cursor: pointer; }
+        button:hover { background: #3c00b3; transform: scale(1.02); }
+        .logout-btn { background: #ff4444; }
+        .logout-btn:hover { background: #cc0000; }
+        .export-btn { background: #00aa66; }
+        .export-btn:hover { background: #008844; }
         .back-link { display: inline-block; margin-top: 30px; color: #5600FF; text-decoration: none; }
     </style>
 </head>
@@ -61,15 +68,32 @@
         } catch(e) { return JSON.parse(JSON.stringify(DEFAULT_PROGRESS)); }
     }
 
+    function exportProgress() {
+        const progress = loadProgress();
+        const jsonStr = JSON.stringify(progress, null, 2);
+        navigator.clipboard.writeText(jsonStr).then(() => {
+            alert('✅ JSON прогресса скопирован в буфер обмена! Сохрани его в надёжном месте.');
+        }).catch(() => {
+            alert('❌ Не удалось скопировать. Попробуй вручную.');
+        });
+    }
+
     function render() {
         const user = loadUser();
         if (!user) { window.location.href = BASE + 'vhod.html'; return; }
         const progress = loadProgress();
-        document.getElementById('userInfo').innerHTML = `
+        
+        const userInfoDiv = document.getElementById('userInfo');
+        userInfoDiv.innerHTML = `
             <p>👤 <strong>${escapeHtml(progress.user)}</strong></p>
-            <p>⭐ Баллы: <strong>${progress.points || 0}</strong></p>
-            <button id="logoutBtn" class="logout-btn">🚪 Выйти</button>
+            <div class="info-row">
+                <span>⭐ Баллы: <strong>${progress.points || 0}</strong></span>
+                <button id="exportBtn" class="export-btn">📤 Экспорт прогресса</button>
+                <button id="logoutBtn" class="logout-btn">🚪 Выйти</button>
+            </div>
         `;
+        
+        document.getElementById('exportBtn')?.addEventListener('click', exportProgress);
         document.getElementById('logoutBtn')?.addEventListener('click', () => {
             sessionStorage.removeItem('gcs_user');
             sessionStorage.removeItem('gcs_progress');
@@ -99,6 +123,7 @@
             grid.appendChild(div);
         });
     }
+
     function escapeHtml(s) { if (!s) return ''; return s.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
     render();
 </script>
