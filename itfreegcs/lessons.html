@@ -9,42 +9,12 @@
         body { background: linear-gradient(60deg, #ffffff 0%, #AEFF00 100%); font-family: system-ui, sans-serif; min-height: 100vh; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
-        /* ШАПКА — отдельно, без слияния */
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .page-header h1 {
-            font-size: 28px;
-            font-weight: bold;
-            color: #5600FF;
-            background: #ffffff;
-            display: inline-block;
-            padding: 10px 30px;
-            border-radius: 50px;
-            border: 3px solid #5600FF;
-        }
+        .page-header { text-align: center; margin-bottom: 30px; }
+        .page-header h1 { font-size: 28px; font-weight: bold; color: #5600FF; background: #ffffff; display: inline-block; padding: 10px 30px; border-radius: 50px; border: 3px solid #5600FF; cursor: pointer; }
         
-        /* Блок пользователя */
-        .user-info { 
-            background: #ffffff; 
-            padding: 20px; 
-            border-radius: 30px; 
-            border: 5px solid #5600FF; 
-            margin-bottom: 30px; 
-            text-align: center; 
-        }
+        .user-info { background: #ffffff; padding: 20px; border-radius: 30px; border: 5px solid #5600FF; margin-bottom: 30px; text-align: center; }
         .user-info p { margin: 8px 0; font-size: 18px; }
-        .info-row { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 20px; 
-            flex-wrap: wrap; 
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px dashed #5600FF;
-        }
+        .info-row { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 15px; padding-top: 10px; border-top: 1px dashed #5600FF; }
         
         .cards-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; margin-top: 20px; }
         .card { background: #fff; width: 220px; height: 220px; border-radius: 30px; border: 5px solid #5600FF; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; transition: 0.3s; }
@@ -63,24 +33,28 @@
         .export-btn:hover { background: #008844; }
         
         .back-link { display: inline-block; margin-top: 30px; color: #5600FF; text-decoration: none; font-weight: bold; }
-        .debug-header { cursor: pointer; }
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- ШАПКА ОТДЕЛЬНО -->
-    <div class="page-header" id="debugHeader">
-        <h1>📚 Твои уроки</h1>
-    </div>
-    
-    <!-- БЛОК ПОЛЬЗОВАТЕЛЯ ОТДЕЛЬНО -->
+    <div class="page-header" id="debugHeader"><h1>📚 Твои уроки</h1></div>
     <div class="user-info" id="userInfo">⚡ Загрузка...</div>
-    
     <div class="cards-grid" id="cardsGrid"></div>
     <a href="index.html" class="back-link">← На главную сайта</a>
 </div>
 <script>
     const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
+    
+    // Эталонные структуры
+    const DEFAULT_CARDS = { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" };
+    const DEFAULT_STEPS = {
+        card1h1: "no",
+        card2h1: "no",
+        card3h1: "no", card3h2: "no", card3h3: "no",
+        card4h1: "no", card4h2: "no",
+        card5h1: "no"
+    };
+    const DEFAULT_PROGRESS = { user: "Гость", points: 0, cards: DEFAULT_CARDS, steps: DEFAULT_STEPS };
     
     // ========== ОТЛАДКА ==========
     let clickCount = 0;
@@ -105,9 +79,6 @@
     });
     
     // ========== ОСНОВНОЙ КОД ==========
-    const DEFAULT_CARDS = { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" };
-    const DEFAULT_STEPS = { card1h1: "no", card2h1: "no" };
-    const DEFAULT_PROGRESS = { user: "Гость", points: 0, cards: DEFAULT_CARDS, steps: DEFAULT_STEPS };
     
     function loadUser() {
         const raw = sessionStorage.getItem('gcs_user');
@@ -167,6 +138,7 @@
         const user = loadUser();
         if (!user) { window.location.href = BASE + 'vhod.html'; return; }
         const progress = loadProgress();
+        
         document.getElementById('userInfo').innerHTML = `
             <p>👤 <strong>${escapeHtml(progress.user)}</strong></p>
             <div class="info-row">
@@ -184,10 +156,10 @@
         
         const cards = [
             { id: 'card1', name: 'Начало', link: 'card1h1.html' },
-            { id: 'card2', name: 'Урок 2', link: 'card2h1.html' },
-            { id: 'card3', name: 'Урок 3', link: 'card3h1.html' },
-            { id: 'card4', name: 'Урок 4', link: 'card4h1.html' },
-            { id: 'card5', name: 'Урок 5', link: 'card5h1.html' }
+            { id: 'card2', name: 'Горячие клавиши', link: 'card2h1.html' },
+            { id: 'card3', name: 'VS Code', link: 'card3h1.html' },
+            { id: 'card4', name: 'Python', link: 'card4h1.html' },
+            { id: 'card5', name: 'PEP8', link: 'card5h1.html' }
         ];
         
         const grid = document.getElementById('cardsGrid');
