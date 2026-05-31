@@ -26,13 +26,12 @@
         <button id="loginBtn">Войти</button>
         <div id="errorMsg" class="error"></div>
         <div id="successBlock"></div>
-        <a href="index.html" class="back-link">← На главную</a>
+        <a href="indecs.html" class="back-link">← На главную</a>
     </div>
 </div>
 <script>
     const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
     
-    // Эталонные структуры (все карточки и шаги до 5 уроков)
     const DEFAULT_CARDS = {
         card1: "no", card2: "no", card3: "no", card4: "no", card5: "no"
     };
@@ -50,14 +49,12 @@
         }
         let updated = false;
         
-        // Дополняем карточки
         for (let key of Object.keys(DEFAULT_CARDS)) {
             if (progress.cards[key] === undefined) {
                 progress.cards[key] = DEFAULT_CARDS[key];
                 updated = true;
             }
         }
-        // Дополняем шаги
         for (let key of Object.keys(DEFAULT_STEPS)) {
             if (progress.steps[key] === undefined) {
                 progress.steps[key] = DEFAULT_STEPS[key];
@@ -105,10 +102,8 @@
                 };
             }
             
-            // Нормализуем прогресс (добавляем все недостающие карточки и шаги)
             progressData = normalizeProgress(progressData, parsed.user);
             
-            // Сохраняем в sessionStorage
             sessionStorage.setItem('gcs_user', JSON.stringify({ user: parsed.user }));
             sessionStorage.setItem('gcs_progress', JSON.stringify(progressData));
             
