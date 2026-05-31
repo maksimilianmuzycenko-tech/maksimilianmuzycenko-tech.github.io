@@ -40,12 +40,11 @@
     <div class="page-header" id="debugHeader"><h1>📚 Твои уроки</h1></div>
     <div class="user-info" id="userInfo">⚡ Загрузка...</div>
     <div class="cards-grid" id="cardsGrid"></div>
-    <a href="index.html" class="back-link">← На главную сайта</a>
+    <a href="indecs.html" class="back-link">← На главную сайта</a>
 </div>
 <script>
     const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
     
-    // Эталонные структуры
     const DEFAULT_CARDS = { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" };
     const DEFAULT_STEPS = {
         card1h1: "no",
@@ -56,7 +55,6 @@
     };
     const DEFAULT_PROGRESS = { user: "Гость", points: 0, cards: DEFAULT_CARDS, steps: DEFAULT_STEPS };
     
-    // ========== ОТЛАДКА ==========
     let clickCount = 0;
     let clickTimer = null;
     function resetClickCount() { clickCount = 0; if (clickTimer) clearTimeout(clickTimer); clickTimer = null; }
@@ -77,8 +75,6 @@
             if (clickCount >= 10) { resetClickCount(); showDebugAlert(); }
         });
     });
-    
-    // ========== ОСНОВНОЙ КОД ==========
     
     function loadUser() {
         const raw = sessionStorage.getItem('gcs_user');
