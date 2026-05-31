@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>GCS — Вход</title>
     <style>
         * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
@@ -26,28 +26,55 @@
         <button id="loginBtn">Войти</button>
         <div id="errorMsg" class="error"></div>
         <div id="successBlock"></div>
-        <a href="indecs.html" class="back-link">← На главную</a>
+        <a href="index.html" class="back-link">← На главную</a>
     </div>
 </div>
 <script>
     const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
+    
+    // Эталонные структуры (все карточки и шаги до 5 уроков)
+    const DEFAULT_CARDS = {
+        card1: "no", card2: "no", card3: "no", card4: "no", card5: "no"
+    };
+    const DEFAULT_STEPS = {
+        card1h1: "no",
+        card2h1: "no",
+        card3h1: "no", card3h2: "no", card3h3: "no",
+        card4h1: "no", card4h2: "no",
+        card5h1: "no"
+    };
+
+    function normalizeProgress(progress, username) {
+        if (!progress) {
+            progress = { user: username, points: 0, cards: {}, steps: {} };
+        }
+        let updated = false;
+        
+        // Дополняем карточки
+        for (let key of Object.keys(DEFAULT_CARDS)) {
+            if (progress.cards[key] === undefined) {
+                progress.cards[key] = DEFAULT_CARDS[key];
+                updated = true;
+            }
+        }
+        // Дополняем шаги
+        for (let key of Object.keys(DEFAULT_STEPS)) {
+            if (progress.steps[key] === undefined) {
+                progress.steps[key] = DEFAULT_STEPS[key];
+                updated = true;
+            }
+        }
+        if (progress.points === undefined) { progress.points = 0; updated = true; }
+        if (!progress.user) { progress.user = username; updated = true; }
+        
+        if (updated) sessionStorage.setItem('gcs_progress', JSON.stringify(progress));
+        return progress;
+    }
+
     const loginBtn = document.getElementById('loginBtn');
     const jsonInput = document.getElementById('jsonInput');
     const errorMsg = document.getElementById('errorMsg');
     const successBlock = document.getElementById('successBlock');
-
-    function createDefaultProgress(username) {
-        return {
-            user: username,
-            points: 0,
-            cards: {
-                card1: "no", card2: "no", card3: "no", card4: "no", card5: "no"
-            },
-            steps: {
-                card1h1: "no", card2h1: "no"
-            }
-        };
-    }
 
     loginBtn.addEventListener('click', () => {
         const rawJson = jsonInput.value.trim();
@@ -60,22 +87,28 @@
             }
             
             let progressData;
-            const defaultCards = { card1: "no", card2: "no", card3: "no", card4: "no", card5: "no" };
-            const defaultSteps = { card1h1: "no", card2h1: "no" };
+            const isFullExport = (parsed.hasOwnProperty('points') || parsed.hasOwnProperty('cards') || parsed.hasOwnProperty('steps'));
             
-            if (parsed.hasOwnProperty('points') || parsed.hasOwnProperty('cards') || parsed.hasOwnProperty('steps')) {
+            if (isFullExport) {
                 progressData = {
                     user: parsed.user,
                     points: parsed.points || 0,
-                    cards: { ...parsed.cards },
-                    steps: { ...parsed.steps }
+                    cards: { ...(parsed.cards || {}) },
+                    steps: { ...(parsed.steps || {}) }
                 };
-                for (let k of Object.keys(defaultCards)) if (!progressData.cards[k]) progressData.cards[k] = defaultCards[k];
-                for (let k of Object.keys(defaultSteps)) if (!progressData.steps[k]) progressData.steps[k] = defaultSteps[k];
             } else {
-                progressData = createDefaultProgress(parsed.user);
+                progressData = {
+                    user: parsed.user,
+                    points: 0,
+                    cards: {},
+                    steps: {}
+                };
             }
             
+            // Нормализуем прогресс (добавляем все недостающие карточки и шаги)
+            progressData = normalizeProgress(progressData, parsed.user);
+            
+            // Сохраняем в sessionStorage
             sessionStorage.setItem('gcs_user', JSON.stringify({ user: parsed.user }));
             sessionStorage.setItem('gcs_progress', JSON.stringify(progressData));
             
@@ -89,7 +122,7 @@
                 window.location.href = BASE + 'lessons.html';
             });
         } catch(e) {
-            errorMsg.innerText = '❌  Неверный JSON. Вставь ключ, полученный при регистрации или экспорте.';
+            errorMsg.innerText = '❌ Неверный JSON. Вставь ключ, полученный при регистрации или экспорте.';
             successBlock.innerHTML = '';
         }
     });
