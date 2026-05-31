@@ -16,12 +16,8 @@
         .completed { color: green; font-weight: bold; margin-top: 15px; }
         .lessons-link { display: inline-block; margin-top: 20px; color: #5600FF; font-weight: bold; text-decoration: none; }
         hr { margin: 20px 0; border-color: #5600FF; }
-        .question { background: #f5f5ff; padding: 15px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #5600FF; }
-        .question p { margin-bottom: 10px; }
-        input { width: 100%; padding: 10px; border-radius: 20px; border: 2px solid #5600FF; margin-top: 10px; }
-        .correct-answer { color: green; font-weight: bold; }
-        .wrong-answer { color: red; }
-        .score { font-size: 18px; margin: 15px 0; }
+        .code-block { background: #1e1e2f; color: #AEFF00; font-family: monospace; padding: 15px; border-radius: 20px; margin: 15px 0; white-space: pre-wrap; }
+        .tip { background: #e6e6ff; padding: 10px; border-radius: 15px; margin: 10px 0; color: #330066; }
     </style>
 </head>
 <body>
@@ -62,7 +58,6 @@
         const userName = user.user || 'Гость';
         const step1Done = progress.steps?.card4h1 === 'yes';
         const stepDone = progress.steps?.card4h2 === 'yes';
-        const cardWin = progress.cards?.card4 === 'win';
 
         const contentDiv = document.getElementById('contentArea');
 
@@ -74,101 +69,66 @@
             return;
         }
 
-        if (stepDone && cardWin) {
+        if (stepDone) {
             contentDiv.innerHTML = `
                 <p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
                 <p>🎉 Поздравляю! Ты полностью прошёл урок 4.</p>
-                <p>Теперь ты знаешь основы Python: вывод, переменные, ввод и f-строки.</p>
+                <p>Python установлен и первый код запущен. Теперь ты готов писать свои программы!</p>
                 <hr>
                 <a href="${BASE}lessons.html" class="lessons-link">← Вернуться к урокам</a>
             `;
             return;
         }
 
-        // Вопросы и ответы
-        const questions = [
-            { text: "Какая команда выводит текст на экран?", answer: "print" },
-            { text: "Как создать переменную с именем 'city' и значением 'Moscow'?", answer: "city = Moscow" },
-            { text: "Что нужно написать, чтобы вывести f'Привет, {name}!'?", answer: "print(f\"Привет, {name}!\")" }
-        ];
+        contentDiv.innerHTML = `
+            <p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
+            <p><strong>📥 Установка Python</strong></p>
+            <ol style="margin-left: 20px; line-height: 1.6;">
+                <li>Зайди на официальный сайт: <a href="https://www.python.org/downloads/" target="_blank">python.org/downloads</a></li>
+                <li>Скачай последнюю версию Python</li>
+                <li><strong>ВАЖНО:</strong> При установке НЕ ЗАБУДЬ поставить галочку <strong>"Add Python to PATH"</strong></li>
+                <li>Нажми "Install Now" и дождись окончания установки</li>
+            </ol>
+            
+            <p><strong>💻 Запуск первого кода</strong></p>
+            <p>1. Открой командную строку (Win+R → cmd)</li>
+            <p>2. Создай файл: <span class="code-block" style="display:inline-block; padding:5px 10px;">notepad hello.py</span></p>
+            <p>3. Напиши в блокноте:</p>
+            <div class="code-block">print("Hello, GCS!")</div>
+            <p>4. Сохрани файл и в командной строке напиши:</p>
+            <div class="code-block">python hello.py</div>
+            
+            <div class="tip">
+                💡 <strong>Если всё правильно</strong> — увидишь: <strong>Hello, GCS!</strong>
+            </div>
+            
+            <hr>
+            <p><strong>🎯 Задание:</strong> Установи Python и запусти <code>hello.py</code>. Затем нажми кнопку ниже.</p>
+            <button id="completeBtn">✅ Установил и запустил(а)!</button>
+            <div id="completeMsg"></div>
+        `;
 
-        let answers = {};
+        const btn = document.getElementById('completeBtn');
+        const msgDiv = document.getElementById('completeMsg');
 
-        function checkAll() {
-            let allCorrect = true;
-            for (let i = 0; i < questions.length; i++) {
-                const userAnswer = (answers[i] || '').trim().toLowerCase().replace(/\s+/g, ' ');
-                const correctAnswer = questions[i].answer.toLowerCase().replace(/\s+/g, ' ');
-                if (userAnswer !== correctAnswer) {
-                    allCorrect = false;
-                    break;
-                }
-            }
-            return allCorrect;
-        }
+        btn.addEventListener('click', () => {
+            if (!progress.steps) progress.steps = {};
+            if (!progress.cards) progress.cards = {};
 
-        function renderQuestions() {
-            let html = `<p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
-                        <p><strong>📝 Ответь на 3 вопроса:</strong></p>`;
-            
-            questions.forEach((q, idx) => {
-                const savedAnswer = answers[idx] || '';
-                html += `
-                    <div class="question">
-                        <p><strong>${idx+1}. ${q.text}</strong></p>
-                        <input type="text" id="q${idx}" value="${escapeHtml(savedAnswer)}" placeholder="Введи ответ...">
-                    </div>
-                `;
-            });
-            
-            html += `<button id="submitBtn">✅ Проверить ответы</button>
-                     <div id="resultMsg"></div>`;
-            
-            contentDiv.innerHTML = html;
-            
-            // Сохраняем ответы при вводе
-            for (let i = 0; i < questions.length; i++) {
-                const input = document.getElementById(`q${i}`);
-                input.addEventListener('input', (e) => {
-                    answers[i] = e.target.value;
-                });
-            }
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const resultMsg = document.getElementById('resultMsg');
-            
-            submitBtn.addEventListener('click', () => {
-                // Обновляем ответы из полей
-                for (let i = 0; i < questions.length; i++) {
-                    const input = document.getElementById(`q${i}`);
-                    answers[i] = input.value;
-                }
-                
-                const allCorrect = checkAll();
-                
-                if (allCorrect) {
-                    if (!progress.steps) progress.steps = {};
-                    if (!progress.cards) progress.cards = {};
-                    
-                    progress.steps.card4h1 = 'yes';
-                    progress.steps.card4h2 = 'yes';
-                    progress.cards.card4 = 'win';
-                    progress.points = (progress.points || 0) + 1;
-                    
-                    saveProgress(progress);
-                    
-                    resultMsg.innerHTML = `
-                        <p class="completed">✅ Все ответы верны! +1 балл. Урок 4 пройден!</p>
-                        <a href="${BASE}lessons.html" class="lessons-link">📚 Перейти к урокам →</a>
-                    `;
-                    submitBtn.disabled = true;
-                } else {
-                    resultMsg.innerHTML = '<p class="wrong-answer">❌ Не все ответы правильные. Попробуй ещё раз!</p>';
-                }
-            });
-        }
-        
-        renderQuestions();
+            progress.steps.card4h1 = 'yes';
+            progress.steps.card4h2 = 'yes';
+            progress.cards.card4 = 'win';
+            progress.points = (progress.points || 0) + 1;
+
+            saveProgress(progress);
+
+            msgDiv.innerHTML = `
+                <p class="completed">✅ Отлично! +1 балл. Урок 4 пройден!</p>
+                <a href="${BASE}lessons.html" class="lessons-link">📚 Перейти к урокам →</a>
+            `;
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+        });
     }
 
     function escapeHtml(str) {
