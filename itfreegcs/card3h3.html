@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCS — Урок 3: VS Code. Шаг 3</title>
+    <style>
+        * { margin: 0 auto; padding: 5px; box-sizing: border-box; }
+        body { background: linear-gradient(60deg, #ffffff 0%, #AEFF00 100%); font-family: system-ui, sans-serif; min-height: 100vh; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; font-size: 24px; font-weight: bold; border-bottom: 3px solid #5600FF; padding-bottom: 10px; margin-bottom: 20px; }
+        .content { background: #ffffff; padding: 30px; border-radius: 30px; border: 5px solid #5600FF; }
+        button { background: #5600FF; color: white; font-weight: bold; padding: 12px 24px; border: none; border-radius: 40px; font-size: 18px; cursor: pointer; margin-top: 20px; }
+        button:hover { transform: scale(1.02); background: #3c00b3; }
+        .completed { color: green; font-weight: bold; margin-top: 15px; }
+        .lessons-link { display: inline-block; margin-top: 20px; color: #5600FF; font-weight: bold; text-decoration: none; }
+        hr { margin: 20px 0; border-color: #5600FF; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header"><h1>📦 Урок 3: VS Code — Шаг 3</h1></div>
+    <div class="content" id="contentArea">
+        <p>⚡ Загрузка...</p>
+    </div>
+</div>
+<script>
+    const BASE = 'https://maksimilianmuzycenko-tech.github.io/itfreegcs/';
+
+    function loadUser() {
+        const raw = sessionStorage.getItem('gcs_user');
+        if (!raw) return null;
+        try { return JSON.parse(raw); } catch(e) { return null; }
+    }
+
+    function loadProgress() {
+        const raw = sessionStorage.getItem('gcs_progress');
+        if (!raw) return null;
+        try { return JSON.parse(raw); } catch(e) { return null; }
+    }
+
+    function saveProgress(progress) {
+        sessionStorage.setItem('gcs_progress', JSON.stringify(progress));
+    }
+
+    function render() {
+        const user = loadUser();
+        if (!user) {
+            window.location.href = BASE + 'vhod.html';
+            return;
+        }
+        let progress = loadProgress();
+        if (!progress) return;
+
+        const userName = user.user || 'Гость';
+        const stepDone = progress.steps?.card3h3 === 'yes';
+        const step1Done = progress.steps?.card3h1 === 'yes';
+        const step2Done = progress.steps?.card3h2 === 'yes';
+
+        const contentDiv = document.getElementById('contentArea');
+
+        if (!step1Done || !step2Done) {
+            contentDiv.innerHTML = `
+                <p>⚠️ Сначала пройди <a href="${BASE}card3h1.html">Шаг 1</a> и <a href="${BASE}card3h2.html">Шаг 2</a>.</p>
+                <a href="${BASE}lessons.html" class="lessons-link">← Вернуться к урокам</a>
+            `;
+            return;
+        }
+
+        if (stepDone) {
+            contentDiv.innerHTML = `
+                <p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
+                <p>🎉 Поздравляю! Ты полностью прошёл урок 3.</p>
+                <p>Теперь у тебя установлен VS Code — мощный инструмент для программирования.</p>
+                <hr>
+                <a href="${BASE}lessons.html" class="lessons-link">← Вернуться к урокам</a>
+            `;
+            return;
+        }
+
+        contentDiv.innerHTML = `
+            <p>👋 Привет, <strong>${escapeHtml(userName)}</strong>!</p>
+            <p><strong>Первый код в VS Code</strong></p>
+            <p>1. Открой VS Code</p>
+            <p>2. Создай новый файл (<span style="background:#1e1e2f; color:#AEFF00; padding:2px 8px; border-radius:12px;">Ctrl + N</span>)</p>
+            <p>3. Напиши: <span style="background:#1e1e2f; color:#AEFF00; padding:2px 8px; border-radius:12px;">print("Hello, GCS!")</span></p>
+            <p>4. Сохрани файл как <span style="background:#1e1e2f; color:#AEFF00; padding:2px 8px; border-radius:12px;">hello.py</span></p>
+            <hr>
+            <p><strong>🎯 Задание:</strong> Напиши в поле ниже <code>print("Hello, GCS!")</code></p>
+            <input type="text" id="answerInput" placeholder="Введи код..." style="width:100%; padding:12px; margin:20px 0; border-radius:30px; border:2px solid #5600FF;">
+            <button id="completeBtn">✅ Проверить и завершить урок</button>
+            <div id="completeMsg"></div>
+        `;
+
+        const btn = document.getElementById('completeBtn');
+        const answerInput = document.getElementById('answerInput');
+        const msgDiv = document.getElementById('completeMsg');
+
+        btn.addEventListener('click', () => {
+            const answer = answerInput.value.trim();
+            const correct = (answer === 'print("Hello, GCS!")' || answer === "print('Hello, GCS!')");
+
+            if (!correct) {
+                msgDiv.innerHTML = '<p style="color:red;">❌ Неправильно. Попробуй ещё раз: <code>print("Hello, GCS!")</code></p>';
+                return;
+            }
+
+            if (!progress.steps) progress.steps = {};
+            if (!progress.cards) progress.cards = {};
+
+            progress.steps.card3h1 = 'yes';
+            progress.steps.card3h2 = 'yes';
+            progress.steps.card3h3 = 'yes';
+            progress.cards.card3 = 'win';
+            progress.points = (progress.points || 0) + 1;
+
+            saveProgress(progress);
+
+            msgDiv.innerHTML = `
+                <p class="completed">✅ Правильно! +1 балл. Урок 3 пройден!</p>
+                <a href="${BASE}lessons.html" class="lessons-link">📚 Перейти к урокам →</a>
+            `;
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+    }
+
+    render();
+</script>
+</body>
+</html>
