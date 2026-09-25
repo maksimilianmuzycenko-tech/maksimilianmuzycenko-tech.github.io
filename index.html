@@ -1,117 +1,387 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-        <!-- Yandex.Metrika counter -->
-    <script type="text/javascript">
-        (function(m,e,t,r,i,k,a){
-            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108723844', 'ym');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1e3c72">
+<title>Школьная информатика — викторины</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
 
-        ym(108723844, 'init', {ssr:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/108723844" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
-    <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Game Command Studio</title>
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            background: linear-gradient(to bottom, #000000 0%, #a318fa 100%) no-repeat fixed;
-            font-family: Arial;
-            line-height: 1.5;
-            color: #ffffff;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 24px;
-        }
-        .header {
-            text-align: center;
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 24px;
-            border-bottom: 7px solid #ffffff;
-            border-radius: 15px;
-            background: linear-gradient(70deg, #ff0000 0%, #ff8c00 100%); 
-            padding-bottom: 14px;
-            transition: 1s;
-        }
-        .header:hover { background: linear-gradient(70deg, #ff0000 0%, #c971ff 100%); transform: scale(1.05); }
-        .nav {
-            display: flex;
-            text-align: center;
-            margin: 34px 0;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 19px;
-        }
-        .nav a {
-            flex: 1;
-            display: inline-block;
-            background: linear-gradient(70deg, #ff0000 0%, #ff8c00 100%);
-            color: white;
-            padding: 16px 16px;
-            text-decoration: none;
-            font-size: 18px;
-            border-radius: 30px;
-            transition: 1s;
-        }
-        .nav a:hover {
-            background: linear-gradient(70deg, #ff0000 0%, #c971ff 100%);
-            transform: scale(1.08);
-        }
-        .license {
-            background: linear-gradient(90deg, #ff0000 0%, #ff8c00 100%);
-            padding: 28px;
-            border-radius: 16px;
-            margin-top: 24px;
-            transition: 1s;
-        }
-        .license h1 {
-            font-size: 30px;
-            margin-bottom: 19px;
-        }
-        .license h2 {
-            font-size: 24px;
-            margin: 24px 0 14px;
-            color: #ffffff;
-        }
-        .license p {
-            margin: 14px 0;
-        }
-        .license:hover { background: linear-gradient(90deg, #ff0000 0%, #c971ff 100%); transform: scale(1.017); }
-        .author p { font-size: 19px; text-align: center; color: #ffffff; }
-        @media (max-width: 768px) {
-            .container { padding: 19px; }
-            .header { font-size: 26px; }
-            .nav a { padding: 14px 16px; font-size: 18px; }
-           .license h1 { font-size: 24px; }
-            .license h2 { font-size: 22px; }
-            .license p { font-size: 18px; }
-        }
+    html, body {
+        min-height: 100%;
+    }
 
-        @media (max-width: 480px) {
-        .container { padding: 14px; }
-        .header { font-size: 22px; }
-        .nav a { padding: 12px 14px; font-size: 16px; }
-        .license { padding: 16px; }
-        .license h1 { font-size: 22px; }
-        .license h2 { font-size: 20px; }
-        .license p { font-size: 16px; }
-        }
-    </style>
+    body {
+        background: linear-gradient(160deg, #1e3c72 0%, #2a5298 50%, #4a7bc8 100%);
+        background-attachment: fixed;
+        display: flex;
+        justify-content: center;
+        padding: 12px;
+        min-height: 100dvh;
+        color: #1a202c;
+    }
+
+    .app {
+        background: #fff;
+        width: 100%;
+        max-width: 480px;
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(0,0,0,.35);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ===== Шапка ===== */
+    .header {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: #fff;
+        padding: 22px 18px 20px;
+        flex-shrink: 0;
+    }
+
+    .header h1 {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: .2px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .header h1 .ico {
+        font-size: 22px;
+        flex-shrink: 0;
+        line-height: 1.1;
+    }
+
+    /* ===== Поиск ===== */
+    .search-wrap {
+        padding: 16px 16px 8px;
+        background: #fff;
+        flex-shrink: 0;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 14px 16px 14px 44px;
+        font-size: 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 14px;
+        background: #f7fafc url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='7'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>") no-repeat 16px center;
+        outline: none;
+        transition: all .15s ease;
+        color: #1a202c;
+    }
+
+    .search-input::placeholder {
+        color: #a0aec0;
+    }
+
+    .search-input:focus {
+        border-color: #2a5298;
+        background-color: #fff;
+        box-shadow: 0 0 0 4px rgba(42,82,152,.12);
+    }
+
+    /* ===== Каталог ===== */
+    .catalog {
+        padding: 12px 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+    }
+
+    .card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 16px;
+        background: #f7fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        text-decoration: none;
+        color: inherit;
+        transition: all .15s ease;
+        min-height: 70px;
+    }
+
+    .card:active {
+        transform: scale(.98);
+    }
+
+    .card:hover {
+        background: #ebf4ff;
+        border-color: #2a5298;
+    }
+
+    .card-icon {
+        flex-shrink: 0;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        color: #fff;
+    }
+
+    .card-body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .card-title {
+        font-size: 15.5px;
+        font-weight: 700;
+        color: #1a202c;
+        line-height: 1.3;
+        margin-bottom: 4px;
+        word-wrap: break-word;
+    }
+
+    .card-class {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #2a5298;
+        background: #dbeafe;
+        padding: 2px 10px;
+        border-radius: 100px;
+        letter-spacing: .2px;
+    }
+
+    .card-arrow {
+        flex-shrink: 0;
+        color: #a0aec0;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    /* ===== Пустой каталог ===== */
+    .empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: #a0aec0;
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .empty .big {
+        font-size: 46px;
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    /* ===== Подвал ===== */
+    .footer {
+        background: #f7fafc;
+        border-top: 1px solid #edf2f7;
+        padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+        font-size: 13.5px;
+        color: #4a5568;
+        line-height: 1.6;
+        flex-shrink: 0;
+    }
+
+    .footer-row {
+        margin-bottom: 6px;
+    }
+
+    .footer-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .footer-label {
+        font-weight: 600;
+        color: #2d3748;
+    }
+
+    .footer a {
+        color: #2a5298;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .footer a:hover {
+        text-decoration: underline;
+    }
+
+    .report-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        margin-top: 14px;
+        padding: 13px 16px;
+        background: #fff;
+        border: 2px solid #e2e8f0;
+        border-radius: 14px;
+        font-size: 14.5px;
+        font-weight: 700;
+        color: #c53030;
+        text-decoration: none;
+        transition: all .15s ease;
+        min-height: 50px;
+    }
+
+    .report-btn:hover {
+        background: #fff5f5;
+        border-color: #c53030;
+    }
+
+    .report-btn:active {
+        transform: scale(.98);
+    }
+</style>
 </head>
 <body>
-<div class="container">
-    <div class="header">Game Command Studio сайт временео недоступен</div>
+
+<div class="app">
+
+    <!-- Шапка -->
+    <div class="header">
+        <h1>
+            <span class="ico">📚</span>
+            Школьная информатика — интересные викторины для проверки
+        </h1>
+    </div>
+
+    <!-- Поиск -->
+    <div class="search-wrap">
+        <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Поиск по названию или классу..."
+            autocomplete="off"
+        >
+    </div>
+
+    <!-- Каталог викторин -->
+    <div class="catalog" id="catalog"></div>
+
+    <!-- Подвал -->
+    <div class="footer">
+        <div class="footer-row">
+            <span class="footer-label">Имя разработчика:</span>
+            Максимилиан, 7 класс, МБОУ СОШ №26 с. Краснокумского
+        </div>
+        <div class="footer-row">
+            <span class="footer-label">Email для обращений:</span>
+            <a href="mailto:yaatomshik@mail.ru">yaatomshik@mail.ru</a>
+        </div>
+        <a class="report-btn" href="mailto:yaatomshik@mail.ru">
+            ⚠️ Сообщить об ошибке
+        </a>
+    </div>
+
+</div>
+
+<script>
+    /* ============================================================
+       КАТАЛОГ ВИКТОРИН
+       ============================================================
+       Формат записи:
+
+       {
+           name: "Название викторины",
+           url: "https://ссылка-на-викторину",
+           class: "7А"
+       },
+
+       ↓↓↓ ПРИМЕР (просто убери // и подставь свои данные) ↓↓↓
+
+       { name: "ПО компьютера",   url: "https://maxim.github.io/quiz/po-7a.html",       class: "7А" },
+       { name: "Алгоритмы",       url: "https://maxim.github.io/quiz/algo-7b.html",      class: "7Б" },
+       { name: "Системы счисления", url: "https://maxim.github.io/quiz/sis-8a.html",     class: "8А" },
+       ============================================================ */
+    const CATALOG = [
+        {
+           name: "Программное Обеспечение (ПО) — 7 КЛАСС",
+           url: "po7cl.html",
+           class: "7"
+       },
+    ];
+
+    /* ============================================================
+       ЛОГИКА (трогать не нужно)
+       ============================================================ */
+    const catalogEl = document.getElementById('catalog');
+    const searchEl  = document.getElementById('searchInput');
+
+    const ICONS = ['🧠', '💡', '📖', '🖥️', '⚙️', '📊', '🔢', '🌐', '🎯', '🧩', '🚀', '📘'];
+
+    function renderCatalog(query = '') {
+        catalogEl.innerHTML = '';
+
+        const q = query.trim().toLowerCase();
+        const filtered = CATALOG.filter(item =>
+            !q ||
+            item.name.toLowerCase().includes(q) ||
+            String(item.class).toLowerCase().includes(q)
+        );
+
+        if (filtered.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'empty';
+            empty.innerHTML = q
+                ? '<span class="big">🔍</span>Ничего не найдено'
+                : '<span class="big">📭</span>Каталог викторин пока пуст';
+            catalogEl.appendChild(empty);
+            return;
+        }
+
+        filtered.forEach((item, i) => {
+            const a = document.createElement('a');
+            a.className = 'card';
+            a.href = item.url;
+
+            const icon = document.createElement('div');
+            icon.className = 'card-icon';
+            icon.textContent = ICONS[i % ICONS.length];
+
+            const body = document.createElement('div');
+            body.className = 'card-body';
+
+            const title = document.createElement('div');
+            title.className = 'card-title';
+            title.textContent = item.name;
+
+            const cls = document.createElement('span');
+            cls.className = 'card-class';
+            cls.textContent = item.class;
+
+            body.appendChild(title);
+            body.appendChild(cls);
+
+            const arrow = document.createElement('div');
+            arrow.className = 'card-arrow';
+            arrow.textContent = '›';
+
+            a.appendChild(icon);
+            a.appendChild(body);
+            a.appendChild(arrow);
+            catalogEl.appendChild(a);
+        });
+    }
+
+    searchEl.addEventListener('input', (e) => renderCatalog(e.target.value));
+
+    renderCatalog();
+</script>
+
 </body>
-</html>
+</html> 
