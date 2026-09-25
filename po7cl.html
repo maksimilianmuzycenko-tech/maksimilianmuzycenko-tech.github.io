@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1e3c72">
+<title>Викторина: ПО компьютера (7 класс)</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    html, body {
+        height: 100%;
+        overflow-x: hidden;
+    }
+
+    body {
+        background: linear-gradient(160deg, #1e3c72 0%, #2a5298 50%, #4a7bc8 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px;
+        min-height: 100dvh;
+        color: #1a202c;
+    }
+
+    .app {
+        background: #fff;
+        width: 100%;
+        max-width: 480px;
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(0,0,0,.35);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100dvh - 24px);
+    }
+
+    .header {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: #fff;
+        padding: 16px 18px 14px;
+        flex-shrink: 0;
+    }
+
+    .header h1 {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: .3px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .header h1 .ico {
+        font-size: 19px;
+    }
+
+    .progress-bar {
+        margin-top: 12px;
+        height: 6px;
+        background: rgba(255,255,255,.25);
+        border-radius: 100px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        width: 10%;
+        background: #ffd93d;
+        border-radius: 100px;
+        transition: width .35s ease;
+    }
+
+    .progress-text {
+        margin-top: 8px;
+        font-size: 12px;
+        opacity: .85;
+        font-weight: 500;
+        letter-spacing: .3px;
+    }
+
+    .content {
+        padding: 18px 16px 20px;
+        overflow-y: auto;
+        flex: 1;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .question-text {
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 1.4;
+        color: #1a202c;
+        margin-bottom: 16px;
+        min-height: 48px;
+    }
+
+    .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: #f7fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 14px;
+        font-size: 15px;
+        line-height: 1.35;
+        cursor: pointer;
+        transition: all .15s ease;
+        min-height: 54px;
+        user-select: none;
+    }
+
+    .option:active {
+        transform: scale(.98);
+    }
+
+    .option .marker {
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        border: 2px solid #a0aec0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        color: #a0aec0;
+        transition: all .15s ease;
+    }
+
+    .option.selected {
+        background: #ebf4ff;
+        border-color: #2a5298;
+    }
+
+    .option.selected .marker {
+        background: #2a5298;
+        border-color: #2a5298;
+        color: #fff;
+    }
+
+    .option.disabled {
+        pointer-events: none;
+    }
+
+    .footer {
+        padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+        background: #fff;
+        border-top: 1px solid #edf2f7;
+        flex-shrink: 0;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: 16px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all .15s ease;
+        letter-spacing: .3px;
+        min-height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn:active {
+        transform: scale(.97);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(30,60,114,.35);
+    }
+
+    .btn-primary:disabled {
+        background: #cbd5e0;
+        box-shadow: none;
+        color: #718096;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-next {
+        background: #22a44a;
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(34,164,74,.35);
+    }
+
+    .btn-restart {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(30,60,114,.35);
+    }
+
+    .result-screen {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 30px 20px;
+        flex: 1;
+        gap: 14px;
+    }
+
+    .result-screen.show {
+        display: flex;
+        animation: fadeIn .4s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-emoji {
+        font-size: 64px;
+        line-height: 1;
+        animation: pop .5s ease;
+    }
+
+    @keyframes pop {
+        0% { transform: scale(0); }
+        70% { transform: scale(1.15); }
+        100% { transform: scale(1); }
+    }
+
+    .result-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: #1e3c72;
+    }
+
+    .result-score {
+        font-size: 44px;
+        font-weight: 800;
+        color: #2a5298;
+        line-height: 1;
+    }
+
+    .result-score small {
+        font-size: 20px;
+        color: #718096;
+        font-weight: 600;
+    }
+
+    .grade-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        font-size: 46px;
+        font-weight: 800;
+        color: #fff;
+        margin: 6px 0;
+        box-shadow: 0 10px 24px rgba(0,0,0,.2);
+    }
+
+    .grade-5 { background: linear-gradient(135deg, #22a44a, #16a34a); }
+    .grade-4 { background: linear-gradient(135deg, #4a90e2, #2a5298); }
+    .grade-3 { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .grade-2 { background: linear-gradient(135deg, #e53e3e, #c53030); }
+
+    .result-msg {
+        font-size: 15px;
+        color: #4a5568;
+        line-height: 1.45;
+        max-width: 320px;
+    }
+
+    .result-detail {
+        font-size: 13px;
+        color: #718096;
+        font-weight: 600;
+        letter-spacing: .3px;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+</style>
+</head>
+<body>
+
+<div class="app">
+    <div class="header" id="header">
+        <h1><span class="ico">💻</span> ПО компьютера · 7 класс</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">Вопрос 1 из 10</div>
+    </div>
+
+    <div class="content" id="quizContent">
+        <div class="question-text" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+    </div>
+
+    <div class="footer" id="footer">
+        <button class="btn btn-primary" id="mainBtn" disabled>Выберите ответ</button>
+    </div>
+
+    <div class="result-screen" id="resultScreen">
+        <div class="result-emoji" id="resultEmoji">🏆</div>
+        <div class="result-title" id="resultTitle">Викторина завершена!</div>
+        <div class="grade-badge" id="gradeBadge">5</div>
+        <div class="result-score" id="resultScore">0 <small>/ 10</small></div>
+        <div class="result-detail" id="resultDetail">Правильных ответов: 0%</div>
+        <div class="result-msg" id="resultMsg"></div>
+        <button class="btn btn-restart" id="restartBtn" style="margin-top: 10px;">🔄 Пройти заново</button>
+    </div>
+</div>
+
+<script>
+    /* ==================== БАНК ВОПРОСОВ ТОЛЬКО ПО ТЕМЕ ПО ==================== */
+    const allQuestions = [
+        { text: "Что такое программное обеспечение (ПО)?", options: ["Устройства компьютера", "Совокупность программ для работы компьютера", "Электрические схемы", "Корпус системного блока"], correct: 1 },
+        { text: "На какие группы делятся программы по назначению?", options: ["Системные, прикладные, инструментальные", "Большие и маленькие", "Платные и бесплатные", "Новые и старые"], correct: 0 },
+        { text: "Что относится к системному ПО?", options: ["Игры", "Операционная система", "Текстовый редактор", "Браузер"], correct: 1 },
+        { text: "Что такое операционная система?", options: ["Программа для рисования", "Комплекс программ, управляющих работой компьютера", "Игра", "Антивирус"], correct: 1 },
+        { text: "Какая из перечисленных — операционная система?", options: ["Microsoft Word", "Google Chrome", "Windows", "Adobe Photoshop"], correct: 2 },
+        { text: "Что является главной задачей операционной системы?", options: ["Создание документов", "Управление устройствами и ресурсами компьютера", "Просмотр видео", "Игры"], correct: 1 },
+        { text: "Какая ОС чаще всего стоит на смартфонах?", options: ["Windows", "macOS", "Android", "Linux"], correct: 2 },
+        { text: "Какая ОС используется на компьютерах Apple?", options: ["Windows", "macOS", "Android", "Linux"], correct: 1 },
+        { text: "Что такое Linux?", options: ["Игра", "Операционная система с открытым кодом", "Антивирус", "Браузер"], correct: 1 },
+        { text: "Что произойдёт без операционной системы?", options: ["Компьютер будет работать быстрее", "Компьютер не сможет работать", "Появятся новые функции", "Ничего не изменится"], correct: 1 },
+        { text: "Для чего нужны драйверы?", options: ["Для украшения", "Для управления устройствами из ОС", "Для интернета", "Для игр"], correct: 1 },
+        { text: "Что такое утилиты?", options: ["Игры", "Вспомогательные программы для обслуживания компьютера", "Операционные системы", "Документы"], correct: 1 },
+        { text: "Что относится к прикладному ПО?", options: ["Windows", "Linux", "Microsoft Word", "Драйвер"], correct: 2 },
+        { text: "Что такое текстовый редактор?", options: ["Программа для работы с текстом", "Игра", "ОС", "Браузер"], correct: 0 },
+        { text: "Какая программа нужна для работы с таблицами?", options: ["Word", "Excel", "Paint", "Блокнот"], correct: 1 },
+        { text: "Что такое графический редактор?", options: ["Программа для работы с изображениями", "Для текста", "Для музыки", "Для видео"], correct: 0 },
+        { text: "Что такое браузер?", options: ["Программа для выхода в интернет", "Для музыки", "Для игр", "Для текста"], correct: 0 },
+        { text: "Что относится к инструментальному ПО?", options: ["Игры", "Среды программирования", "Браузеры", "Антивирусы"], correct: 1 },
+        { text: "Для чего нужны антивирусы?", options: ["Для игр", "Для защиты компьютера от вредоносных программ", "Для музыки", "Для текста"], correct: 1 },
+        { text: "Что такое архиватор?", options: ["Программа для сжатия файлов", "Для рисования", "Для интернета", "Для музыки"], correct: 0 },
+        { text: "Что такое пиратское ПО?", options: ["Бесплатное лицензионное", "Незаконно скопированное ПО", "Новое ПО", "Системное ПО"], correct: 1 },
+        { text: "Что такое лицензия на ПО?", options: ["Право на использование программы", "Игра", "Антивирус", "Документ"], correct: 0 },
+        { text: "Какое ПО называется свободным?", options: ["Платное", "С открытым кодом и свободной лицензией", "Пиратское", "Секретное"], correct: 1 },
+        { text: "Что такое оперативная память?", options: ["Долговременное хранилище", "Временная память для работы программ", "Процессор", "Монитор"], correct: 1 },
+        { text: "Что такое обновление ПО?", options: ["Установка новой версии программы", "Удаление", "Копирование", "Печать"], correct: 0 },
+        { text: "Что такое установка программы?", options: ["Процесс добавления ПО на компьютер", "Удаление", "Печать", "Копирование"], correct: 0 },
+        { text: "Что такое удаление программы?", options: ["Установка", "Процесс очистки компьютера от ПО", "Копирование", "Печать"], correct: 1 },
+        { text: "Что относится к служебному ПО?", options: ["Антивирус", "Word", "Браузер", "Игра"], correct: 0 },
+        { text: "Что такое BIOS?", options: ["Базовая система ввода-вывода", "Игра", "Браузер", "Антивирус"], correct: 0 },
+        { text: "Что делает ОС при загрузке компьютера?", options: ["Проверяет устройства и запускает программы", "Выключает компьютер", "Печатает", "Играет музыку"], correct: 0 },
+        { text: "Что такое многозадачность ОС?", options: ["Работа одной программы", "Одновременная работа нескольких программ", "Игра", "Печать"], correct: 1 },
+        { text: "Что такое интерфейс ОС?", options: ["Способ взаимодействия пользователя с ОС", "Программа", "Файл", "Игра"], correct: 0 },
+        { text: "Что такое командная строка?", options: ["Текстовый способ управления ОС", "Графическое меню", "Игра", "Браузер"], correct: 0 },
+        { text: "Что такое графический интерфейс?", options: ["Управление с помощью текста", "Управление с помощью значков и окон", "Программа", "Игра"], correct: 1 },
+        { text: "Какое ПО управляет всеми устройствами компьютера?", options: ["Прикладное", "Системное", "Инструментальное", "Игровое"], correct: 1 },
+        { text: "Что такое системное программное обеспечение?", options: ["Программы для пользователя", "Программы, обеспечивающие работу компьютера и устройств", "Игры", "Только антивирусы"], correct: 1 },
+        { text: "Что из перечисленного — прикладная программа?", options: ["Windows", "Драйвер", "Paint", "BIOS"], correct: 2 },
+        { text: "Что из перечисленного — системная программа?", options: ["Excel", "Word", "Драйвер", "Paint"], correct: 2 },
+        { text: "Какая программа помогает находить и удалять вирусы?", options: ["Архиватор", "Антивирус", "Браузер", "Редактор"], correct: 1 },
+        { text: "Что нужно сделать с программой, чтобы она появилась на компьютере?", options: ["Распечатать", "Установить", "Нарисовать", "Скопировать в тетрадь"], correct: 1 }
+    ];
+
+    /* ==================== НАСТРОЙКИ ==================== */
+    const QUESTIONS_PER_GAME = 10;
+
+    /* ==================== СОСТОЯНИЕ ==================== */
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let score = 0;
+    let selectedOption = null;
+    let answered = false;
+
+    /* ==================== ЭЛЕМЕНТЫ ==================== */
+    const header        = document.getElementById('header');
+    const progressFill  = document.getElementById('progressFill');
+    const progressText  = document.getElementById('progressText');
+    const quizContent   = document.getElementById('quizContent');
+    const questionText  = document.getElementById('questionText');
+    const optionsCont   = document.getElementById('optionsContainer');
+    const footer        = document.getElementById('footer');
+    const mainBtn       = document.getElementById('mainBtn');
+    const resultScreen  = document.getElementById('resultScreen');
+    const resultEmoji   = document.getElementById('resultEmoji');
+    const resultTitle   = document.getElementById('resultTitle');
+    const resultScore   = document.getElementById('resultScore');
+    const resultDetail  = document.getElementById('resultDetail');
+    const resultMsg     = document.getElementById('resultMsg');
+    const gradeBadge    = document.getElementById('gradeBadge');
+    const restartBtn    = document.getElementById('restartBtn');
+
+    /* ==================== УТИЛИТЫ ==================== */
+    function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    function shuffleOptions(question) {
+        const correctText = question.options[question.correct];
+        const shuffledOptions = shuffle(question.options);
+        const newCorrect = shuffledOptions.indexOf(correctText);
+        return {
+            text: question.text,
+            options: shuffledOptions,
+            correct: newCorrect
+        };
+    }
+
+    function pickQuestions() {
+        const picked = shuffle(allQuestions).slice(0, QUESTIONS_PER_GAME);
+        return picked.map(shuffleOptions);
+    }
+
+    /* ==================== ЛОГИКА ==================== */
+    function renderQuestion() {
+        const q = currentQuestions[currentIndex];
+        answered = false;
+        selectedOption = null;
+
+        questionText.textContent = q.text;
+
+        progressText.textContent = `Вопрос ${currentIndex + 1} из ${QUESTIONS_PER_GAME}`;
+        progressFill.style.width = `${((currentIndex + 1) / QUESTIONS_PER_GAME) * 100}%`;
+
+        optionsCont.innerHTML = '';
+        q.options.forEach((optText, i) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+
+            const marker = document.createElement('div');
+            marker.className = 'marker';
+            marker.textContent = String.fromCharCode(65 + i);
+
+            const span = document.createElement('span');
+            span.textContent = optText;
+
+            div.appendChild(marker);
+            div.appendChild(span);
+
+            div.addEventListener('click', () => selectOption(i, div));
+            optionsCont.appendChild(div);
+        });
+
+        mainBtn.textContent = 'Ответить';
+        mainBtn.className = 'btn btn-primary';
+        mainBtn.disabled = true;
+
+        quizContent.scrollTop = 0;
+    }
+
+    function selectOption(index, el) {
+        if (answered) return;
+
+        document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+
+        selectedOption = index;
+        mainBtn.disabled = false;
+        mainBtn.textContent = 'Ответить';
+    }
+
+    function confirmAnswer() {
+        const q = currentQuestions[currentIndex];
+        answered = true;
+
+        document.querySelectorAll('.option').forEach(o => {
+            o.classList.add('disabled');
+        });
+
+        if (selectedOption === q.correct) score++;
+
+        if (currentIndex < QUESTIONS_PER_GAME - 1) {
+            mainBtn.textContent = 'Следующий вопрос →';
+            mainBtn.className = 'btn btn-next';
+        } else {
+            mainBtn.textContent = 'Показать результат 🎉';
+            mainBtn.className = 'btn btn-next';
+        }
+        mainBtn.disabled = false;
+    }
+
+    function nextQuestion() {
+        if (currentIndex < QUESTIONS_PER_GAME - 1) {
+            currentIndex++;
+            renderQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    /* ==================== ФОРМУЛА ОЦЕНКИ ====================
+       < 25%  → 2
+       26–50% → 3
+       51–75% → 4
+       76%+   → 5
+    ======================================================== */
+    function calculateGrade(percent) {
+        if (percent >= 76) return 5;
+        if (percent >= 51) return 4;
+        if (percent >= 26) return 3;
+        return 2;
+    }
+
+    function showResult() {
+        header.classList.add('hidden');
+        quizContent.classList.add('hidden');
+        footer.classList.add('hidden');
+        resultScreen.classList.add('show');
+
+        const total = QUESTIONS_PER_GAME;
+        const percent = Math.round((score / total) * 100);
+        const grade = calculateGrade(percent);
+
+        resultScore.innerHTML = `${score} <small>/ ${total}</small>`;
+        resultDetail.textContent = `Правильных ответов: ${percent}%`;
+
+        gradeBadge.textContent = grade;
+        gradeBadge.className = 'grade-badge grade-' + grade;
+
+        if (grade === 5) {
+            resultEmoji.textContent = '🏆';
+            resultTitle.textContent = 'Оценка: 5 — Отлично!';
+            resultMsg.textContent = 'Ты прекрасно знаешь программное обеспечение компьютера. Так держать!';
+        } else if (grade === 4) {
+            resultEmoji.textContent = '👍';
+            resultTitle.textContent = 'Оценка: 4 — Хорошо!';
+            resultMsg.textContent = 'Хороший результат. Немного повтори — и будет отлично!';
+        } else if (grade === 3) {
+            resultEmoji.textContent = '📘';
+            resultTitle.textContent = 'Оценка: 3 — Удовлетворительно';
+            resultMsg.textContent = 'Основы знаешь, но стоит ещё раз прочитать тему про ПО компьютера.';
+        } else {
+            resultEmoji.textContent = '💡';
+            resultTitle.textContent = 'Оценка: 2 — Стоит повторить';
+            resultMsg.textContent = 'Повтори материал и попробуй снова. У тебя обязательно получится!';
+        }
+    }
+
+    function startQuiz() {
+        currentQuestions = pickQuestions();
+        currentIndex = 0;
+        score = 0;
+        selectedOption = null;
+        answered = false;
+
+        header.classList.remove('hidden');
+        quizContent.classList.remove('hidden');
+        footer.classList.remove('hidden');
+        resultScreen.classList.remove('show');
+
+        renderQuestion();
+    }
+
+    /* ==================== ОБРАБОТЧИКИ ==================== */
+    mainBtn.addEventListener('click', () => {
+        if (!answered) {
+            confirmAnswer();
+        } else {
+            nextQuestion();
+        }
+    });
+
+    restartBtn.addEventListener('click', startQuiz);
+
+    /* ==================== СТАРТ ==================== */
+    startQuiz();
+</script>
+
+</body>
+</html>
