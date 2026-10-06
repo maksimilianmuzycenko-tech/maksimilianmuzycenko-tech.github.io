@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#ffe4ec">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>💕 Обнять / Поцеловать / Выйти замуж</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: linear-gradient(160deg, #fff0f5 0%, #ffe4ec 100%);
+            color: #3d2c31;
+            padding: 8px;
+            padding-top: max(8px, env(safe-area-inset-top));
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
+            -webkit-text-size-adjust: 100%;
+        }
+        .game-container {
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Заголовок */
+        h1 {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #b3405a;
+            margin-bottom: 12px;
+            padding: 0 4px;
+            line-height: 1.3;
+            letter-spacing: 0.3px;
+        }
+
+        /* Секция имён */
+        .names-section {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 14px 12px;
+            margin-bottom: 14px;
+            box-shadow: 0 3px 10px rgba(200, 130, 150, 0.15);
+            border: 1px solid #ffd9e2;
+        }
+        .names-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .names-header h2 {
+            font-size: 1rem;
+            color: #a13e57;
+            font-weight: 600;
+        }
+        .counter {
+            background: #fbd0dc;
+            padding: 3px 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #852f45;
+            font-size: 0.85rem;
+        }
+
+        /* Поля ввода имён */
+        .inputs-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 40vh;
+            overflow-y: auto;
+            padding-right: 2px;
+            margin-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .inputs-grid::-webkit-scrollbar {
+            width: 4px;
+        }
+        .inputs-grid::-webkit-scrollbar-thumb {
+            background: #d98fa8;
+            border-radius: 10px;
+        }
+        .name-input-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .name-input-row input {
+            flex: 1;
+            min-width: 0;
+            padding: 14px 16px;
+            border-radius: 40px;
+            border: 2px solid #ffcdd9;
+            background: white;
+            font-size: 16px; /* важно: 16px предотвращает зум на iOS */
+            outline: none;
+            color: #3d2c31;
+            font-weight: 500;
+            transition: border-color 0.2s;
+        }
+        .name-input-row input:focus {
+            border-color: #e08fa8;
+            box-shadow: 0 0 0 3px #ffdde6;
+        }
+        .name-input-row input::placeholder {
+            color: #cba3b1;
+            font-weight: 400;
+        }
+        .remove-btn {
+            background: #ffe1e9;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 1.7rem;
+            line-height: 1;
+            color: #a53f58;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-weight: 300;
+            transition: background 0.15s;
+        }
+        .remove-btn:active {
+            background: #ffc1d2;
+            transform: scale(0.94);
+        }
+
+        /* Кнопка добавить */
+        .add-btn {
+            background: #ffeef3;
+            border: 2px dashed #e6a9bc;
+            border-radius: 40px;
+            padding: 14px 20px;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #a13e57;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: background 0.15s;
+        }
+        .add-btn:active:not(:disabled) {
+            background: #ffe0e9;
+        }
+        .add-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        .add-btn span {
+            font-size: 1.3rem;
+        }
+
+        /* Кнопки сохранения/загрузки */
+        .storage-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .storage-btn {
+            flex: 1;
+            background: white;
+            border: 2px solid #ffc2d2;
+            border-radius: 40px;
+            padding: 14px 8px;
+            font-weight: 600;
+            color: #8f3b51;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.15s;
+        }
+        .storage-btn:active {
+            background: #fff3f7;
+        }
+
+        /* Предупреждение */
+        .no-names-warning {
+            color: #b34e68;
+            font-weight: 500;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 20px;
+            text-align: center;
+        }
+
+        /* Кнопки действий */
+        .actions-section {
+            text-align: center;
+        }
+        .actions-title {
+            color: #7a4052;
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .action-btn {
+            width: 100%;
+            padding: 18px 12px;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.1s, filter 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 0.3px;
+        }
+        .action-btn.hug {
+            background: #b5839b;
+            box-shadow: 0 5px 0 #8f6177;
+        }
+        .action-btn.kiss {
+            background: #d46b88;
+            box-shadow: 0 5px 0 #a94d66;
+        }
+        .action-btn.marry {
+            background: #b3405a;
+            box-shadow: 0 5px 0 #83283e;
+        }
+        .action-btn:active:not(:disabled) {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #00000022;
+        }
+        .action-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Карточка результата */
+        .result-card {
+            background: #fff7fa;
+            border-radius: 24px;
+            padding: 18px 14px;
+            box-shadow: 0 4px 0 #e8c4d1, 0 10px 20px -8px #c28b9f;
+            border: 2px solid #ffe2eb;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .result-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #aa7a8b;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .result-name {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #8f2e4a;
+            line-height: 1.15;
+            word-break: break-word;
+            text-align: center;
+            transition: 0.15s;
+        }
+        .result-name.empty {
+            font-size: 1.05rem;
+            font-weight: 400;
+            color: #bc9aa8;
+            font-style: italic;
+        }
+
+        /* Тост */
+        .toast-message {
+            position: fixed;
+            bottom: max(20px, env(safe-area-inset-bottom));
+            left: 16px;
+            right: 16px;
+            background: #4d2e38;
+            color: #ffeef3;
+            padding: 14px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            box-shadow: 0 8px 20px -5px #3d1e28;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.25s, transform 0.25s;
+            pointer-events: none;
+            z-index: 999;
+            font-size: 0.95rem;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .toast-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Планшет/большой экран */
+        @media (min-width: 500px) {
+            h1 { font-size: 1.5rem; }
+            .action-btn { font-size: 1.25rem; padding: 20px 12px; }
+            .result-name { font-size: 2.2rem; }
+        }
+
+        /* Очень маленькие экраны */
+        @media (max-height: 700px) {
+            .inputs-grid { max-height: 30vh; }
+            h1 { margin-bottom: 8px; }
+            .names-section { padding: 12px 10px; }
+        }
+
+        /* Ландшафт на телефоне — делаем компактнее */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .inputs-grid { max-height: 25vh; }
+            h1 { font-size: 1rem; margin-bottom: 6px; }
+            .action-btn { padding: 12px 8px; font-size: 1rem; }
+            .result-name { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <h1>💋 Обнять / Поцеловать / Выйти замуж 💍</h1>
+
+    <div class="names-section">
+        <div class="names-header">
+            <h2>📝 Список имён</h2>
+            <div class="counter" id="counterDisplay">0 / 30</div>
+        </div>
+        <div class="inputs-grid" id="inputsGrid"></div>
+        <button class="add-btn" id="addNameBtn" title="Добавить имя (макс. 30)">
+            <span>+</span> Добавить имя
+        </button>
+        <div class="storage-buttons">
+            <button class="storage-btn" id="saveBtn">💾 Сохранить</button>
+            <button class="storage-btn" id="loadBtn">📂 Загрузить</button>
+        </div>
+        <div id="noNamesWarning" class="no-names-warning"></div>
+    </div>
+
+    <div class="actions-section">
+        <div class="actions-title">🎲 Нажми и узнай, кому повезёт</div>
+        <div class="action-buttons">
+            <button class="action-btn hug" id="hugBtn" disabled>🤗 Обнять</button>
+            <button class="action-btn kiss" id="kissBtn" disabled>😘 Поцеловать</button>
+            <button class="action-btn marry" id="marryBtn" disabled>💍 Выйти замуж</button>
+        </div>
+        <div class="result-card" id="resultCard">
+            <div class="result-label" id="resultLabel">Результат</div>
+            <div class="result-name empty" id="resultName">Нажми на кнопку...</div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-message" id="toast"></div>
+
+<script>
+    (function() {
+        const MAX_NAMES = 30;
+        const STORAGE_KEY = 'obnyat_pocelevat_vyiti_zamuj_names';
+
+        let names = [];
+        let nameInputs = [];
+
+        const inputsGrid = document.getElementById('inputsGrid');
+        const addNameBtn = document.getElementById('addNameBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const loadBtn = document.getElementById('loadBtn');
+        const counterDisplay = document.getElementById('counterDisplay');
+        const noNamesWarning = document.getElementById('noNamesWarning');
+
+        const hugBtn = document.getElementById('hugBtn');
+        const kissBtn = document.getElementById('kissBtn');
+        const marryBtn = document.getElementById('marryBtn');
+
+        const resultLabel = document.getElementById('resultLabel');
+        const resultName = document.getElementById('resultName');
+        const toastEl = document.getElementById('toast');
+
+        function showToast(message) {
+            toastEl.textContent = message;
+            toastEl.classList.add('show');
+            clearTimeout(toastEl.timeout);
+            toastEl.timeout = setTimeout(() => {
+                toastEl.classList.remove('show');
+            }, 2000);
+        }
+
+        function updateUIState() {
+            const count = names.length;
+            counterDisplay.textContent = `${count} / ${MAX_NAMES}`;
+            addNameBtn.disabled = (count >= MAX_NAMES);
+
+            const hasNames = count > 0;
+            hugBtn.disabled = !hasNames;
+            kissBtn.disabled = !hasNames;
+            marryBtn.disabled = !hasNames;
+
+            noNamesWarning.textContent = hasNames ? '' : '⚠️ Добавь хотя бы одно имя';
+
+            if (!hasNames) {
+                resultLabel.textContent = 'Результат';
+                resultName.textContent = 'Нет имён...';
+                resultName.classList.add('empty');
+            }
+        }
+
+        function syncNamesFromInputs() {
+            const newNames = [];
+            for (let inp of nameInputs) {
+                const val = inp.value.trim();
+                if (val !== '') newNames.push(val);
+            }
+            names = newNames;
+            updateUIState();
+        }
+
+        function rebuildInputsFromNames() {
+            inputsGrid.innerHTML = '';
+            nameInputs = [];
+
+            for (let i = 0; i < names.length; i++) {
+                const row = document.createElement('div');
+                row.className = 'name-input-row';
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = `Имя ${i + 1}`;
+                input.value = names[i] || '';
+                input.maxLength = 40;
+                input.setAttribute('autocomplete', 'off');
+                input.setAttribute('autocorrect', 'off');
+                input.setAttribute('autocapitalize', 'words');
+                input.addEventListener('input', syncNamesFromInputs);
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.textContent = '×';
+                removeBtn.title = 'Удалить';
+                removeBtn.type = 'button';
+                removeBtn.addEventListener('click', function() {
+                    row.remove();
+                    nameInputs = Array.from(inputsGrid.querySelectorAll('input'));
+                    syncNamesFromInputs();
+                });
+
+                row.appendChild(input);
+                row.appendChild(removeBtn);
+                inputsGrid.appendChild(row);
+                nameInputs.push(input);
+            }
+        }
+
+        function addInputField() {
+            if (names.length >= MAX_NAMES) {
+                showToast(`Максимум ${MAX_NAMES} имён`);
+                return;
+            }
+
+            const row = document.createElement('div');
+            row.className = 'name-input-row';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = `Имя ${names.length + 1}`;
+            input.maxLength = 40;
+            input.setAttribute('autocomplete', 'off');
+            input.setAttribute('autocorrect', 'off');
+            input.setAttribute('autocapitalize', 'words');
+            input.addEventListener('input', syncNamesFromInputs);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.textContent = '×';
+            removeBtn.type = 'button';
+            removeBtn.title = 'Удалить';
+            removeBtn.addEventListener('click', function() {
+                row.remove();
+                nameInputs = Array.from(inputsGrid.querySelectorAll('input'));
+                syncNamesFromInputs();
+            });
+
+            row.appendChild(input);
+            row.appendChild(removeBtn);
+            inputsGrid.appendChild(row);
+            nameInputs.push(input);
+
+            // Прокручиваем к новому полю
+            row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            input.focus();
+            syncNamesFromInputs();
+        }
+
+        function loadFromStorage() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (!stored) {
+                    showToast('Нет сохранённых имён');
+                    return;
+                }
+                const parsed = JSON.parse(stored);
+                if (!Array.isArray(parsed)) throw new Error();
+
+                const loaded = parsed
+                    .filter(item => typeof item === 'string' && item.trim() !== '')
+                    .map(item => item.trim())
+                    .slice(0, MAX_NAMES);
+
+                names = loaded;
+                rebuildInputsFromNames();
+                updateUIState();
+                resultLabel.textContent = 'Результат';
+                resultName.textContent = 'Нажми на кнопку...';
+                resultName.classList.add('empty');
+                showToast(`Загружено ${names.length} имён`);
+            } catch (e) {
+                showToast('Ошибка загрузки');
+            }
+        }
+
+        function saveToStorage() {
+            syncNamesFromInputs();
+            if (names.length === 0) {
+                showToast('Нет имён для сохранения');
+                return;
+            }
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(names));
+                showToast(`Сохранено ${names.length} имён`);
+            } catch (e) {
+                showToast('Ошибка сохранения');
+            }
+        }
+
+        function handleAction(actionType) {
+            syncNamesFromInputs();
+            if (names.length === 0) {
+                showToast('Сначала добавь имена');
+                return;
+            }
+
+            const chosen = names[Math.floor(Math.random() * names.length)];
+
+            resultName.textContent = chosen;
+            resultName.classList.remove('empty');
+
+            let actionText = '', emoji = '';
+            if (actionType === 'hug') { actionText = '🤗 Обнять'; emoji = '🤗'; }
+            else if (actionType === 'kiss') { actionText = '😘 Поцеловать'; emoji = '💋'; }
+            else if (actionType === 'marry') { actionText = '💍 Выйти замуж'; emoji = '💒'; }
+
+            resultLabel.textContent = actionText;
+
+            const card = document.getElementById('resultCard');
+            card.style.transform = 'scale(1.02)';
+            setTimeout(() => { card.style.transform = 'scale(1)'; }, 130);
+
+            showToast(`${emoji} ${chosen}`);
+        }
+
+        function init() {
+            // Пробуем автозагрузку
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed)) {
+                        names = parsed
+                            .filter(item => typeof item === 'string' && item.trim() !== '')
+                            .map(item => item.trim())
+                            .slice(0, MAX_NAMES);
+                    }
+                }
+            } catch (e) { /* ignore */ }
+
+            if (names.length === 0) {
+                names = [];
+                rebuildInputsFromNames();
+                addInputField();
+            } else {
+                rebuildInputsFromNames();
+            }
+
+            updateUIState();
+
+            addNameBtn.addEventListener('click', addInputField);
+            saveBtn.addEventListener('click', saveToStorage);
+            loadBtn.addEventListener('click', loadFromStorage);
+
+            hugBtn.addEventListener('click', () => handleAction('hug'));
+            kissBtn.addEventListener('click', () => handleAction('kiss'));
+            marryBtn.addEventListener('click', () => handleAction('marry'));
+
+            // На телефоне Enter в поле — сразу добавить новое
+            inputsGrid.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
+                    e.preventDefault();
+                    if (names.length < MAX_NAMES) {
+                        // Если текущее пустое — не добавляем, а фокусируемся на новом
+                        addInputField();
+                    }
+                }
+            });
+        }
+
+        init();
+    })();
+</script>
+</body>
+</html>
