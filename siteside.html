@@ -3,70 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sites IDE — Конструктор сайтов</title>
+<title>Sites IDE</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: #0b0b18;
-    color: #e0e0e0;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    padding: 20px;
-    min-height: 100vh;
-  }
-
+  body { background: #0b0b18; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 20px; }
   .container { max-width: 1400px; margin: 0 auto; }
-
-  h1 {
-    font-size: 2rem;
-    color: #f2b84b;
-    border-bottom: 2px solid #23233a;
-    padding-bottom: 12px;
-    margin-bottom: 20px;
-  }
-
-  /* ===== Карточки ===== */
-  .card {
-    background: #14142a;
-    padding: 18px 22px;
-    border-radius: 12px;
-    border: 1px solid #2a2a4a;
-    margin-bottom: 16px;
-  }
-
+  h1 { font-size: 2rem; color: #f2b84b; border-bottom: 2px solid #23233a; padding-bottom: 12px; margin-bottom: 20px; }
+  .card { background: #14142a; padding: 18px 22px; border-radius: 12px; border: 1px solid #2a2a4a; margin-bottom: 16px; }
   .toolbar { display: flex; flex-wrap: wrap; gap: 10px; }
-
-  /* ===== Кнопки ===== */
-  .btn {
-    padding: 9px 18px;
-    border: none;
-    border-radius: 24px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.9rem;
-    background: #2a2a52;
-    color: #ddd;
-    transition: filter 0.15s, transform 0.1s;
-    white-space: nowrap;
-  }
+  .btn { padding: 9px 18px; border: none; border-radius: 24px; font-weight: 600; cursor: pointer; font-size: 0.9rem; background: #2a2a52; color: #ddd; transition: filter 0.15s; }
   .btn:hover { filter: brightness(1.2); }
-  .btn:active { transform: scale(0.97); }
   .btn-primary { background: #f2b84b; color: #1a1a2e; }
   .btn-success { background: #2a7a3a; color: #fff; }
-  .btn-danger  { background: #7a3a3a; color: #fff; }
-  .btn-info    { background: #2a5a9a; color: #fff; }
+  .btn-danger { background: #7a3a3a; color: #fff; }
+  .btn-info { background: #2a5a9a; color: #fff; }
   .btn-secondary { background: #3a3a5a; color: #ddd; }
-
-  .btn-sm {
-    padding: 5px 11px;
-    font-size: 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background: #0f3460;
-    color: #fff;
-    transition: background 0.15s;
-  }
+  .btn-sm { padding: 5px 11px; font-size: 12px; border: none; border-radius: 5px; cursor: pointer; background: #0f3460; color: #fff; }
   .btn-sm:hover { background: #1a4a7a; }
   .btn-sm.green { background: #2a6a3a; }
   .btn-sm.green:hover { background: #3a8a4a; }
@@ -76,369 +28,67 @@
   .btn-sm.yellow:hover { background: #9a7a2a; }
   .btn-sm.purple { background: #5a2a7a; }
   .btn-sm.purple:hover { background: #7a3a9a; }
-
-  /* ===== Панели ===== */
-  .panel {
-    display: grid;
-    grid-template-columns: minmax(320px, 1fr) minmax(400px, 1.6fr);
-    gap: 16px;
-  }
-  @media (max-width: 900px) {
-    .panel { grid-template-columns: 1fr; }
-  }
-
-  .preview-frame {
-    width: 100%;
-    height: 560px;
-    border: 1px solid #2a2a4a;
-    border-radius: 8px;
-    background: #fff;
-    display: block;
-  }
-
-  /* ===== Вкладки ===== */
-  .tabs {
-    display: flex;
-    gap: 4px;
-    background: #0f3460;
-    padding: 4px;
-    border-radius: 8px;
-    margin-bottom: 14px;
-  }
-  .tabs button {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: #aaa;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    transition: background 0.15s;
-  }
-  .tabs button:hover { color: #ddd; }
+  .panel { display: grid; grid-template-columns: minmax(320px, 1fr) minmax(400px, 1.6fr); gap: 16px; }
+  @media (max-width: 900px) { .panel { grid-template-columns: 1fr; } }
+  .preview-frame { width: 100%; height: 560px; border: 1px solid #2a2a4a; border-radius: 8px; background: #fff; display: block; }
+  .tabs { display: flex; gap: 4px; background: #0f3460; padding: 4px; border-radius: 8px; margin-bottom: 14px; }
+  .tabs button { flex: 1; background: transparent; border: none; color: #aaa; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
   .tabs button.active { background: #1a4a7a; color: #fff; }
-
-  /* ===== Список ===== */
   .list { margin-top: 8px; }
-
-  .list-item {
-    background: #16213e;
-    padding: 10px 12px;
-    margin-bottom: 6px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-left: 3px solid #e94560;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-    user-select: none;
-  }
+  .list-item { background: #16213e; padding: 10px 12px; margin-bottom: 6px; border-radius: 6px; display: flex; align-items: center; gap: 8px; border-left: 3px solid #e94560; font-size: 13px; cursor: pointer; user-select: none; }
   .list-item:hover { background: #1a2a4a; }
   .list-item.active { border-left-color: #f2b84b; background: #1e2a4a; }
   .list-item.dragging { opacity: 0.4; }
   .list-item.drag-over { border-top: 2px solid #f2b84b; }
-
-  .list-item .handle {
-    color: #666;
-    cursor: grab;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-  .list-item .text {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .list-item .del {
-    background: transparent;
-    border: none;
-    color: #e94560;
-    cursor: pointer;
-    font-size: 15px;
-    padding: 0 4px;
-    flex-shrink: 0;
-  }
-  .list-item .del:hover { color: #ff6b81; }
-  .list-item .tag {
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 3px;
-    margin-left: 4px;
-    flex-shrink: 0;
-  }
+  .list-item .handle { color: #666; cursor: grab; font-size: 14px; flex-shrink: 0; }
+  .list-item .text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .list-item .del { background: transparent; border: none; color: #e94560; cursor: pointer; font-size: 15px; padding: 0 4px; flex-shrink: 0; }
+  .list-item .tag { font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 4px; flex-shrink: 0; }
   .tag-hidden { background: #5a3a7a; color: #cba; }
   .tag-func { background: #7a5a1a; color: #fdd; }
-
-  .empty {
-    color: #666;
-    text-align: center;
-    padding: 20px 0;
-    font-size: 13px;
-  }
-
-  /* ===== Параметры ===== */
-  .params {
-    background: #16213e;
-    padding: 14px 16px;
-    border-radius: 8px;
-    border: 1px solid #1f2f4a;
-    margin-top: 12px;
-  }
-
-  .params h4 {
-    color: #f2b84b;
-    margin-bottom: 10px;
-    font-size: 0.95rem;
-    font-weight: 600;
-  }
-
+  .empty { color: #666; text-align: center; padding: 20px 0; font-size: 13px; }
+  .params { background: #16213e; padding: 14px 16px; border-radius: 8px; border: 1px solid #1f2f4a; margin-top: 12px; }
+  .params h4 { color: #f2b84b; margin-bottom: 10px; font-size: 0.95rem; }
   .field { margin-bottom: 10px; }
-  .field label {
-    display: block;
-    font-size: 12px;
-    color: #9aa;
-    margin-bottom: 4px;
-    font-weight: 500;
-  }
-  .field input[type="text"],
-  .field select,
-  .field textarea {
-    width: 100%;
-    padding: 8px 10px;
-    background: #0f3460;
-    border: 1px solid #1a4a7a;
-    color: #fff;
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: inherit;
-  }
-  .field input[type="text"]:focus,
-  .field select:focus,
-  .field textarea:focus {
-    outline: none;
-    border-color: #f2b84b;
-  }
-  .field input[type="color"] {
-    width: 100%;
-    height: 36px;
-    padding: 2px;
-    cursor: pointer;
-    border-radius: 6px;
-    border: 1px solid #1a4a7a;
-    background: #0f3460;
-  }
-  .field textarea {
-    min-height: 80px;
-    resize: vertical;
-    font-family: 'Consolas', monospace;
-    font-size: 13px;
-  }
-
-  .hint {
-    font-size: 11px;
-    color: #7a8a9a;
-    margin-top: 3px;
-    font-style: italic;
-  }
-
-  .check {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px;
-    background: #0f3460;
-    border-radius: 6px;
-    margin-top: 8px;
-    cursor: pointer;
-  }
+  .field label { display: block; font-size: 12px; color: #9aa; margin-bottom: 4px; font-weight: 500; }
+  .field input[type="text"], .field input[type="number"], .field select, .field textarea { width: 100%; padding: 8px 10px; background: #0f3460; border: 1px solid #1a4a7a; color: #fff; border-radius: 6px; font-size: 14px; font-family: inherit; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #f2b84b; }
+  .field input[type="color"] { width: 100%; height: 36px; padding: 2px; cursor: pointer; border-radius: 6px; border: 1px solid #1a4a7a; background: #0f3460; }
+  .field textarea { min-height: 80px; resize: vertical; font-family: 'Consolas', monospace; font-size: 13px; }
+  .hint { font-size: 11px; color: #7a8a9a; margin-top: 3px; font-style: italic; }
+  .check { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: #0f3460; border-radius: 6px; margin-top: 8px; cursor: pointer; }
   .check:hover { background: #1a4a7a; }
-  .check input { cursor: pointer; }
-
   .align-row { display: flex; gap: 4px; }
-  .align-row button {
-    flex: 1;
-    padding: 7px;
-    background: #0f3460;
-    border: 2px solid transparent;
-    border-radius: 6px;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-  }
-  .align-row button:hover { background: #1a4a7a; }
-  .align-row button.active {
-    border-color: #e94560;
-    background: #1a4a7a;
-  }
-
-  .section-divider {
-    margin-top: 14px;
-    padding-top: 12px;
-    border-top: 1px dashed #2a3a5a;
-  }
-  .section-title {
-    font-size: 11px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    font-weight: 600;
-  }
+  .align-row button { flex: 1; padding: 7px; background: #0f3460; border: 2px solid transparent; border-radius: 6px; color: #fff; cursor: pointer; }
+  .align-row button.active { border-color: #e94560; background: #1a4a7a; }
+  .section-divider { margin-top: 14px; padding-top: 12px; border-top: 1px dashed #2a3a5a; }
+  .section-title { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
   .section-title.link { color: #6ac6ff; }
   .section-title.func { color: #f2b84b; }
-
-  /* ===== Кнопки действий ===== */
-  .action-row {
-    display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-    margin-bottom: 6px;
-  }
-
-  .code-box {
-    background: #0d0d1a;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #1a4a7a;
-    font-family: 'Consolas', monospace;
-    font-size: 13px;
-    color: #9cdcfe;
-    white-space: pre-wrap;
-    max-height: 240px;
-    overflow: auto;
-    line-height: 1.5;
-    margin-top: 10px;
-  }
-
-  /* ===== Модалка ===== */
-  .modal-bg {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 9999;
-    animation: fadeIn 0.15s ease;
-  }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-  .modal {
-    background: #14142a;
-    border: 1px solid #2a2a4a;
-    border-radius: 12px;
-    padding: 22px 26px;
-    width: 100%;
-    max-width: 460px;
-    max-height: 88vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-    animation: slideUp 0.2s ease;
-  }
-  @keyframes slideUp {
-    from { transform: translateY(15px); opacity: 0; }
-    to   { transform: translateY(0); opacity: 1; }
-  }
+  .section-title.global { color: #6affb8; }
+  .action-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px; }
+  .code-box { background: #0d0d1a; padding: 12px; border-radius: 8px; border: 1px solid #1a4a7a; font-family: 'Consolas', monospace; font-size: 13px; color: #9cdcfe; white-space: pre-wrap; max-height: 240px; overflow: auto; line-height: 1.5; margin-top: 10px; }
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
+  .modal { background: #14142a; border: 1px solid #2a2a4a; border-radius: 12px; padding: 22px 26px; width: 100%; max-width: 460px; max-height: 88vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
   .modal.wide { max-width: 800px; }
-
-  .modal h3 {
-    color: #f2b84b;
-    font-size: 1.2rem;
-    margin-bottom: 14px;
-  }
-
-  .modal-body {
-    font-size: 14px;
-    color: #ccc;
-    line-height: 1.6;
-  }
+  .modal h3 { color: #f2b84b; font-size: 1.2rem; margin-bottom: 14px; }
+  .modal-body { font-size: 14px; color: #ccc; line-height: 1.6; }
   .modal-body p { margin-bottom: 8px; }
-  .modal-body code {
-    background: #0d0d1a;
-    padding: 2px 6px;
-    border-radius: 4px;
-    color: #f2b84b;
-    font-family: 'Consolas', monospace;
-    font-size: 12px;
-  }
+  .modal-body code { background: #0d0d1a; padding: 2px 6px; border-radius: 4px; color: #f2b84b; font-family: 'Consolas', monospace; font-size: 12px; }
   .modal-body ul { margin: 8px 0 8px 20px; }
   .modal-body li { margin-bottom: 4px; }
-  .modal-body h4 {
-    color: #e94560;
-    margin: 14px 0 6px;
-    font-size: 0.95rem;
-  }
-
-  .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 18px;
-    flex-wrap: wrap;
-  }
-
-  /* ===== Справочник ===== */
-  .help-block {
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #2a2a4a;
-  }
-  .help-block:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-  }
-  .help-block h3 {
-    color: #f2b84b;
-    margin-bottom: 8px;
-    font-size: 1.05rem;
-  }
-  .help-block h4 {
-    color: #e94560;
-    margin: 12px 0 6px;
-    font-size: 0.92rem;
-  }
+  .modal-body h4 { color: #e94560; margin: 14px 0 6px; font-size: 0.95rem; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+  .help-block { margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #2a2a4a; }
+  .help-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .help-block h3 { color: #f2b84b; margin-bottom: 8px; font-size: 1.05rem; }
   .help-block ul { margin-left: 18px; }
-  .help-block li { margin-bottom: 4px; }
-  .help-tip {
-    background: #1a2a3a;
-    border-left: 3px solid #f2b84b;
-    padding: 10px 12px;
-    border-radius: 4px;
-    margin: 10px 0;
-    font-size: 13px;
-    color: #cbd;
-  }
-  .help-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 8px 0;
-    font-size: 13px;
-  }
-  .help-table th, .help-table td {
-    text-align: left;
-    padding: 6px 8px;
-    border-bottom: 1px solid #2a2a4a;
-  }
+  .help-tip { background: #1a2a3a; border-left: 3px solid #f2b84b; padding: 10px 12px; border-radius: 4px; margin: 10px 0; font-size: 13px; color: #cbd; }
+  .help-table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
+  .help-table th, .help-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #2a2a4a; }
   .help-table th { color: #f2b84b; }
-
-  .badge {
-    display: inline-block;
-    background: #1a4a7a;
-    color: #fff;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
-  }
-
+  .badge { display: inline-block; background: #1a4a7a; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
   .hidden { display: none !important; }
-
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: #0a0a18; }
   ::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 3px; }
@@ -446,30 +96,25 @@
 </head>
 <body>
 <div class="container">
-
   <h1>🧩 Sites IDE</h1>
 
-  <!-- Тулбар -->
   <div class="card toolbar">
     <button class="btn btn-success" onclick="compile()">⚙️ Скомпилировать</button>
     <button class="btn btn-primary" onclick="exportProject()">⬇️ Экспорт</button>
     <button class="btn btn-success" onclick="document.getElementById('fileInput').click()">📂 Импорт</button>
+    <button class="btn btn-info" onclick="openSettings()">⚙️ Настройки</button>
     <button class="btn btn-info" onclick="openHelp()">📖 Справочник</button>
     <button class="btn btn-danger" onclick="clearAll()">🗑️ Очистить</button>
   </div>
 
-  <!-- Панели -->
   <div class="panel">
-
-    <!-- Левая панель -->
     <div>
       <div class="card">
         <div class="tabs">
           <button id="tabIface" class="active" onclick="switchTab('iface')">🧩 Интерфейс</button>
-          <button id="tabLogic" onclick="switchTab('logic')">⚡ Логика (JS)</button>
+          <button id="tabLogic" onclick="switchTab('logic')">⚡ Логика</button>
         </div>
 
-        <!-- Интерфейс -->
         <div id="ifaceTab">
           <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">
             <button class="btn-sm" onclick="addBlock('button')">➕ Кнопка</button>
@@ -477,36 +122,22 @@
             <button class="btn-sm" onclick="addBlock('link')">🔗 Ссылка</button>
             <button class="btn-sm" onclick="addBlock('image')">🖼️ Картинка</button>
           </div>
-
-          <div id="blockList" class="list">
-            <div class="empty">Нет блоков. Добавьте первый!</div>
-          </div>
-
+          <div id="blockList" class="list"><div class="empty">Нет блоков</div></div>
           <div id="blockParams"></div>
         </div>
 
-        <!-- Логика -->
         <div id="logicTab" class="hidden">
-          <p style="color:#888;font-size:12px;margin-bottom:10px;">
-            Создайте функцию, добавьте действия. Привязывается к кнопке или ссылке.
-          </p>
-
           <button class="btn-sm green" onclick="addFunction()">➕ Добавить функцию</button>
-
-          <div id="funcList" class="list">
-            <div class="empty">Нет функций. Добавьте первую!</div>
-          </div>
+          <div id="funcList" class="list"><div class="empty">Нет функций</div></div>
 
           <div id="funcEditor" class="hidden">
             <div class="params">
               <h4>✏️ Редактор функции</h4>
-
               <div class="field">
                 <label>Имя функции</label>
                 <input type="text" id="funcName" onchange="renameFunction(this.value)">
               </div>
-
-              <label style="display:block;font-size:12px;color:#9aa;margin:12px 0 5px;">📌 Базовые действия</label>
+              <label style="display:block;font-size:12px;color:#9aa;margin:12px 0 5px;">📌 Действия</label>
               <div class="action-row">
                 <button class="btn-sm" onclick="addAction('alert')">💬 Alert</button>
                 <button class="btn-sm" onclick="addAction('console')">🖥️ Console</button>
@@ -518,51 +149,38 @@
                 <button class="btn-sm" onclick="addAction('toggle')">🔄 Переключить</button>
                 <button class="btn-sm" onclick="addAction('custom')">✏️ Свой код</button>
               </div>
-
-              <label style="display:block;font-size:12px;color:#9aa;margin:12px 0 5px;">🔢 Переменные</label>
               <div class="action-row">
                 <button class="btn-sm yellow" onclick="addAction('var_declare')">📦 Создать</button>
                 <button class="btn-sm yellow" onclick="addAction('var_set')">✏️ Изменить</button>
                 <button class="btn-sm yellow" onclick="addAction('var_math')">➕ Математика</button>
                 <button class="btn-sm yellow" onclick="addAction('var_alert')">💬 Показать</button>
               </div>
-
-              <label style="display:block;font-size:12px;color:#9aa;margin:12px 0 5px;">🔀 Условия</label>
               <div class="action-row">
                 <button class="btn-sm purple" onclick="addAction('if')">❓ Если</button>
                 <button class="btn-sm purple" onclick="addAction('wait')">⏱️ Задержка</button>
               </div>
-
-              <label style="display:block;font-size:12px;color:#9aa;margin:12px 0 5px;">📋 Действия</label>
-              <div id="actionList" class="list">
-                <div class="empty">Нет действий</div>
-              </div>
-
-              <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;">
-                <button class="btn-sm green" onclick="refreshCode()">🔄 Обновить код</button>
+              <div id="actionList" class="list"><div class="empty">Нет действий</div></div>
+              <div style="display:flex;gap:5px;margin-top:10px;">
                 <button class="btn-sm red" onclick="deleteFunction()">🗑️ Удалить функцию</button>
               </div>
-
-              <div class="code-box" id="codeBox">// код функции</div>
+              <div class="code-box" id="codeBox">// код</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Правая панель -->
     <div>
       <div class="card">
         <h3 style="font-weight:400;color:#bbb;margin-bottom:10px;font-size:1rem;">👁️ Предпросмотр</h3>
         <iframe id="preview" class="preview-frame"></iframe>
       </div>
     </div>
-
   </div>
 
   <input type="file" id="fileInput" style="display:none" accept=".json" onchange="importProject(event)">
   <datalist id="funcNamesList"></datalist>
-  <p style="text-align:center;color:#555;font-size:0.8rem;margin-top:16px;">💾 Автосохранение • Версия 0.6.1 ALPHA • Помощник по написанию: DeepSeek • Лицензия: MIT</p>
+  <p style="text-align:center;color:#555;font-size:0.8rem;margin-top:16px;">💾 Автосохранение • v0.7.1 BETA • Помощник по написанию: DeepSeek • Лицензия: MIT</p>
 </div>
 
 <script>
@@ -570,119 +188,90 @@
    СОСТОЯНИЕ
    ============================================================ */
 var state = {
+  settings: {
+    title: 'Мой сайт',
+    filename: 'site',
+    bgColor: '#ffffff',
+    textColor: '#000000',
+    font: 'sans-serif'
+  },
   blocks: [],
   jsFunctions: []
 };
-
 var selectedBlockIndex = -1;
 var selectedFuncIndex = -1;
 
-// Значения по умолчанию для блоков
 var BLOCK_DEFAULTS = {
-  button: {
-    text: 'Кнопка', color: '#ffffff', bg: '#e94560',
-    align: 'left', rounded: true,
-    link: '', onclick: '', anchor: '', hidden: false
-  },
-  text: {
-    text: 'Текст', color: '#ffffff', align: 'left',
-    anchor: '', hidden: false
-  },
-  link: {
-    text: 'Ссылка', color: '#ffffff', bg: '#e94560',
-    align: 'left', link: 'https://example.com', onclick: '',
-    buttonMode: false, rounded: true, anchor: '', hidden: false
-  },
-  image: {
-    src: 'https://via.placeholder.com/300x150?text=Image',
-    align: 'left', anchor: '', hidden: false
-  }
+  button: { text:'Кнопка', color:'#ffffff', bg:'#e94560', align:'left', rounded:true, link:'', onclick:'', anchor:'', hidden:false },
+  text:   { text:'Текст', color:'#ffffff', align:'left', anchor:'', hidden:false },
+  link:   { text:'Ссылка', color:'#ffffff', bg:'#e94560', align:'left', link:'https://example.com', onclick:'', buttonMode:false, rounded:true, anchor:'', hidden:false },
+  image:  { src:'https://via.placeholder.com/300x150?text=Image', align:'left', anchor:'', hidden:false }
 };
 
-// Слова, которые нельзя использовать как имя функции
-var RESERVED = ['break','case','catch','class','const','continue','debugger',
-  'default','delete','do','else','export','extends','finally','for','function',
-  'if','import','in','instanceof','new','return','super','switch','this','throw',
-  'try','typeof','var','void','while','with','yield','let','static','enum',
-  'await','alert','console','window','document','body'];
+var RESERVED = ['break','case','catch','class','const','continue','debugger','default','delete','do','else','export','extends','finally','for','function','if','import','in','instanceof','new','return','super','switch','this','throw','try','typeof','var','void','while','with','yield','let','static','enum','await','alert','console','window','document','body'];
 
 /* ============================================================
    УТИЛИТЫ
    ============================================================ */
 function esc(s) {
   return String(s == null ? '' : s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
-
 function escJS(s) {
-  return String(s == null ? '' : s)
-    .replace(/\\/g, '\\\\')
-    .replace(/"/g, '\\"')
-    .replace(/\n/g, '\\n');
+  return String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
 }
-
 function cleanFuncName(name) {
   if (!name) return '';
   return String(name).trim().replace(/\(\)$/, '');
 }
-
 function validFuncName(name) {
   if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(name)) return false;
   return RESERVED.indexOf(name) === -1;
 }
-
 function validUrl(str) {
   if (!str) return false;
   if (str.charAt(0) === '#' || str.charAt(0) === '/') return true;
-  try { new URL(str); return true; } catch (e) {
-    return /^(mailto:|tel:|javascript:)/.test(str);
-  }
+  try { new URL(str); return true; } catch (e) { return /^(mailto:|tel:|javascript:)/.test(str); }
+}
+function cleanAnchor(raw) {
+  if (!raw) return '';
+  var s = String(raw).trim();
+  s = s.replace(/^#+/, '');
+  s = s.replace(/\s+/g, '-');
+  s = s.replace(/[^a-zA-Z0-9_-]/g, '');
+  if (s && !/^[a-zA-Z]/.test(s)) s = 'a' + s;
+  return s;
 }
 
 /* ============================================================
-   МОДАЛЬНОЕ ОКНО
+   МОДАЛКА
    ============================================================ */
 function closeModal() {
   var m = document.querySelector('.modal-bg');
   if (m) m.remove();
 }
 
-/**
- * Опции:
- *   title   — заголовок
- *   html    — HTML внутри (строка)
- *   fields  — массив полей { name, label, type, value, options, hint, placeholder }
- *   buttons — массив кнопок { text, className, onClick(values) }
- *   wide    — широкая модалка
- */
 function openModal(opts) {
   closeModal();
-
   var bg = document.createElement('div');
   bg.className = 'modal-bg';
-
   var modal = document.createElement('div');
   modal.className = 'modal' + (opts.wide ? ' wide' : '');
 
-  // Заголовок
   if (opts.title) {
     var h = document.createElement('h3');
     h.textContent = opts.title;
     modal.appendChild(h);
   }
 
-  // Тело
   var body = document.createElement('div');
   body.className = 'modal-body';
   if (opts.html) body.innerHTML = opts.html;
   modal.appendChild(body);
 
-  // Поля
   var inputs = {};
+  var wraps = {};
   (opts.fields || []).forEach(function (f) {
     var wrap = document.createElement('div');
     wrap.className = 'field';
@@ -719,19 +308,17 @@ function openModal(opts) {
     }
 
     wrap.appendChild(el);
-
     if (f.hint) {
       var h2 = document.createElement('div');
       h2.className = 'hint';
       h2.textContent = f.hint;
       wrap.appendChild(h2);
     }
-
     body.appendChild(wrap);
     inputs[f.name] = el;
+    wraps[f.name] = wrap;
   });
 
-  // Кнопки
   var actions = document.createElement('div');
   actions.className = 'modal-actions';
 
@@ -743,26 +330,25 @@ function openModal(opts) {
     btn.onclick = function () {
       var vals = {};
       Object.keys(inputs).forEach(function (k) { vals[k] = inputs[k].value; });
-      if (b.onClick) b.onClick(vals);
+      if (b.onClick) {
+        var keep = b.onClick(vals);
+        if (keep === true) return;
+      }
       closeModal();
     };
     actions.appendChild(btn);
   });
   modal.appendChild(actions);
-
   bg.appendChild(modal);
   document.body.appendChild(bg);
 
-  // Клик по фону — закрыть (только если нет полей)
   bg.addEventListener('click', function (e) {
     if (e.target === bg && !opts.fields) closeModal();
   });
 
-  // Фокус на первом поле
   var first = modal.querySelector('input, select, textarea');
   if (first && opts.fields && opts.fields.length) first.focus();
 
-  // Enter = последняя кнопка
   if (opts.fields && opts.fields.length) {
     modal.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
@@ -772,20 +358,16 @@ function openModal(opts) {
       }
     });
   }
+
+  return { inputs: inputs, wraps: wraps };
 }
 
 function alertBox(title, text) {
-  openModal({
-    title: title,
-    html: '<p>' + text + '</p>',
-    buttons: [{ text: 'OK', className: 'btn-primary' }]
-  });
+  openModal({ title: title, html: '<p>' + text + '</p>' });
 }
-
 function confirmBox(title, text, onYes) {
   openModal({
-    title: title,
-    html: '<p>' + text + '</p>',
+    title: title, html: '<p>' + text + '</p>',
     buttons: [
       { text: 'Отмена', className: 'btn-secondary' },
       { text: 'Да', className: 'btn-danger', onClick: onYes }
@@ -794,49 +376,42 @@ function confirmBox(title, text, onYes) {
 }
 
 /* ============================================================
-   СОХРАНЕНИЕ / ЗАГРУЗКА
+   СОХРАНЕНИЕ
    ============================================================ */
 function save() {
-  try {
-    localStorage.setItem('sites_ide_v6', JSON.stringify(state));
-  } catch (e) { /* игнор */ }
+  try { localStorage.setItem('sites_ide_v8', JSON.stringify(state)); } catch (e) {}
 }
-
 function load() {
   try {
-    var raw = localStorage.getItem('sites_ide_v6');
+    var raw = localStorage.getItem('sites_ide_v8');
     if (!raw) return;
     var data = JSON.parse(raw);
-
+    if (data.settings) state.settings = Object.assign(state.settings, data.settings);
     if (data.blocks) state.blocks = data.blocks;
     if (data.jsFunctions) state.jsFunctions = data.jsFunctions;
 
-    // Нормализация: добавляем отсутствующие поля
     state.blocks.forEach(function (b) {
       var def = BLOCK_DEFAULTS[b.type];
       if (!def) return;
-      Object.keys(def).forEach(function (k) {
-        if (b[k] === undefined) b[k] = def[k];
-      });
-      // У text и image не должно быть onclick
+      Object.keys(def).forEach(function (k) { if (b[k] === undefined) b[k] = def[k]; });
       if (b.type !== 'button' && b.type !== 'link') delete b.onclick;
+      if (b.anchor) b.anchor = cleanAnchor(b.anchor);
     });
-
-    // Нормализация имён функций
     state.jsFunctions.forEach(function (f) {
       f.name = cleanFuncName(f.name);
       if (!f.actions) f.actions = [];
     });
-  } catch (e) { /* игнор */ }
+  } catch (e) {}
 }
 
 /* ============================================================
-   РЕНДЕР БЛОКА (в HTML)
+   РЕНДЕР БЛОКА
    ============================================================ */
 function renderBlockHTML(b) {
   var hiddenStyle = b.hidden ? 'display:none;' : '';
   var wrapperStyle = 'margin:8px 0;' + hiddenStyle;
-  var anchorAttr = b.anchor ? ' id="' + esc(b.anchor.replace('#','')) + '"' : '';
+  var a = cleanAnchor(b.anchor);
+  var anchorAttr = a ? ' id="' + esc(a) + '"' : '';
 
   if (b.type === 'button') {
     var btnStyle = 'background:' + b.bg + ';color:' + b.color + ';'
@@ -847,26 +422,21 @@ function renderBlockHTML(b) {
 
     var fn = cleanFuncName(b.onclick);
     if (fn) {
-      // Функция — чистый button без <a>
       return '<div style="text-align:' + b.align + ';' + wrapperStyle + '">'
         + '<button' + anchorAttr + ' style="' + btnStyle + '" onclick="' + fn + '()">'
-        + esc(b.text)
-        + '</button></div>';
+        + esc(b.text) + '</button></div>';
     } else {
-      // Только ссылка — <a> со стилем кнопки
       var href = b.link || '#';
       return '<div style="text-align:' + b.align + ';' + wrapperStyle + '">'
         + '<a' + anchorAttr + ' href="' + esc(href) + '" style="' + btnStyle + '">'
-        + esc(b.text)
-        + '</a></div>';
+        + esc(b.text) + '</a></div>';
     }
   }
 
   if (b.type === 'text') {
     return '<div style="text-align:' + b.align + ';' + wrapperStyle + '">'
       + '<p' + anchorAttr + ' style="color:' + b.color + ';font-size:18px;margin:0;">'
-      + esc(b.text)
-      + '</p></div>';
+      + esc(b.text) + '</p></div>';
   }
 
   if (b.type === 'link') {
@@ -888,8 +458,7 @@ function renderBlockHTML(b) {
 
     return '<div style="text-align:' + b.align + ';' + wrapperStyle + '">'
       + '<a' + anchorAttr + ' href="' + esc(href2) + '" style="' + linkStyle + btnPart + '"' + onclickAttr + '>'
-      + esc(b.text)
-      + '</a></div>';
+      + esc(b.text) + '</a></div>';
   }
 
   if (b.type === 'image') {
@@ -897,197 +466,165 @@ function renderBlockHTML(b) {
       + '<img' + anchorAttr + ' src="' + esc(b.src) + '" alt="image" style="max-width:100%;border-radius:8px;">'
       + '</div>';
   }
-
   return '';
 }
 
 /* ============================================================
-   ГЕНЕРАЦИЯ JS КОДА
+   JS КОД
    ============================================================ */
 function actionToJS(a) {
-  var sel = a.params.selector === 'custom'
-    ? (a.params.customSelector || 'body')
-    : (a.params.selector || 'this');
+  var sel = a.params.selector || 'this';
+
+  // ★ ФИКС: для #anchor и .class берем из values, для custom — из customSelector
+  if (sel === 'custom') {
+    sel = (a.params.customSelector || '').trim() || 'body';
+  } else if (sel === '#anchor') {
+    sel = '#' + cleanAnchor(a.params.anchorName || '');
+    if (sel === '#') sel = 'body';
+  } else if (sel === '.class') {
+    var cls = (a.params.className || '').trim().replace(/^\./, '').replace(/[^a-zA-Z0-9_-]/g, '');
+    sel = cls ? '.' + cls : 'body';
+  }
 
   switch (a.type) {
-    case 'alert':
-      return 'alert("' + escJS(a.params.msg || 'Hello!') + '");';
-    case 'console':
-      return 'console.log("' + escJS(a.params.msg || 'Hello!') + '");';
+    case 'alert': return 'alert("' + escJS(a.params.msg || 'Hello!') + '");';
+    case 'console': return 'console.log("' + escJS(a.params.msg || 'Hello!') + '");';
     case 'color':
       if (sel === 'this') return 'this.style.color = "' + a.params.color + '";';
-      return 'document.querySelector("' + sel + '").style.color = "' + a.params.color + '";';
+      return 'document.querySelector("' + sel.replace(/"/g, '\\"') + '").style.color = "' + a.params.color + '";';
     case 'bgcolor':
       if (sel === 'this') return 'this.style.backgroundColor = "' + a.params.bgcolor + '";';
-      return 'document.querySelector("' + sel + '").style.backgroundColor = "' + a.params.bgcolor + '";';
-    case 'redirect':
-      return 'window.location.href = "' + escJS(a.params.url || '') + '";';
+      return 'document.querySelector("' + sel.replace(/"/g, '\\"') + '").style.backgroundColor = "' + a.params.bgcolor + '";';
+    case 'redirect': return 'window.location.href = "' + escJS(a.params.url || '') + '";';
     case 'hide':
       if (sel === 'this') return 'this.style.display = "none";';
-      return 'document.querySelector("' + sel + '").style.display = "none";';
+      return 'document.querySelector("' + sel.replace(/"/g, '\\"') + '").style.display = "none";';
     case 'show':
       if (sel === 'this') return 'this.style.display = "";';
-      return 'document.querySelector("' + sel + '").style.display = "";';
+      return 'document.querySelector("' + sel.replace(/"/g, '\\"') + '").style.display = "";';
     case 'toggle':
       if (sel === 'this') return 'this.style.display = (this.style.display === "none") ? "" : "none";';
-      return 'var el = document.querySelector("' + sel + '"); if (el) el.style.display = (el.style.display === "none") ? "" : "none";';
-    case 'custom':
-      return a.params.code || '// пусто';
-    case 'var_declare':
-      return (a.params.varType || 'let') + ' ' + a.params.name + ' = ' + a.params.value + ';';
-    case 'var_set':
-      return a.params.name + ' = ' + a.params.value + ';';
+      return 'var el = document.querySelector("' + sel.replace(/"/g, '\\"') + '"); if (el) el.style.display = (el.style.display === "none") ? "" : "none";';
+    case 'custom': return a.params.code || '// пусто';
+    case 'var_declare': return (a.params.varType || 'let') + ' ' + a.params.name + ' = ' + a.params.value + ';';
+    case 'var_set': return a.params.name + ' = ' + a.params.value + ';';
     case 'var_math':
       if (a.params.operator === '++') return a.params.name + '++;';
       if (a.params.operator === '--') return a.params.name + '--;';
       return a.params.name + ' ' + a.params.operator + '= ' + a.params.value + ';';
-    case 'var_alert':
-      return 'alert(' + a.params.name + ');';
-    case 'if':
-      return 'if (' + a.params.left + ' ' + a.params.operator + ' ' + a.params.right + ') { alert("' + escJS(a.params.thenMsg || 'OK') + '"); }';
-    case 'wait':
-      return 'setTimeout(function() {}, ' + a.params.ms + ');';
-    default:
-      return '// ' + a.type;
+    case 'var_alert': return 'alert(' + a.params.name + ');';
+    case 'if': return 'if (' + a.params.left + ' ' + a.params.operator + ' ' + a.params.right + ') { alert("' + escJS(a.params.thenMsg || 'OK') + '"); }';
+    case 'wait': return 'setTimeout(function() {}, ' + a.params.ms + ');';
   }
+  return '// ' + a.type;
 }
 
 function generateFuncCode(f) {
   if (!f.actions.length) return 'function ' + f.name + '() {}';
-  var lines = f.actions.map(actionToJS);
-  return 'function ' + f.name + '() {\n  ' + lines.join('\n  ') + '\n}';
+  return 'function ' + f.name + '() {\n  ' + f.actions.map(actionToJS).join('\n  ') + '\n}';
 }
-
 function generateAllFuncs() {
   return state.jsFunctions.map(generateFuncCode).join('\n\n');
 }
 
 /* ============================================================
-   ПРЕДПРОСМОТР
+   ПРЕДПРОСМОТР (с глобальными настройками)
    ============================================================ */
 function updatePreview() {
   var iframe = document.getElementById('preview');
   var doc = iframe.contentDocument || iframe.contentWindow.document;
-
+  var s = state.settings;
   var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
-    + '<style>body{margin:20px;font-family:sans-serif;background:#fff;}</style>'
+    + '<title>' + esc(s.title) + '</title>'
+    + '<style>body{margin:20px;font-family:' + s.font + ';background:' + s.bgColor + ';color:' + s.textColor + ';}</style>'
     + '</head><body>'
     + state.blocks.map(renderBlockHTML).join('')
     + '<script>' + generateAllFuncs() + '<\/script>'
     + '</body></html>';
-
   doc.open();
   doc.write(html);
   doc.close();
 }
 
 /* ============================================================
-   СПИСОК БЛОКОВ + DRAG&DROP
+   СПИСОК БЛОКОВ + DnD
    ============================================================ */
 var dragFrom = -1;
+var dndBound = {};
 
 function updateBlockList() {
-  var container = document.getElementById('blockList');
-
+  var c = document.getElementById('blockList');
   if (!state.blocks.length) {
-    container.innerHTML = '<div class="empty">Нет блоков. Добавьте первый!</div>';
+    c.innerHTML = '<div class="empty">Нет блоков</div>';
     return;
   }
-
   var html = '';
   state.blocks.forEach(function (b, i) {
     var cls = 'list-item' + (i === selectedBlockIndex ? ' active' : '');
-    var label = b.text || b.src || '';
     var tags = '';
-
     if (b.hidden) tags += '<span class="tag tag-hidden">👻</span>';
-
     if (b.type === 'button' || b.type === 'link') {
       var fn = cleanFuncName(b.onclick);
       if (fn) tags += '<span class="tag tag-func">⚡' + esc(fn) + '</span>';
     }
-
+    var lbl = b.text || b.src || '';
     html += '<div class="' + cls + '" draggable="true" data-i="' + i + '" onclick="selectBlock(' + i + ')">'
       + '<span class="handle">⋮⋮</span>'
-      + '<span class="text">' + esc(b.type.toUpperCase() + ' ' + (i+1) + ': ' + label) + '</span>'
+      + '<span class="text">' + esc(b.type.toUpperCase() + ' ' + (i+1) + ': ' + lbl) + '</span>'
       + tags
       + '<button class="del" onclick="event.stopPropagation();deleteBlock(' + i + ')">✕</button>'
       + '</div>';
   });
-  container.innerHTML = html;
+  c.innerHTML = html;
 
-  // Drag events (вешаем один раз на контейнер через делегирование)
-  if (!container.dataset.bound) {
-    container.dataset.bound = '1';
-
-    container.addEventListener('dragstart', function (e) {
+  if (!dndBound.blocks) {
+    dndBound.blocks = true;
+    c.addEventListener('dragstart', function (e) {
       var item = e.target.closest('.list-item');
       if (!item) return;
       dragFrom = parseInt(item.dataset.i);
       item.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
     });
-
-    container.addEventListener('dragend', function (e) {
-      var items = container.querySelectorAll('.list-item');
-      items.forEach(function (it) {
-        it.classList.remove('dragging');
-        it.classList.remove('drag-over');
-      });
+    c.addEventListener('dragend', function () {
+      c.querySelectorAll('.list-item').forEach(function (it) { it.classList.remove('dragging','drag-over'); });
     });
-
-    container.addEventListener('dragover', function (e) {
+    c.addEventListener('dragover', function (e) {
       e.preventDefault();
       var item = e.target.closest('.list-item');
       if (!item) return;
-      var idx = parseInt(item.dataset.i);
-      if (idx === dragFrom) return;
-      container.querySelectorAll('.list-item').forEach(function (it) {
-        it.classList.remove('drag-over');
-      });
+      if (parseInt(item.dataset.i) === dragFrom) return;
+      c.querySelectorAll('.list-item').forEach(function (it) { it.classList.remove('drag-over'); });
       item.classList.add('drag-over');
     });
-
-    container.addEventListener('drop', function (e) {
+    c.addEventListener('drop', function (e) {
       e.preventDefault();
       var item = e.target.closest('.list-item');
       if (!item) return;
       var to = parseInt(item.dataset.i);
       if (dragFrom === -1 || to === dragFrom) return;
-
-      var moved = state.blocks.splice(dragFrom, 1)[0];
-      state.blocks.splice(to, 0, moved);
+      var m = state.blocks.splice(dragFrom, 1)[0];
+      state.blocks.splice(to, 0, m);
       selectedBlockIndex = to;
-
       dragFrom = -1;
-      save();
-      renderAll();
+      save(); renderAll();
     });
   }
 }
 
-/* ============================================================
-   ДОБАВЛЕНИЕ / УДАЛЕНИЕ БЛОКОВ
-   ============================================================ */
 function addBlock(type) {
   var b = { type: type };
-  Object.keys(BLOCK_DEFAULTS[type]).forEach(function (k) {
-    b[k] = BLOCK_DEFAULTS[type][k];
-  });
+  Object.keys(BLOCK_DEFAULTS[type]).forEach(function (k) { b[k] = BLOCK_DEFAULTS[type][k]; });
   state.blocks.push(b);
   selectedBlockIndex = state.blocks.length - 1;
-  save();
-  renderAll();
+  save(); renderAll();
 }
-
 function deleteBlock(i) {
   state.blocks.splice(i, 1);
   selectedBlockIndex = -1;
-  save();
-  renderAll();
+  save(); renderAll();
   document.getElementById('blockParams').innerHTML = '';
 }
-
 function selectBlock(i) {
   selectedBlockIndex = i;
   updateBlockList();
@@ -1100,90 +637,69 @@ function selectBlock(i) {
 function showBlockParams(i) {
   var b = state.blocks[i];
   if (!b) return;
+  var c = document.getElementById('blockParams');
+  var h = '<div class="params"><h4>⚙️ ' + b.type.toUpperCase() + '</h4>';
 
-  var container = document.getElementById('blockParams');
-  var html = '<div class="params">';
-  html += '<h4>⚙️ ' + b.type.toUpperCase() + '</h4>';
-
-  // Текст или URL картинки
   if (b.type === 'image') {
-    html += '<div class="field"><label>URL картинки</label>'
-      + '<input type="text" value="' + esc(b.src) + '" onchange="setProp(' + i + ', \'src\', this.value)"></div>';
+    h += '<div class="field"><label>URL картинки</label>'
+      + '<input type="text" value="' + esc(b.src) + '" onchange="setProp(' + i + ',\'src\',this.value)"></div>';
   } else {
-    html += '<div class="field"><label>Текст</label>'
-      + '<input type="text" value="' + esc(b.text) + '" onchange="setProp(' + i + ', \'text\', this.value)"></div>';
+    h += '<div class="field"><label>Текст</label>'
+      + '<input type="text" value="' + esc(b.text) + '" onchange="setProp(' + i + ',\'text\',this.value)"></div>';
   }
 
-  // Выравнивание
-  html += '<div class="field"><label>Выравнивание</label><div class="align-row">';
-  ['left', 'center', 'right'].forEach(function (a) {
-    var active = (b.align === a) ? ' active' : '';
+  h += '<div class="field"><label>Выравнивание</label><div class="align-row">';
+  ['left','center','right'].forEach(function (a) {
+    var act = (b.align === a) ? ' active' : '';
     var icon = a === 'left' ? '◀️' : (a === 'center' ? '🔘' : '▶️');
-    html += '<button type="button" class="' + active.trim() + '" onclick="setProp(' + i + ', \'align\', \'' + a + '\')">' + icon + '</button>';
+    h += '<button type="button" class="' + act.trim() + '" onclick="setProp(' + i + ',\'align\',\'' + a + '\')">' + icon + '</button>';
   });
-  html += '</div></div>';
+  h += '</div></div>';
 
-  // Цвета
   if (b.type === 'button' || b.type === 'text' || (b.type === 'link' && b.buttonMode)) {
-    html += '<div class="field"><label>Цвет текста</label>'
-      + '<input type="color" value="' + b.color + '" onchange="setProp(' + i + ', \'color\', this.value)"></div>';
+    h += '<div class="field"><label>Цвет текста</label>'
+      + '<input type="color" value="' + b.color + '" onchange="setProp(' + i + ',\'color\',this.value)"></div>';
   }
   if (b.type === 'button' || (b.type === 'link' && b.buttonMode)) {
-    html += '<div class="field"><label>Цвет фона</label>'
-      + '<input type="color" value="' + b.bg + '" onchange="setProp(' + i + ', \'bg\', this.value)"></div>';
+    h += '<div class="field"><label>Цвет фона</label>'
+      + '<input type="color" value="' + b.bg + '" onchange="setProp(' + i + ',\'bg\',this.value)"></div>';
   }
   if (b.type === 'button' || b.type === 'link') {
-    html += '<label class="check">'
-      + '<input type="checkbox" ' + (b.rounded ? 'checked' : '') + ' onchange="setProp(' + i + ', \'rounded\', this.checked)">'
-      + ' Скруглённая</label>';
+    h += '<label class="check"><input type="checkbox" ' + (b.rounded?'checked':'') + ' onchange="setProp(' + i + ',\'rounded\',this.checked)"> Скруглённая</label>';
   }
   if (b.type === 'link') {
-    html += '<label class="check">'
-      + '<input type="checkbox" ' + (b.buttonMode ? 'checked' : '') + ' onchange="setProp(' + i + ', \'buttonMode\', this.checked)">'
-      + ' Кнопочный вид</label>';
+    h += '<label class="check"><input type="checkbox" ' + (b.buttonMode?'checked':'') + ' onchange="setProp(' + i + ',\'buttonMode\',this.checked)"> Кнопочный вид</label>';
   }
 
-  // Якорь
-  html += '<div class="field" style="margin-top:10px;"><label>Якорь (id)</label>'
-    + '<input type="text" value="' + esc(b.anchor) + '" onchange="setProp(' + i + ', \'anchor\', this.value)" placeholder="myAnchor">'
-    + '<div class="hint">Метка для ссылок #myAnchor и для JS-селектора</div></div>';
+  h += '<div class="field" style="margin-top:10px;"><label>Якорь (id)</label>'
+    + '<input type="text" value="' + esc(b.anchor) + '" onchange="setProp(' + i + ',\'anchor\',this.value)" placeholder="myAnchor">'
+    + '<div class="hint">Только латиница, цифры, _ и -. Без # в начале.</div></div>';
 
-  // Ссылка — только для button и link
   if (b.type === 'button' || b.type === 'link') {
-    html += '<div class="section-divider">'
-      + '<div class="section-title link">🔗 Ссылка (куда ведёт)</div>'
-      + '<div class="field">'
-      + '<input type="text" value="' + esc(b.link) + '" onchange="setProp(' + i + ', \'link\', this.value)" placeholder="https://example.com или #anchor">'
-      + '<div class="hint">Оставь пустым, если нужна только функция</div>'
-      + '</div></div>';
+    h += '<div class="section-divider"><div class="section-title link">🔗 Ссылка</div>'
+      + '<div class="field"><input type="text" value="' + esc(b.link) + '" onchange="setProp(' + i + ',\'link\',this.value)" placeholder="https://example.com или #anchor">'
+      + '<div class="hint">Оставь пустым, если нужна только функция</div></div></div>';
   }
 
-  // Функция — только для button и link
   if (b.type === 'button' || b.type === 'link') {
-    html += '<div class="section-divider">'
-      + '<div class="section-title func">⚡ Функция при клике</div>'
-      + '<div class="field">'
-      + '<input type="text" value="' + esc(cleanFuncName(b.onclick)) + '" onchange="setProp(' + i + ', \'onclick\', this.value)" placeholder="myFunction" list="funcNamesList">'
-      + '<div class="hint">Имя JS-функции без скобок. Скобки добавятся автоматически.</div>'
-      + '</div></div>';
+    h += '<div class="section-divider"><div class="section-title func">⚡ Функция при клике</div>'
+      + '<div class="field"><input type="text" value="' + esc(cleanFuncName(b.onclick)) + '" onchange="setProp(' + i + ',\'onclick\',this.value)" placeholder="myFunction" list="funcNamesList">'
+      + '<div class="hint">Имя JS-функции без скобок</div></div></div>';
   }
 
-  // Невидимый
-  html += '<label class="check" style="margin-top:12px;">'
-    + '<input type="checkbox" ' + (b.hidden ? 'checked' : '') + ' onchange="setProp(' + i + ', \'hidden\', this.checked)">'
-    + ' 👻 Невидимый при загрузке</label>'
-    + '<div class="hint">Показать можно действием «Показать» по якорю</div>';
+  h += '<label class="check" style="margin-top:12px;"><input type="checkbox" ' + (b.hidden?'checked':'') + ' onchange="setProp(' + i + ',\'hidden\',this.checked)"> 👻 Невидимый при загрузке</label>';
 
-  html += '</div>';
-  container.innerHTML = html;
+  h += '</div>';
+  c.innerHTML = h;
 }
 
 function setProp(i, key, val) {
+  if (key === 'anchor') val = cleanAnchor(val);
   state.blocks[i][key] = val;
   save();
   updatePreview();
   updateBlockList();
-  if (key === 'align' || key === 'rounded' || key === 'buttonMode') {
+  if (key === 'align' || key === 'rounded' || key === 'buttonMode' || key === 'anchor') {
     showBlockParams(i);
   }
 }
@@ -1192,79 +708,50 @@ function setProp(i, key, val) {
    ВКЛАДКИ
    ============================================================ */
 function switchTab(tab) {
-  var iface = document.getElementById('ifaceTab');
-  var logic = document.getElementById('logicTab');
-  var tabIface = document.getElementById('tabIface');
-  var tabLogic = document.getElementById('tabLogic');
-
-  if (tab === 'iface') {
-    iface.classList.remove('hidden');
-    logic.classList.add('hidden');
-    tabIface.classList.add('active');
-    tabLogic.classList.remove('active');
-  } else {
-    iface.classList.add('hidden');
-    logic.classList.remove('hidden');
-    tabIface.classList.remove('active');
-    tabLogic.classList.add('active');
-    updateFuncList();
-  }
+  document.getElementById('ifaceTab').classList.toggle('hidden', tab !== 'iface');
+  document.getElementById('logicTab').classList.toggle('hidden', tab !== 'logic');
+  document.getElementById('tabIface').classList.toggle('active', tab === 'iface');
+  document.getElementById('tabLogic').classList.toggle('active', tab === 'logic');
+  if (tab === 'logic') updateFuncList();
 }
 
 /* ============================================================
    ФУНКЦИИ
    ============================================================ */
 function updateFuncList() {
-  var container = document.getElementById('funcList');
-  var datalist = document.getElementById('funcNamesList');
-
-  // Обновляем datalist
-  datalist.innerHTML = state.jsFunctions.map(function (f) {
-    return '<option value="' + esc(f.name) + '">';
-  }).join('');
+  var c = document.getElementById('funcList');
+  var dl = document.getElementById('funcNamesList');
+  dl.innerHTML = state.jsFunctions.map(function (f) { return '<option value="' + esc(f.name) + '">'; }).join('');
 
   if (!state.jsFunctions.length) {
-    container.innerHTML = '<div class="empty">Нет функций. Добавьте первую!</div>';
+    c.innerHTML = '<div class="empty">Нет функций</div>';
     return;
   }
-
   var html = '';
   state.jsFunctions.forEach(function (f, i) {
     var cls = 'list-item' + (i === selectedFuncIndex ? ' active' : '');
-    html += '<div class="' + cls + '" data-i="' + i + '" onclick="openFuncEditor(' + i + ')">'
+    html += '<div class="' + cls + '" onclick="openFuncEditor(' + i + ')">'
       + '<span class="text">⚡ ' + esc(f.name) + ' (' + f.actions.length + ')</span>'
       + '<button class="del" onclick="event.stopPropagation();deleteFunc(' + i + ')">✕</button>'
       + '</div>';
   });
-  container.innerHTML = html;
+  c.innerHTML = html;
 }
 
 function addFunction() {
   openModal({
     title: '➕ Новая функция',
-    html: '<p>Введите имя функции. <b>Без скобок</b> — они добавятся автоматически.</p>',
-    fields: [
-      { name: 'name', label: 'Имя', value: 'myFunction', placeholder: 'myFunction',
-        hint: 'Пример: myFunction, doSomething' }
-    ],
+    fields: [{ name: 'name', label: 'Имя', value: 'myFunction', placeholder: 'myFunction' }],
     buttons: [
       { text: 'Отмена', className: 'btn-secondary' },
       { text: 'Создать', className: 'btn-success', onClick: function (v) {
         var name = cleanFuncName(v.name);
-        if (!name) { alertBox('Ошибка', 'Имя не может быть пустым'); return; }
-        if (!validFuncName(name)) {
-          alertBox('Ошибка', 'Имя должно начинаться с буквы, _ или $ и содержать только буквы, цифры, _ и $. Нельзя использовать зарезервированные слова.');
-          return;
-        }
-        if (state.jsFunctions.some(function (f) { return f.name === name; })) {
-          alertBox('Ошибка', 'Функция с таким именем уже есть!');
-          return;
-        }
+        if (!name) { alertBox('Ошибка', 'Пустое имя'); return true; }
+        if (!validFuncName(name)) { alertBox('Ошибка', 'Невалидное имя'); return true; }
+        if (state.jsFunctions.some(function (f) { return f.name === name; })) { alertBox('Ошибка', 'Уже есть'); return true; }
         state.jsFunctions.push({ name: name, actions: [] });
         selectedFuncIndex = state.jsFunctions.length - 1;
-        save();
-        updateFuncList();
-        openFuncEditor(selectedFuncIndex);
+        save(); updateFuncList(); openFuncEditor(selectedFuncIndex);
       }}
     ]
   });
@@ -1274,7 +761,6 @@ function openFuncEditor(i) {
   selectedFuncIndex = i;
   var f = state.jsFunctions[i];
   if (!f) return;
-
   document.getElementById('funcEditor').classList.remove('hidden');
   document.getElementById('funcName').value = f.name;
   updateActionList();
@@ -1286,59 +772,40 @@ function renameFunction(newName) {
   if (selectedFuncIndex === -1) return;
   newName = cleanFuncName(newName);
   var oldName = state.jsFunctions[selectedFuncIndex].name;
-
   if (!newName || newName === oldName) return;
-
   if (!validFuncName(newName)) {
-    alertBox('Ошибка', 'Недопустимое имя (зарезервированное слово или неверный формат).');
+    alertBox('Ошибка', 'Недопустимое имя');
     document.getElementById('funcName').value = oldName;
     return;
   }
   if (state.jsFunctions.some(function (f, idx) { return idx !== selectedFuncIndex && f.name === newName; })) {
-    alertBox('Ошибка', 'Функция с таким именем уже есть!');
+    alertBox('Ошибка', 'Уже есть');
     document.getElementById('funcName').value = oldName;
     return;
   }
-
   state.jsFunctions[selectedFuncIndex].name = newName;
-
-  // Обновляем ссылки в блоках
   state.blocks.forEach(function (b) {
     if ((b.type === 'button' || b.type === 'link') && cleanFuncName(b.onclick) === oldName) {
       b.onclick = newName;
     }
   });
-
-  save();
-  updatePreview();
-  updateBlockList();
-  updateFuncList();
-  refreshCode();
+  save(); updatePreview(); updateBlockList(); updateFuncList(); refreshCode();
 }
 
 function deleteFunc(i) {
   var name = state.jsFunctions[i].name;
-  confirmBox('Удалить функцию?', 'Функция "' + esc(name) + '" будет удалена, ссылки на неё в блоках очищены.', function () {
-    // Чистим onclick
+  confirmBox('Удалить функцию?', 'Функция "' + esc(name) + '" будет удалена.', function () {
     state.blocks.forEach(function (b) {
-      if ((b.type === 'button' || b.type === 'link') && cleanFuncName(b.onclick) === name) {
-        b.onclick = '';
-      }
+      if ((b.type === 'button' || b.type === 'link') && cleanFuncName(b.onclick) === name) b.onclick = '';
     });
     state.jsFunctions.splice(i, 1);
-
     if (selectedFuncIndex === i) {
       selectedFuncIndex = -1;
       document.getElementById('funcEditor').classList.add('hidden');
-    } else if (selectedFuncIndex > i) {
-      selectedFuncIndex--;
-    }
-
-    save();
-    renderAll();
+    } else if (selectedFuncIndex > i) selectedFuncIndex--;
+    save(); renderAll();
   });
 }
-
 function deleteFunction() {
   if (selectedFuncIndex === -1) return;
   deleteFunc(selectedFuncIndex);
@@ -1346,112 +813,99 @@ function deleteFunction() {
 
 function refreshCode() {
   var box = document.getElementById('codeBox');
-  if (selectedFuncIndex === -1) {
-    box.textContent = '// нет функции';
-    return;
-  }
-  var f = state.jsFunctions[selectedFuncIndex];
-  box.textContent = generateFuncCode(f);
+  if (selectedFuncIndex === -1) { box.textContent = '// нет'; return; }
+  box.textContent = generateFuncCode(state.jsFunctions[selectedFuncIndex]);
 }
 
 /* ============================================================
-   ДЕЙСТВИЯ ФУНКЦИИ
+   ДЕЙСТВИЯ
    ============================================================ */
 var ACTION_DEFAULTS = {
-  alert:       { msg: 'Hello!' },
-  console:     { msg: 'Hello console!' },
-  color:       { selector: 'this', color: '#ff0000', customSelector: '' },
-  bgcolor:     { selector: 'this', bgcolor: '#ff0000', customSelector: '' },
-  redirect:    { url: 'https://example.com' },
-  hide:        { selector: 'this', customSelector: '' },
-  show:        { selector: 'this', customSelector: '' },
-  toggle:      { selector: 'this', customSelector: '' },
-  custom:      { code: '// ваш код' },
+  alert: { msg: 'Hello!' },
+  console: { msg: 'Hello console!' },
+  color: { selector: 'this', color: '#ff0000', customSelector: '', anchorName: '', className: '' },
+  bgcolor: { selector: 'this', bgcolor: '#ff0000', customSelector: '', anchorName: '', className: '' },
+  redirect: { url: 'https://example.com' },
+  hide: { selector: 'this', customSelector: '', anchorName: '', className: '' },
+  show: { selector: 'this', customSelector: '', anchorName: '', className: '' },
+  toggle: { selector: 'this', customSelector: '', anchorName: '', className: '' },
+  custom: { code: '// ваш код' },
   var_declare: { varType: 'let', name: 'myVar', value: '10' },
-  var_set:     { name: 'myVar', value: '20' },
-  var_math:    { name: 'myVar', operator: '+', value: '5' },
-  var_alert:   { name: 'myVar' },
-  if:          { left: 'myVar', operator: '==', right: '10', thenMsg: 'OK' },
-  wait:        { ms: '1000' }
+  var_set: { name: 'myVar', value: '20' },
+  var_math: { name: 'myVar', operator: '+', value: '5' },
+  var_alert: { name: 'myVar' },
+  if: { left: 'myVar', operator: '==', right: '10', thenMsg: 'OK' },
+  wait: { ms: '1000' }
 };
 
 function addAction(type) {
-  if (selectedFuncIndex === -1) {
-    alertBox('Внимание', 'Сначала выберите функцию!');
-    return;
-  }
-
+  if (selectedFuncIndex === -1) { alertBox('Внимание', 'Выберите функцию'); return; }
   var params = {};
-  Object.keys(ACTION_DEFAULTS[type]).forEach(function (k) {
-    params[k] = ACTION_DEFAULTS[type][k];
-  });
-
+  Object.keys(ACTION_DEFAULTS[type]).forEach(function (k) { params[k] = ACTION_DEFAULTS[type][k]; });
   state.jsFunctions[selectedFuncIndex].actions.push({ type: type, params: params });
-  save();
-  updateActionList();
-  refreshCode();
+  save(); updateActionList(); refreshCode();
   editAction(state.jsFunctions[selectedFuncIndex].actions.length - 1);
 }
 
 function deleteAction(i) {
   if (selectedFuncIndex === -1) return;
   state.jsFunctions[selectedFuncIndex].actions.splice(i, 1);
-  save();
-  updateActionList();
-  refreshCode();
+  save(); updateActionList(); refreshCode();
 }
 
 function updateActionList() {
-  var container = document.getElementById('actionList');
+  var c = document.getElementById('actionList');
   if (selectedFuncIndex === -1) return;
-
   var actions = state.jsFunctions[selectedFuncIndex].actions;
-  if (!actions.length) {
-    container.innerHTML = '<div class="empty">Нет действий</div>';
-    return;
-  }
-
+  if (!actions.length) { c.innerHTML = '<div class="empty">Нет действий</div>'; return; }
   var html = '';
   actions.forEach(function (a, i) {
-    var icon = '📝';
-    var label = a.type;
-    var p = a.params;
+    var icon = '📝', label = a.type, p = a.params;
+    var selLabel = p.selector || 'this';
+    if (selLabel === 'custom') selLabel = p.customSelector || '?';
+    else if (selLabel === '#anchor') selLabel = '#' + (p.anchorName || '?');
+    else if (selLabel === '.class') selLabel = '.' + (p.className || '?');
 
     switch (a.type) {
-      case 'alert':       icon = '💬'; label = 'Alert: "' + (p.msg || '') + '"'; break;
-      case 'console':     icon = '🖥️'; label = 'Console: "' + (p.msg || '') + '"'; break;
-      case 'color':       icon = '🎨'; label = 'Цвет "' + (p.selector === 'custom' ? p.customSelector : p.selector) + '" → ' + p.color; break;
-      case 'bgcolor':     icon = '🖌️'; label = 'Фон "' + (p.selector === 'custom' ? p.customSelector : p.selector) + '" → ' + p.bgcolor; break;
-      case 'redirect':    icon = '🔗'; label = 'Переход: ' + p.url; break;
-      case 'hide':        icon = '👻'; label = 'Скрыть: ' + (p.selector === 'custom' ? p.customSelector : p.selector); break;
-      case 'show':        icon = '👀'; label = 'Показать: ' + (p.selector === 'custom' ? p.customSelector : p.selector); break;
-      case 'toggle':      icon = '🔄'; label = 'Переключить: ' + (p.selector === 'custom' ? p.customSelector : p.selector); break;
-      case 'custom':      icon = '✏️'; label = 'Свой код'; break;
+      case 'alert': icon = '💬'; label = 'Alert: "' + (p.msg || '') + '"'; break;
+      case 'console': icon = '🖥️'; label = 'Console: "' + (p.msg || '') + '"'; break;
+      case 'color': icon = '🎨'; label = 'Цвет "' + selLabel + '" → ' + p.color; break;
+      case 'bgcolor': icon = '🖌️'; label = 'Фон "' + selLabel + '" → ' + p.bgcolor; break;
+      case 'redirect': icon = '🔗'; label = 'Переход: ' + p.url; break;
+      case 'hide': icon = '👻'; label = 'Скрыть: ' + selLabel; break;
+      case 'show': icon = '👀'; label = 'Показать: ' + selLabel; break;
+      case 'toggle': icon = '🔄'; label = 'Переключить: ' + selLabel; break;
+      case 'custom': icon = '✏️'; label = 'Свой код'; break;
       case 'var_declare': icon = '📦'; label = p.varType + ' ' + p.name + ' = ' + p.value; break;
-      case 'var_set':     icon = '✏️'; label = p.name + ' = ' + p.value; break;
-      case 'var_math':    icon = '➕'; label = p.name + ' ' + p.operator + ' ' + (p.operator === '++' || p.operator === '--' ? '' : p.value); break;
-      case 'var_alert':   icon = '💬'; label = 'Alert(' + p.name + ')'; break;
-      case 'if':          icon = '❓'; label = 'if (' + p.left + ' ' + p.operator + ' ' + p.right + ')'; break;
-      case 'wait':        icon = '⏱️'; label = 'Ждать ' + p.ms + ' мс'; break;
+      case 'var_set': icon = '✏️'; label = p.name + ' = ' + p.value; break;
+      case 'var_math': icon = '➕'; label = p.name + ' ' + p.operator + ' ' + (p.operator === '++' || p.operator === '--' ? '' : p.value); break;
+      case 'var_alert': icon = '💬'; label = 'Alert(' + p.name + ')'; break;
+      case 'if': icon = '❓'; label = 'if (' + p.left + ' ' + p.operator + ' ' + p.right + ')'; break;
+      case 'wait': icon = '⏱️'; label = 'Ждать ' + p.ms + ' мс'; break;
     }
-
     html += '<div class="list-item" onclick="editAction(' + i + ')">'
       + '<span class="text">' + icon + ' ' + esc(label) + '</span>'
       + '<button class="del" onclick="event.stopPropagation();deleteAction(' + i + ')">✕</button>'
       + '</div>';
   });
-  container.innerHTML = html;
+  c.innerHTML = html;
 }
 
+/* ============================================================
+   РЕДАКТОР ДЕЙСТВИЯ — ★ ГЛАВНЫЙ ФИКС ★
+   Поле для ввода показывается в зависимости от выбранного селектора
+   ============================================================ */
 function editAction(i) {
   if (selectedFuncIndex === -1) return;
   var a = state.jsFunctions[selectedFuncIndex].actions[i];
   if (!a) return;
 
+  var curSel = a.params.selector || 'this';
+
   var selectorOptions = [
     { value: 'this',  text: '🖱️ this — сам элемент' },
     { value: 'body',  text: 'body — вся страница' },
-    { value: '#anchor', text: '#anchor — по id' },
+    { value: '#anchor', text: '#anchor — по id (якорю)' },
     { value: '.class',  text: '.class — по классу' },
     { value: 'button',  text: 'button — все кнопки' },
     { value: 'p',       text: 'p — все параграфы' },
@@ -1459,65 +913,79 @@ function editAction(i) {
     { value: 'custom',  text: '✏️ Свой селектор' }
   ];
 
-  var title = '';
-  var fields = [];
-  var html = '';
+  var title = '', fields = [], html = '', hasSelector = false;
 
   switch (a.type) {
     case 'alert':
       title = '💬 Alert';
-      html = '<p>Показать всплывающее сообщение.</p>';
       fields = [{ name: 'msg', label: 'Текст', value: a.params.msg || '' }];
       break;
     case 'console':
       title = '🖥️ Console';
-      html = '<p>Вывести сообщение в консоль (F12).</p>';
       fields = [{ name: 'msg', label: 'Текст', value: a.params.msg || '' }];
       break;
+
+    // ★ ФИКС: три отдельных поля для #anchor, .class, custom — показываются по выбору
     case 'color':
-      title = '🎨 Цвет текста';
+      title = '🎨 Цвет текста'; hasSelector = true;
       fields = [
-        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
-        { name: 'customSelector', label: 'Свой селектор (если выбран "custom")', value: a.params.customSelector || '', placeholder: '#myBtn или .card' },
+        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: curSel },
+        { name: 'anchorName', label: '📌 Имя якоря (id)', value: a.params.anchorName || '', placeholder: 'myAnchor',
+          hint: 'Для варианта «#anchor» — введи сюда id элемента. Решётку писать не нужно.' },
+        { name: 'className', label: '🏷️ Имя класса', value: a.params.className || '', placeholder: 'myClass',
+          hint: 'Для варианта «.class» — введи имя класса без точки.' },
+        { name: 'customSelector', label: '✏️ Свой CSS-селектор', value: a.params.customSelector || '', placeholder: '#myBtn или .card',
+          hint: 'Для варианта «Свой селектор» — введи любой CSS-селектор.' },
         { name: 'color', label: 'Цвет', type: 'color', value: a.params.color || '#ff0000' }
       ];
       break;
     case 'bgcolor':
-      title = '🖌️ Цвет фона';
+      title = '🖌️ Цвет фона'; hasSelector = true;
       fields = [
-        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
-        { name: 'customSelector', label: 'Свой селектор (если выбран "custom")', value: a.params.customSelector || '' },
+        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: curSel },
+        { name: 'anchorName', label: '📌 Имя якоря (id)', value: a.params.anchorName || '', placeholder: 'myAnchor',
+          hint: 'Для варианта «#anchor».' },
+        { name: 'className', label: '🏷️ Имя класса', value: a.params.className || '', placeholder: 'myClass',
+          hint: 'Для варианта «.class».' },
+        { name: 'customSelector', label: '✏️ Свой CSS-селектор', value: a.params.customSelector || '', placeholder: '#myBtn или .card',
+          hint: 'Для варианта «Свой селектор».' },
         { name: 'bgcolor', label: 'Цвет фона', type: 'color', value: a.params.bgcolor || '#ff0000' }
       ];
       break;
     case 'redirect':
-      title = '🔗 Переход по ссылке';
+      title = '🔗 Переход';
       fields = [{ name: 'url', label: 'URL', value: a.params.url || '' }];
       break;
     case 'hide':
-      title = '👻 Скрыть элемент';
+      title = '👻 Скрыть'; hasSelector = true;
       fields = [
-        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
-        { name: 'customSelector', label: 'Свой селектор', value: a.params.customSelector || '' }
+        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: curSel },
+        { name: 'anchorName', label: '📌 Имя якоря (id)', value: a.params.anchorName || '', placeholder: 'myAnchor' },
+        { name: 'className', label: '🏷️ Имя класса', value: a.params.className || '', placeholder: 'myClass' },
+        { name: 'customSelector', label: '✏️ Свой CSS-селектор', value: a.params.customSelector || '' }
       ];
       break;
     case 'show':
-      title = '👀 Показать элемент';
+      title = '👀 Показать'; hasSelector = true;
       fields = [
-        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
-        { name: 'customSelector', label: 'Свой селектор', value: a.params.customSelector || '' }
+        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: curSel },
+        { name: 'anchorName', label: '📌 Имя якоря (id)', value: a.params.anchorName || '', placeholder: 'myAnchor' },
+        { name: 'className', label: '🏷️ Имя класса', value: a.params.className || '', placeholder: 'myClass' },
+        { name: 'customSelector', label: '✏️ Свой CSS-селектор', value: a.params.customSelector || '' }
       ];
       break;
     case 'toggle':
-      title = '🔄 Переключить видимость';
+      title = '🔄 Переключить'; hasSelector = true;
       fields = [
-        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
-        { name: 'customSelector', label: 'Свой селектор', value: a.params.customSelector || '' }
+        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: curSel },
+        { name: 'anchorName', label: '📌 Имя якоря (id)', value: a.params.anchorName || '', placeholder: 'myAnchor' },
+        { name: 'className', label: '🏷️ Имя класса', value: a.params.className || '', placeholder: 'myClass' },
+        { name: 'customSelector', label: '✏️ Свой CSS-селектор', value: a.params.customSelector || '' }
       ];
       break;
     case 'custom':
       title = '✏️ Свой код';
-      html = '<p>Введите JavaScript. <code>this</code> — текущий элемент.</p>';
+      html = '<p>JavaScript. <code>this</code> — текущий элемент.</p>';
       fields = [{ name: 'code', label: 'Код', type: 'textarea', value: a.params.code || '' }];
       break;
     case 'var_declare':
@@ -1534,59 +1002,118 @@ function editAction(i) {
       title = '✏️ Изменить переменную';
       fields = [
         { name: 'name', label: 'Имя', value: a.params.name || 'myVar' },
-        { name: 'value', label: 'Новое значение', value: a.params.value || '20' }
+        { name: 'value', label: 'Значение', value: a.params.value || '20' }
       ];
       break;
     case 'var_math':
       title = '➕ Математика';
       fields = [
-        { name: 'name', label: 'Имя переменной', value: a.params.name || 'myVar' },
+        { name: 'name', label: 'Имя', value: a.params.name || 'myVar' },
         { name: 'operator', label: 'Операция', type: 'select',
-          options: [
-            {value:'+',text:'+'},{value:'-',text:'-'},
-            {value:'*',text:'*'},{value:'/',text:'/'},
-            {value:'++',text:'++'},{value:'--',text:'--'}
-          ],
+          options: [{value:'+',text:'+'},{value:'-',text:'-'},{value:'*',text:'*'},{value:'/',text:'/'},{value:'++',text:'++'},{value:'--',text:'--'}],
           value: a.params.operator || '+' },
         { name: 'value', label: 'Число', value: a.params.value || '5' }
       ];
       break;
     case 'var_alert':
       title = '💬 Alert с переменной';
-      fields = [{ name: 'name', label: 'Имя переменной', value: a.params.name || 'myVar' }];
+      fields = [{ name: 'name', label: 'Имя', value: a.params.name || 'myVar' }];
       break;
     case 'if':
-      title = '❓ Условие (if)';
+      title = '❓ Условие';
       fields = [
         { name: 'left', label: 'Левая часть', value: a.params.left || 'myVar' },
         { name: 'operator', label: 'Оператор', type: 'select',
-          options: [
-            {value:'==',text:'=='},{value:'!=',text:'!='},
-            {value:'>',text:'>'},{value:'<',text:'<'},
-            {value:'>=',text:'>='},{value:'<=',text:'<='}
-          ],
+          options: [{value:'==',text:'=='},{value:'!=',text:'!='},{value:'>',text:'>'},{value:'<',text:'<'},{value:'>=',text:'>='},{value:'<=',text:'<='}],
           value: a.params.operator || '==' },
         { name: 'right', label: 'Правая часть', value: a.params.right || '10' },
-        { name: 'thenMsg', label: 'Сообщение при выполнении', value: a.params.thenMsg || 'OK' }
+        { name: 'thenMsg', label: 'Сообщение', value: a.params.thenMsg || 'OK' }
       ];
       break;
     case 'wait':
       title = '⏱️ Задержка';
-      fields = [{ name: 'ms', label: 'Миллисекунды (1000 = 1 сек)', value: a.params.ms || '1000' }];
+      fields = [{ name: 'ms', label: 'Мс (1000 = 1 сек)', value: a.params.ms || '1000' }];
       break;
   }
 
-  openModal({
-    title: title,
-    html: html,
-    fields: fields,
+  var refs = openModal({
+    title: title, html: html, fields: fields,
     buttons: [
       { text: 'Отмена', className: 'btn-secondary' },
       { text: 'Сохранить', className: 'btn-success', onClick: function (v) {
+        // Валидация заполнения соответствующего поля
+        if (hasSelector) {
+          if (v.selector === '#anchor' && !String(v.anchorName || '').trim()) {
+            alertBox('Ошибка', 'Выбрано «#anchor», но имя якоря не указано. Введите id элемента.');
+            return true;
+          }
+          if (v.selector === '.class' && !String(v.className || '').trim()) {
+            alertBox('Ошибка', 'Выбрано «.class», но имя класса не указано.');
+            return true;
+          }
+          if (v.selector === 'custom' && !String(v.customSelector || '').trim()) {
+            alertBox('Ошибка', 'Выбрано «Свой селектор», но поле пустое.');
+            return true;
+          }
+        }
         Object.keys(v).forEach(function (k) { a.params[k] = v[k]; });
+        save(); updateActionList(); refreshCode();
+      }}
+    ]
+  });
+
+  // ★ Показываем/скрываем поля в зависимости от выбора селектора
+  if (hasSelector && refs) {
+    var anchorWrap = refs.wraps.anchorName;
+    var classWrap = refs.wraps.className;
+    var customWrap = refs.wraps.customSelector;
+
+    var updateVisibility = function () {
+      var val = refs.inputs.selector.value;
+      if (anchorWrap) anchorWrap.style.display = (val === '#anchor') ? '' : 'none';
+      if (classWrap) classWrap.style.display = (val === '.class') ? '' : 'none';
+      if (customWrap) customWrap.style.display = (val === 'custom') ? '' : 'none';
+    };
+    updateVisibility();
+    refs.inputs.selector.addEventListener('change', updateVisibility);
+  }
+}
+
+/* ============================================================
+   ГЛОБАЛЬНЫЕ НАСТРОЙКИ
+   ============================================================ */
+function openSettings() {
+  var s = state.settings;
+  openModal({
+    title: '⚙️ Глобальные настройки',
+    html: '<p>Эти параметры применятся ко всему сайту при компиляции и в предпросмотре.</p>',
+    fields: [
+      { name: 'title', label: '📄 Заголовок сайта (title)', value: s.title, placeholder: 'Мой сайт' },
+      { name: 'filename', label: '💾 Имя файла при экспорте', value: s.filename, placeholder: 'site',
+        hint: 'Без .html — добавится автоматически' },
+      { name: 'bgColor', label: '🎨 Цвет фона страницы', type: 'color', value: s.bgColor },
+      { name: 'textColor', label: '🎨 Цвет текста по умолчанию', type: 'color', value: s.textColor },
+      { name: 'font', label: '🔤 Шрифт', type: 'select',
+        options: [
+          { value: 'sans-serif', text: 'Sans-Serif (по умолчанию)' },
+          { value: 'serif', text: 'Serif (с засечками)' },
+          { value: 'monospace', text: 'Monospace (моно)' },
+          { value: 'Arial, sans-serif', text: 'Arial' },
+          { value: 'Georgia, serif', text: 'Georgia' },
+          { value: 'Courier New, monospace', text: 'Courier New' }
+        ],
+        value: s.font }
+    ],
+    buttons: [
+      { text: 'Отмена', className: 'btn-secondary' },
+      { text: 'Сохранить', className: 'btn-success', onClick: function (v) {
+        state.settings.title = v.title || 'Мой сайт';
+        state.settings.filename = String(v.filename || 'site').replace(/[^a-zA-Z0-9_-]/g, '') || 'site';
+        state.settings.bgColor = v.bgColor;
+        state.settings.textColor = v.textColor;
+        state.settings.font = v.font;
         save();
-        updateActionList();
-        refreshCode();
+        updatePreview();
       }}
     ]
   });
@@ -1597,106 +1124,87 @@ function editAction(i) {
    ============================================================ */
 function autoFix() {
   var fixes = [];
-
-  // Нормализуем имена функций
   state.jsFunctions.forEach(function (f) {
-    var clean = cleanFuncName(f.name);
-    if (clean !== f.name) {
-      fixes.push('Имя функции "' + f.name + '" → "' + clean + '"');
-      f.name = clean;
-    }
+    var c = cleanFuncName(f.name);
+    if (c !== f.name) { fixes.push('Функция "' + f.name + '" → "' + c + '"'); f.name = c; }
   });
-
-  // Нормализуем onclick в блоках
   state.blocks.forEach(function (b, i) {
     if ((b.type === 'button' || b.type === 'link') && b.onclick) {
-      var clean = cleanFuncName(b.onclick);
-      if (clean !== b.onclick) {
-        b.onclick = clean;
-        fixes.push('Блок #' + (i+1) + ': имя функции нормализовано');
-      }
+      var c = cleanFuncName(b.onclick);
+      if (c !== b.onclick) { b.onclick = c; fixes.push('Блок #' + (i+1) + ': имя функции очищено'); }
     }
-    // У text/image не должно быть onclick
     if ((b.type === 'text' || b.type === 'image') && b.onclick) {
       delete b.onclick;
-      fixes.push('Блок #' + (i+1) + ': удалён лишний onclick');
+      fixes.push('Блок #' + (i+1) + ': удалён onclick');
+    }
+    if (b.anchor) {
+      var ca = cleanAnchor(b.anchor);
+      if (ca !== b.anchor) {
+        fixes.push('Блок #' + (i+1) + ': якорь "' + b.anchor + '" → "' + ca + '"');
+        b.anchor = ca;
+      }
     }
   });
-
-  // Пустые значения переменных → 0
-  state.jsFunctions.forEach(function (f) {
-    f.actions.forEach(function (a) {
-      if ((a.type === 'var_declare' || a.type === 'var_set') && (a.params.value === '' || a.params.value === undefined)) {
-        a.params.value = '0';
-        fixes.push(f.name + ': пустое значение → 0');
-      }
-    });
-  });
-
   return fixes;
 }
 
 function validate() {
-  var errors = [];
-  var warnings = [];
-
-  // Блоки
+  var errors = [], warnings = [];
   state.blocks.forEach(function (b, i) {
     var label = 'Блок #' + (i+1) + ' (' + b.type + ')';
-
     if (b.type === 'button' || b.type === 'text' || b.type === 'link') {
       if (!b.text || !b.text.trim()) errors.push(label + ': пустой текст');
     }
-    if (b.type === 'link' && (!b.link || !b.link.trim())) {
-      warnings.push(label + ': пустая ссылка');
-    }
-    if (b.type === 'image' && (!b.src || !b.src.trim())) {
-      errors.push(label + ': пустой URL картинки');
-    }
+    if (b.type === 'image' && (!b.src || !b.src.trim())) errors.push(label + ': пустой URL');
     if (b.type === 'link' && b.link && !validUrl(b.link) && !/^[#\/]/.test(b.link)) {
-      warnings.push(label + ': URL "' + b.link + '" может быть невалидным');
+      warnings.push(label + ': URL может быть невалидным');
     }
-
+    if (b.anchor) {
+      var ca = cleanAnchor(b.anchor);
+      if (!ca) errors.push(label + ': якорь пустой после очистки');
+      else if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(ca)) errors.push(label + ': невалидный якорь "' + b.anchor + '"');
+    }
     if (b.type === 'button' || b.type === 'link') {
       var fn = cleanFuncName(b.onclick);
       if (fn && !state.jsFunctions.some(function (f) { return f.name === fn; })) {
-        errors.push(label + ': вызывает несуществующую функцию "' + fn + '"');
+        errors.push(label + ': нет функции "' + fn + '"');
       }
     }
   });
 
-  // Функции
   state.jsFunctions.forEach(function (f) {
     var label = 'Функция "' + f.name + '"';
-    if (!validFuncName(f.name)) {
-      errors.push(label + ': невалидное имя');
-    }
-
+    if (!validFuncName(f.name)) errors.push(label + ': невалидное имя');
     var vars = {};
     f.actions.forEach(function (a, j) {
       var pos = ', действие #' + (j+1);
       if (a.type === 'var_declare') {
         if (!a.params.name || !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(a.params.name)) {
           errors.push(label + pos + ': невалидное имя переменной');
-        } else {
-          vars[a.params.name] = true;
-        }
+        } else vars[a.params.name] = true;
       }
       if ((a.type === 'var_set' || a.type === 'var_math' || a.type === 'var_alert') && !a.params.name) {
-        errors.push(label + pos + ': не указано имя переменной');
+        errors.push(label + pos + ': нет имени переменной');
+      }
+      // Проверка селекторов
+      if (a.params && a.params.selector) {
+        if (a.params.selector === 'custom' && !String(a.params.customSelector || '').trim()) {
+          errors.push(label + pos + ': «свой селектор» пустой');
+        }
+        if (a.params.selector === '#anchor' && !String(a.params.anchorName || '').trim()) {
+          errors.push(label + pos + ': «#anchor» без имени якоря');
+        }
+        if (a.params.selector === '.class' && !String(a.params.className || '').trim()) {
+          errors.push(label + pos + ': «.class» без имени класса');
+        }
       }
     });
-
-    // Предупреждения о необъявленных переменных
     f.actions.forEach(function (a, j) {
-      if (a.type === 'var_set' || a.type === 'var_math' || a.type === 'var_alert') {
-        if (a.params.name && !vars[a.params.name]) {
-          warnings.push(label + ', действие #' + (j+1) + ': переменная "' + a.params.name + '" не объявлена');
-        }
+      if ((a.type === 'var_set' || a.type === 'var_math' || a.type === 'var_alert') && a.params.name && !vars[a.params.name]) {
+        warnings.push(label + ', #' + (j+1) + ': переменная "' + a.params.name + '" не объявлена');
       }
     });
   });
-
   return { errors: errors, warnings: warnings };
 }
 
@@ -1706,25 +1214,21 @@ function validate() {
 function compile() {
   var fixes = autoFix();
   if (fixes.length) {
-    alertBox('🔧 Автоисправления',
-      '<p>Применены исправления:</p><ul style="margin-left:18px;margin-top:8px;">'
-      + fixes.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('')
-      + '</ul><p style="margin-top:10px;color:#9ac;">Попробуйте снова.</p>');
-    save();
-    renderAll();
+    alertBox('🔧 Автоисправления', '<p>Применено:</p><ul style="margin-left:18px;">'
+      + fixes.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul><p>Попробуйте снова.</p>');
+    save(); renderAll();
     return;
   }
-
   var v = validate();
   if (v.errors.length) {
-    alertBox('❌ Ошибки', '<p>Исправьте:</p><ul style="margin-left:18px;margin-top:8px;color:#ff8;">'
+    alertBox('❌ Ошибки', '<ul style="margin-left:18px;color:#ff8;">'
       + v.errors.map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul>');
     return;
   }
   if (v.warnings.length) {
     openModal({
       title: '⚠️ Предупреждения',
-      html: '<p>Продолжить сборку?</p><ul style="margin-left:18px;margin-top:8px;color:#ffd;">'
+      html: '<p>Продолжить?</p><ul style="margin-left:18px;color:#ffd;">'
         + v.warnings.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') + '</ul>',
       buttons: [
         { text: 'Отмена', className: 'btn-secondary' },
@@ -1733,36 +1237,25 @@ function compile() {
     });
     return;
   }
-
   doCompile();
 }
 
 function doCompile() {
-  var funcs = generateAllFuncs();
-  var blocks = state.blocks.map(renderBlockHTML).join('\n');
-
-  var html = '<!DOCTYPE html>\n'
-    + '<html lang="ru">\n'
-    + '<head>\n'
+  var s = state.settings;
+  var html = '<!DOCTYPE html>\n<html lang="ru">\n<head>\n'
     + '<meta charset="UTF-8">\n'
     + '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-    + '<title>Мой сайт</title>\n'
-    + '<style>\n'
-    + 'body { margin: 20px; font-family: sans-serif; background: #fff; }\n'
-    + 'button { cursor: pointer; font-family: inherit; }\n'
-    + '</style>\n'
-    + '<script>\n'
-    + funcs
-    + '\n<\/script>\n'
-    + '</head>\n'
-    + '<body>\n'
-    + blocks + '\n'
-    + '</body>\n</html>';
-
+    + '<title>' + esc(s.title) + '</title>\n'
+    + '<style>body{margin:20px;font-family:' + s.font + ';background:' + s.bgColor + ';color:' + s.textColor + ';}'
+    + 'button{cursor:pointer;font-family:inherit;}</style>\n'
+    + '<script>\n' + generateAllFuncs() + '\n<\/script>\n'
+    + '</head>\n<body>\n'
+    + state.blocks.map(renderBlockHTML).join('\n')
+    + '\n</body>\n</html>';
   var blob = new Blob([html], { type: 'text/html' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'site.html';
+  a.download = s.filename + '.html';
   a.click();
   URL.revokeObjectURL(a.href);
 }
@@ -1771,11 +1264,10 @@ function doCompile() {
    ЭКСПОРТ / ИМПОРТ
    ============================================================ */
 function exportProject() {
-  var json = JSON.stringify(state, null, 2);
-  var blob = new Blob([json], { type: 'application/json' });
+  var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'sites_ide_project.json';
+  a.download = state.settings.filename + '_project.json';
   a.click();
   URL.revokeObjectURL(a.href);
 }
@@ -1783,56 +1275,44 @@ function exportProject() {
 function importProject(e) {
   var file = e.target.files[0];
   if (!file) return;
-
   var reader = new FileReader();
   reader.onload = function (ev) {
     try {
       var data = JSON.parse(ev.target.result);
-      if (!data.blocks) { alertBox('Ошибка', 'Неверный формат файла'); return; }
-
+      if (!data.blocks) { alertBox('Ошибка', 'Неверный формат'); return; }
+      if (data.settings) state.settings = Object.assign(state.settings, data.settings);
       state.blocks = data.blocks || [];
       state.jsFunctions = data.jsFunctions || [];
-
-      // Нормализация
       state.blocks.forEach(function (b) {
         var def = BLOCK_DEFAULTS[b.type];
         if (!def) return;
-        Object.keys(def).forEach(function (k) {
-          if (b[k] === undefined) b[k] = def[k];
-        });
+        Object.keys(def).forEach(function (k) { if (b[k] === undefined) b[k] = def[k]; });
         if (b.type !== 'button' && b.type !== 'link') delete b.onclick;
+        if (b.anchor) b.anchor = cleanAnchor(b.anchor);
       });
       state.jsFunctions.forEach(function (f) {
         f.name = cleanFuncName(f.name);
         if (!f.actions) f.actions = [];
       });
-
       selectedBlockIndex = -1;
       selectedFuncIndex = -1;
-      save();
-      renderAll();
+      save(); renderAll();
       document.getElementById('blockParams').innerHTML = '';
       document.getElementById('funcEditor').classList.add('hidden');
-      alertBox('Успех', '✅ Проект загружен!');
-    } catch (err) {
-      alertBox('Ошибка', 'Импорт: ' + err.message);
-    }
+      alertBox('Успех', '✅ Загружено!');
+    } catch (err) { alertBox('Ошибка', 'Импорт: ' + err.message); }
   };
   reader.readAsText(file);
   e.target.value = '';
 }
 
-/* ============================================================
-   ОЧИСТКА
-   ============================================================ */
 function clearAll() {
   confirmBox('Очистить всё?', 'Все блоки и функции будут удалены.', function () {
     state.blocks = [];
     state.jsFunctions = [];
     selectedBlockIndex = -1;
     selectedFuncIndex = -1;
-    save();
-    renderAll();
+    save(); renderAll();
     document.getElementById('blockParams').innerHTML = '';
     document.getElementById('funcEditor').classList.add('hidden');
   });
@@ -1842,98 +1322,55 @@ function clearAll() {
    СПРАВОЧНИК
    ============================================================ */
 function openHelp() {
-  var html = ''
-    + '<div class="help-block">'
-    + '<h3>👋 Добро пожаловать!</h3>'
-    + '<p>Визуальный конструктор сайтов. Слева — панель, справа — предпросмотр в реальном времени.</p>'
-    + '<div class="help-tip">💡 Функции <b>работают в предпросмотре</b> — можно кликать и проверять.</div>'
-    + '</div>'
+  var h = ''
+    + '<div class="help-block"><h3>👋 Добро пожаловать</h3>'
+    + '<p>Визуальный конструктор. Слева — панель, справа — предпросмотр.</p>'
+    + '<div class="help-tip">💡 Функции работают в предпросмотре</div></div>'
 
-    + '<div class="help-block">'
-    + '<h3>🧩 Блоки</h3>'
+    + '<div class="help-block"><h3>⚙️ Глобальные настройки</h3>'
+    + '<p>Кнопка «Настройки» в тулбаре: заголовок сайта, имя файла, цвет фона страницы, цвет текста, шрифт.</p></div>'
+
+    + '<div class="help-block"><h3>🧩 Блоки</h3>'
     + '<table class="help-table">'
-    + '<tr><th>Блок</th><th>Что умеет</th></tr>'
-    + '<tr><td><span class="badge">Кнопка</span></td><td>Ссылка + функция при клике</td></tr>'
-    + '<tr><td><span class="badge">Ссылка</span></td><td>Ссылка + функция при клике</td></tr>'
+    + '<tr><th>Блок</th><th>Умеет</th></tr>'
+    + '<tr><td><span class="badge">Кнопка</span></td><td>Ссылка + функция</td></tr>'
+    + '<tr><td><span class="badge">Ссылка</span></td><td>Ссылка + функция</td></tr>'
     + '<tr><td><span class="badge">Текст</span></td><td>Только отображение</td></tr>'
     + '<tr><td><span class="badge">Картинка</span></td><td>Только отображение</td></tr>'
-    + '</table>'
-    + '</div>'
+    + '</table></div>'
 
-    + '<div class="help-block">'
-    + '<h3>🔗 Ссылка и ⚡ Функция — это разное</h3>'
+    + '<div class="help-block"><h3>🎯 Селекторы — ГЛАВНОЕ</h3>'
+    + '<p>Когда выбираешь элемент в действии, рядом появляется поле для ввода:</p>'
     + '<table class="help-table">'
-    + '<tr><th>Поле</th><th>Что вводить</th></tr>'
-    + '<tr><td>🔗 Ссылка</td><td>URL или якорь: <code>https://google.com</code>, <code>#top</code></td></tr>'
-    + '<tr><td>⚡ Функция</td><td>Имя JS-функции: <code>myFunction</code> (без скобок)</td></tr>'
+    + '<tr><th>Выбор</th><th>Появляется поле</th></tr>'
+    + '<tr><td><code>this</code></td><td>— (не нужно ничего вводить)</td></tr>'
+    + '<tr><td><code>body / button / p / img</code></td><td>— (не нужно)</td></tr>'
+    + '<tr><td><code>#anchor</code></td><td>📌 <b>Имя якоря (id)</b> — введи id без решётки</td></tr>'
+    + '<tr><td><code>.class</code></td><td>🏷️ <b>Имя класса</b> — без точки</td></tr>'
+    + '<tr><td><code>custom</code></td><td>✏️ <b>Свой CSS-селектор</b></td></tr>'
     + '</table>'
-    + '<div class="help-tip">💡 Если задана функция — обычный переход по ссылке отключается. Используй действие «Переход» внутри функции.</div>'
-    + '</div>'
+    + '<div class="help-tip">💡 Пример: хочешь изменить цвет блока с якорем <code>myAnchor</code>. В действии «Цвет» выбираешь <b>#anchor</b>, в поле «Имя якоря» пишешь <b>myAnchor</b>.</div></div>'
 
-    + '<div class="help-block">'
-    + '<h3>👻 Невидимый при загрузке</h3>'
-    + '<p>Галочка в параметрах блока. Элемент скрыт при загрузке страницы.</p>'
-    + '<div class="help-tip">💡 Задай блоку якорь (например, <code>hiddenBlock</code>) и покажи его действием <b>Показать</b> с селектором <code>#hiddenBlock</code>.</div>'
-    + '</div>'
-
-    + '<div class="help-block">'
-    + '<h3>⚡ Действия</h3>'
-    + '<h4>Сообщения</h4>'
+    + '<div class="help-block"><h3>⚡ Действия</h3>'
     + '<ul>'
-    + '<li><b>💬 Alert</b> — всплывающее окно</li>'
-    + '<li><b>🖥️ Console</b> — вывод в консоль браузера (F12)</li>'
-    + '</ul>'
-    + '<h4>Стили и видимость</h4>'
-    + '<ul>'
-    + '<li><b>🎨 Цвет</b> — цвет текста элемента</li>'
-    + '<li><b>🖌️ Фон</b> — цвет фона элемента</li>'
+    + '<li><b>💬 Alert / 🖥️ Console</b> — сообщения</li>'
+    + '<li><b>🎨 Цвет / 🖌️ Фон</b> — стили</li>'
     + '<li><b>👻 Скрыть / 👀 Показать / 🔄 Переключить</b> — видимость</li>'
-    + '</ul>'
-    + '<h4>Навигация</h4>'
-    + '<ul><li><b>🔗 Переход</b> — на другой URL</li></ul>'
-    + '<h4>Переменные</h4>'
-    + '<ul>'
-    + '<li><b>📦 Создать</b> — <code>let x = 10;</code></li>'
-    + '<li><b>✏️ Изменить</b> — <code>x = 20;</code></li>'
-    + '<li><b>➕ Математика</b> — <code>x += 5;</code>, <code>x++;</code></li>'
-    + '<li><b>💬 Показать</b> — <code>alert(x);</code></li>'
-    + '</ul>'
-    + '<h4>Условия</h4>'
-    + '<ul>'
-    + '<li><b>❓ Если</b> — <code>if (x > 10) alert("OK");</code></li>'
-    + '<li><b>⏱️ Задержка</b> — <code>setTimeout(...)</code></li>'
-    + '</ul>'
-    + '<h4>Свой код</h4>'
-    + '<p><b>✏️ Свой код</b> — любой JavaScript. <code>this</code> = кликнутый элемент.</p>'
-    + '</div>'
-
-    + '<div class="help-block">'
-    + '<h3>🎯 Селекторы</h3>'
-    + '<table class="help-table">'
-    + '<tr><th>Селектор</th><th>Что выбирает</th></tr>'
-    + '<tr><td><code>this</code></td><td>Сам кликнутый элемент</td></tr>'
-    + '<tr><td><code>#anchor</code></td><td>Элемент с якорем</td></tr>'
-    + '<tr><td><code>.class</code></td><td>По CSS-классу</td></tr>'
-    + '<tr><td><code>body</code></td><td>Вся страница</td></tr>'
-    + '<tr><td>Свой</td><td>Любой CSS-селектор</td></tr>'
-    + '</table>'
-    + '</div>'
-
-    + '<div class="help-block">'
-    + '<h3>💾 Сохранение</h3>'
-    + '<p>Автосохранение каждые 5 секунд. <b>Экспорт</b> — в JSON-файл, <b>Импорт</b> — из JSON, <b>Скомпилировать</b> — готовый HTML.</p>'
-    + '</div>';
+    + '<li><b>🔗 Переход</b> — на URL</li>'
+    + '<li><b>📦 Переменные</b> — создание, изменение, математика</li>'
+    + '<li><b>❓ Если / ⏱️ Задержка</b> — условия</li>'
+    + '</ul></div>';
 
   openModal({
-    title: '📖 Справочник Sites IDE',
-    html: html,
+    title: '📖 Справочник',
+    html: h,
     wide: true,
     buttons: [{ text: 'Понятно', className: 'btn-primary' }]
   });
 }
 
 /* ============================================================
-   ОБЩИЙ РЕНДЕР
+   ОБЩИЙ РЕНДЕР + СТАРТ
    ============================================================ */
 function renderAll() {
   updatePreview();
@@ -1941,15 +1378,10 @@ function renderAll() {
   updateFuncList();
 }
 
-/* ============================================================
-   ЗАПУСК
-   ============================================================ */
 load();
 renderAll();
-
 setInterval(save, 5000);
-
-console.log('🧩 Sites IDE v6.0 загружена');
+console.log('Sites IDE v0.7.1 BETA');
 </script>
 </body>
 </html>
