@@ -5,196 +5,172 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sites IDE</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #0b0b18; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 20px; }
-  .container { max-width: 1400px; margin: 0 auto; }
-  h1 { font-size: 2rem; color: #f2b84b; border-bottom: 2px solid #23233a; padding-bottom: 12px; margin-bottom: 20px; }
-  .card { background: #14142a; padding: 18px 22px; border-radius: 12px; border: 1px solid #2a2a4a; margin-bottom: 16px; }
-  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; }
-  .btn { padding: 9px 18px; border: none; border-radius: 24px; font-weight: 600; cursor: pointer; font-size: 0.9rem; background: #2a2a52; color: #ddd; transition: filter 0.15s; }
-  .btn:hover { filter: brightness(1.2); }
-  .btn-primary { background: #f2b84b; color: #1a1a2e; }
-  .btn-success { background: #2a7a3a; color: #fff; }
-  .btn-danger { background: #7a3a3a; color: #fff; }
-  .btn-info { background: #2a5a9a; color: #fff; }
-  .btn-secondary { background: #3a3a5a; color: #ddd; }
-  .btn-sm { padding: 5px 11px; font-size: 12px; border: none; border-radius: 5px; cursor: pointer; background: #0f3460; color: #fff; }
-  .btn-sm:hover { background: #1a4a7a; }
-  .btn-sm.green { background: #2a6a3a; }
-  .btn-sm.green:hover { background: #3a8a4a; }
-  .btn-sm.red { background: #6a2a2a; }
-  .btn-sm.red:hover { background: #8a3a3a; }
-  .btn-sm.yellow { background: #7a5a1a; }
-  .btn-sm.yellow:hover { background: #9a7a2a; }
-  .btn-sm.purple { background: #5a2a7a; }
-  .btn-sm.purple:hover { background: #7a3a9a; }
-  .panel { display: grid; grid-template-columns: minmax(320px, 1fr) minmax(400px, 1.6fr); gap: 16px; }
-  @media (max-width: 900px) { .panel { grid-template-columns: 1fr; } }
-  .preview-frame { width: 100%; height: 560px; border: 1px solid #2a2a4a; border-radius: 8px; background: #fff; display: block; }
-  .tabs { display: flex; gap: 4px; background: #0f3460; padding: 4px; border-radius: 8px; margin-bottom: 14px; }
-  .tabs button { flex: 1; background: transparent; border: none; color: #aaa; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
-  .tabs button.active { background: #1a4a7a; color: #fff; }
-  .list { margin-top: 8px; }
-  .list-item { background: #16213e; padding: 10px 12px; margin-bottom: 6px; border-radius: 6px; display: flex; align-items: center; gap: 8px; border-left: 3px solid #e94560; font-size: 13px; cursor: pointer; user-select: none; }
-  .list-item:hover { background: #1a2a4a; }
-  .list-item.active { border-left-color: #f2b84b; background: #1e2a4a; }
-  .list-item.dragging { opacity: 0.4; }
-  .list-item.drag-over { border-top: 2px solid #f2b84b; }
-  .list-item .handle { color: #666; cursor: grab; font-size: 14px; flex-shrink: 0; }
-  .list-item .text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .list-item .del { background: transparent; border: none; color: #e94560; cursor: pointer; font-size: 15px; padding: 0 4px; flex-shrink: 0; }
-  .list-item .tag { font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 4px; flex-shrink: 0; }
-  .tag-hidden { background: #5a3a7a; color: #cba; }
-  .tag-func { background: #7a5a1a; color: #fdd; }
-  .empty { color: #666; text-align: center; padding: 20px 0; font-size: 13px; }
-  .params { background: #16213e; padding: 14px 16px; border-radius: 8px; border: 1px solid #1f2f4a; margin-top: 12px; }
-  .params h4 { color: #f2b84b; margin-bottom: 10px; font-size: 0.95rem; }
-  .field { margin-bottom: 10px; }
-  .field label { display: block; font-size: 12px; color: #9aa; margin-bottom: 4px; font-weight: 500; }
-  .field input[type="text"], .field input[type="number"], .field select, .field textarea { width: 100%; padding: 8px 10px; background: #0f3460; border: 1px solid #1a4a7a; color: #fff; border-radius: 6px; font-size: 14px; font-family: inherit; }
-  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #f2b84b; }
-  .field input[type="color"] { width: 100%; height: 36px; padding: 2px; cursor: pointer; border-radius: 6px; border: 1px solid #1a4a7a; background: #0f3460; }
-  .field textarea { min-height: 80px; resize: vertical; font-family: 'Consolas', monospace; font-size: 13px; }
-  .hint { font-size: 11px; color: #7a8a9a; margin-top: 3px; font-style: italic; }
-  .check { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: #0f3460; border-radius: 6px; margin-top: 8px; cursor: pointer; }
-  .check:hover { background: #1a4a7a; }
-  .align-row { display: flex; gap: 4px; }
-  .align-row button { flex: 1; padding: 7px; background: #0f3460; border: 2px solid transparent; border-radius: 6px; color: #fff; cursor: pointer; }
-  .align-row button.active { border-color: #e94560; background: #1a4a7a; }
-  .section-divider { margin-top: 14px; padding-top: 12px; border-top: 1px dashed #2a3a5a; }
-  .section-title { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
-  .section-title.link { color: #6ac6ff; }
-  .section-title.func { color: #f2b84b; }
-  .section-title.global { color: #6affb8; }
-  .action-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px; }
-  .code-box { background: #0d0d1a; padding: 12px; border-radius: 8px; border: 1px solid #1a4a7a; font-family: 'Consolas', monospace; font-size: 13px; color: #9cdcfe; white-space: pre-wrap; max-height: 240px; overflow: auto; line-height: 1.5; margin-top: 10px; }
-  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
-  .modal { background: #14142a; border: 1px solid #2a2a4a; border-radius: 12px; padding: 22px 26px; width: 100%; max-width: 460px; max-height: 88vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
-  .modal.wide { max-width: 800px; }
-  .modal h3 { color: #f2b84b; font-size: 1.2rem; margin-bottom: 14px; }
-  .modal-body { font-size: 14px; color: #ccc; line-height: 1.6; }
-  .modal-body p { margin-bottom: 8px; }
-  .modal-body code { background: #0d0d1a; padding: 2px 6px; border-radius: 4px; color: #f2b84b; font-family: 'Consolas', monospace; font-size: 12px; }
-  .modal-body ul { margin: 8px 0 8px 20px; }
-  .modal-body li { margin-bottom: 4px; }
-  .modal-body h4 { color: #e94560; margin: 14px 0 6px; font-size: 0.95rem; }
-  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
-  .help-block { margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #2a2a4a; }
-  .help-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-  .help-block h3 { color: #f2b84b; margin-bottom: 8px; font-size: 1.05rem; }
-  .help-block ul { margin-left: 18px; }
-  .help-tip { background: #1a2a3a; border-left: 3px solid #f2b84b; padding: 10px 12px; border-radius: 4px; margin: 10px 0; font-size: 13px; color: #cbd; }
-  .help-table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
-  .help-table th, .help-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #2a2a4a; }
-  .help-table th { color: #f2b84b; }
-  .badge { display: inline-block; background: #1a4a7a; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-  .hidden { display: none !important; }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: #0a0a18; }
-  ::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 3px; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0b0b18; color:#e0e0e0; font-family:'Segoe UI',sans-serif; padding:20px; }
+.container { max-width:1400px; margin:0 auto; }
+h1 { font-size:2rem; color:#f2b84b; border-bottom:2px solid #23233a; padding-bottom:12px; margin-bottom:20px; }
+.card { background:#14142a; padding:18px 22px; border-radius:12px; border:1px solid #2a2a4a; margin-bottom:16px; }
+.toolbar { display:flex; flex-wrap:wrap; gap:10px; }
+.btn { padding:9px 18px; border:none; border-radius:24px; font-weight:600; cursor:pointer; font-size:0.9rem; background:#2a2a52; color:#ddd; }
+.btn:hover { filter:brightness(1.2); }
+.btn-primary { background:#f2b84b; color:#1a1a2e; }
+.btn-success { background:#2a7a3a; color:#fff; }
+.btn-danger { background:#7a3a3a; color:#fff; }
+.btn-info { background:#2a5a9a; color:#fff; }
+.btn-secondary { background:#3a3a5a; color:#ddd; }
+.btn-sm { padding:5px 11px; font-size:12px; border:none; border-radius:5px; cursor:pointer; background:#0f3460; color:#fff; }
+.btn-sm:hover { background:#1a4a7a; }
+.btn-sm.green { background:#2a6a3a; }
+.btn-sm.red { background:#6a2a2a; }
+.btn-sm.yellow { background:#7a5a1a; }
+.btn-sm.purple { background:#5a2a7a; }
+.panel { display:grid; grid-template-columns:minmax(320px,1fr) minmax(400px,1.6fr); gap:16px; }
+@media (max-width:900px) { .panel { grid-template-columns:1fr; } }
+.preview-frame { width:100%; height:560px; border:1px solid #2a2a4a; border-radius:8px; background:#fff; display:block; }
+.tabs { display:flex; gap:4px; background:#0f3460; padding:4px; border-radius:8px; margin-bottom:14px; }
+.tabs button { flex:1; background:transparent; border:none; color:#aaa; padding:8px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; }
+.tabs button.active { background:#1a4a7a; color:#fff; }
+.list { margin-top:8px; }
+.list-item { background:#16213e; padding:10px 12px; margin-bottom:6px; border-radius:6px; display:flex; align-items:center; gap:8px; border-left:3px solid #e94560; font-size:13px; cursor:pointer; }
+.list-item:hover { background:#1a2a4a; }
+.list-item.active { border-left-color:#f2b84b; background:#1e2a4a; }
+.list-item .text { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.list-item .del { background:transparent; border:none; color:#e94560; cursor:pointer; font-size:15px; padding:0 4px; }
+.list-item .tag { font-size:10px; padding:2px 6px; border-radius:3px; margin-left:4px; }
+.tag-hidden { background:#5a3a7a; color:#cba; }
+.tag-func { background:#7a5a1a; color:#fdd; }
+.empty { color:#666; text-align:center; padding:20px 0; font-size:13px; }
+.params { background:#16213e; padding:14px 16px; border-radius:8px; border:1px solid #1f2f4a; margin-top:12px; }
+.params h4 { color:#f2b84b; margin-bottom:10px; font-size:0.95rem; }
+.field { margin-bottom:10px; }
+.field label { display:block; font-size:12px; color:#9aa; margin-bottom:4px; font-weight:500; }
+.field input[type="text"], .field select, .field textarea { width:100%; padding:8px 10px; background:#0f3460; border:1px solid #1a4a7a; color:#fff; border-radius:6px; font-size:14px; font-family:inherit; }
+.field input:focus, .field select:focus, .field textarea:focus { outline:none; border-color:#f2b84b; }
+.field input[type="color"] { width:100%; height:36px; padding:2px; cursor:pointer; border-radius:6px; border:1px solid #1a4a7a; background:#0f3460; }
+.field textarea { min-height:80px; resize:vertical; font-family:Consolas,monospace; font-size:13px; }
+.hint { font-size:11px; color:#7a8a9a; margin-top:3px; font-style:italic; }
+.check { display:flex; align-items:center; gap:8px; padding:6px 8px; background:#0f3460; border-radius:6px; margin-top:8px; cursor:pointer; }
+.align-row { display:flex; gap:4px; }
+.align-row button { flex:1; padding:7px; background:#0f3460; border:2px solid transparent; border-radius:6px; color:#fff; cursor:pointer; }
+.align-row button.active { border-color:#e94560; background:#1a4a7a; }
+.section-divider { margin-top:14px; padding-top:12px; border-top:1px dashed #2a3a5a; }
+.section-title { font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; font-weight:600; }
+.section-title.link { color:#6ac6ff; }
+.section-title.func { color:#f2b84b; }
+.action-row { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:6px; }
+.code-box { background:#0d0d1a; padding:12px; border-radius:8px; border:1px solid #1a4a7a; font-family:Consolas,monospace; font-size:13px; color:#9cdcfe; white-space:pre-wrap; max-height:240px; overflow:auto; line-height:1.5; margin-top:10px; }
+.modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center; padding:20px; z-index:9999; }
+.modal { background:#14142a; border:1px solid #2a2a4a; border-radius:12px; padding:22px 26px; width:100%; max-width:460px; max-height:88vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.7); }
+.modal.wide { max-width:800px; }
+.modal h3 { color:#f2b84b; font-size:1.2rem; margin-bottom:14px; }
+.modal-body { font-size:14px; color:#ccc; line-height:1.6; }
+.modal-body p { margin-bottom:8px; }
+.modal-body code { background:#0d0d1a; padding:2px 6px; border-radius:4px; color:#f2b84b; font-family:Consolas,monospace; font-size:12px; }
+.modal-body ul { margin:8px 0 8px 20px; }
+.modal-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:18px; flex-wrap:wrap; }
+.help-block { margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #2a2a4a; }
+.help-block:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.help-block h3 { color:#f2b84b; margin-bottom:8px; font-size:1.05rem; }
+.help-block ul { margin-left:18px; }
+.help-tip { background:#1a2a3a; border-left:3px solid #f2b84b; padding:10px 12px; border-radius:4px; margin:10px 0; font-size:13px; color:#cbd; }
+.help-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:13px; }
+.help-table th, .help-table td { text-align:left; padding:6px 8px; border-bottom:1px solid #2a2a4a; }
+.help-table th { color:#f2b84b; }
+.hidden { display:none !important; }
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:#0a0a18; }
+::-webkit-scrollbar-thumb { background:#2a2a4a; border-radius:3px; }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>🧩 Sites IDE</h1>
+<h1>🧩 Sites IDE</h1>
 
-  <div class="card toolbar">
-    <button class="btn btn-success" onclick="compile()">⚙️ Скомпилировать</button>
-    <button class="btn btn-primary" onclick="exportProject()">⬇️ Экспорт</button>
-    <button class="btn btn-success" onclick="document.getElementById('fileInput').click()">📂 Импорт</button>
-    <button class="btn btn-info" onclick="openSettings()">⚙️ Настройки</button>
-    <button class="btn btn-info" onclick="openHelp()">📖 Справочник</button>
-    <button class="btn btn-danger" onclick="clearAll()">🗑️ Очистить</button>
-  </div>
+<div class="card toolbar">
+  <button class="btn btn-success" onclick="compile()">⚙️ Скомпилировать</button>
+  <button class="btn btn-primary" onclick="exportProject()">⬇️ Экспорт</button>
+  <button class="btn btn-success" onclick="document.getElementById('fileInput').click()">📂 Импорт</button>
+  <button class="btn btn-info" onclick="openSettings()">⚙️ Настройки</button>
+  <button class="btn btn-info" onclick="openHelp()">📖 Справочник</button>
+  <button class="btn btn-danger" onclick="clearAll()">🗑️ Очистить</button>
+</div>
 
-  <div class="panel">
-    <div>
-      <div class="card">
-        <div class="tabs">
-          <button id="tabIface" class="active" onclick="switchTab('iface')">🧩 Интерфейс</button>
-          <button id="tabLogic" onclick="switchTab('logic')">⚡ Логика</button>
+<div class="panel">
+  <div>
+    <div class="card">
+      <div class="tabs">
+        <button id="tabIface" class="active" onclick="switchTab('iface')">🧩 Интерфейс</button>
+        <button id="tabLogic" onclick="switchTab('logic')">⚡ Логика</button>
+      </div>
+      <div id="ifaceTab">
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">
+          <button class="btn-sm" onclick="addBlock('button')">➕ Кнопка</button>
+          <button class="btn-sm" onclick="addBlock('text')">📝 Текст</button>
+          <button class="btn-sm" onclick="addBlock('link')">🔗 Ссылка</button>
+          <button class="btn-sm" onclick="addBlock('image')">🖼️ Картинка</button>
         </div>
-
-        <div id="ifaceTab">
-          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">
-            <button class="btn-sm" onclick="addBlock('button')">➕ Кнопка</button>
-            <button class="btn-sm" onclick="addBlock('text')">📝 Текст</button>
-            <button class="btn-sm" onclick="addBlock('link')">🔗 Ссылка</button>
-            <button class="btn-sm" onclick="addBlock('image')">🖼️ Картинка</button>
-          </div>
-          <div id="blockList" class="list"><div class="empty">Нет блоков</div></div>
-          <div id="blockParams"></div>
-        </div>
-
-        <div id="logicTab" class="hidden">
-          <button class="btn-sm green" onclick="addFunction()">➕ Добавить функцию</button>
-          <div id="funcList" class="list"><div class="empty">Нет функций</div></div>
-
-          <div id="funcEditor" class="hidden">
-            <div class="params">
-              <h4>✏️ Редактор функции</h4>
-              <div class="field">
-                <label>Имя функции</label>
-                <input type="text" id="funcName" onchange="renameFunction(this.value)">
-              </div>
-              <label style="display:block;font-size:12px;color:#9aa;margin:12px 0 5px;">📌 Действия</label>
-              <div class="action-row">
-                <button class="btn-sm" onclick="addAction('alert')">💬 Alert</button>
-                <button class="btn-sm" onclick="addAction('console')">🖥️ Console</button>
-                <button class="btn-sm" onclick="addAction('color')">🎨 Цвет</button>
-                <button class="btn-sm" onclick="addAction('bgcolor')">🖌️ Фон</button>
-                <button class="btn-sm" onclick="addAction('redirect')">🔗 Переход</button>
-                <button class="btn-sm" onclick="addAction('hide')">👻 Скрыть</button>
-                <button class="btn-sm" onclick="addAction('show')">👀 Показать</button>
-                <button class="btn-sm" onclick="addAction('toggle')">🔄 Переключить</button>
-                <button class="btn-sm" onclick="addAction('custom')">✏️ Свой код</button>
-              </div>
-              <div class="action-row">
-                <button class="btn-sm yellow" onclick="addAction('var_declare')">📦 Создать</button>
-                <button class="btn-sm yellow" onclick="addAction('var_set')">✏️ Изменить</button>
-                <button class="btn-sm yellow" onclick="addAction('var_math')">➕ Математика</button>
-                <button class="btn-sm yellow" onclick="addAction('var_alert')">💬 Показать</button>
-              </div>
-              <div class="action-row">
-                <button class="btn-sm purple" onclick="addAction('if')">❓ Если</button>
-                <button class="btn-sm purple" onclick="addAction('wait')">⏱️ Задержка</button>
-              </div>
-              <div id="actionList" class="list"><div class="empty">Нет действий</div></div>
-              <div style="display:flex;gap:5px;margin-top:10px;">
-                <button class="btn-sm red" onclick="deleteFunction()">🗑️ Удалить функцию</button>
-              </div>
-              <div class="code-box" id="codeBox">// код</div>
+        <div id="blockList" class="list"><div class="empty">Нет блоков</div></div>
+        <div id="blockParams"></div>
+      </div>
+      <div id="logicTab" class="hidden">
+        <button class="btn-sm green" onclick="addFunction()">➕ Добавить функцию</button>
+        <div id="funcList" class="list"><div class="empty">Нет функций</div></div>
+        <div id="funcEditor" class="hidden">
+          <div class="params">
+            <h4>✏️ Редактор функции</h4>
+            <div class="field">
+              <label>Имя функции</label>
+              <input type="text" id="funcName" onchange="renameFunction(this.value)">
             </div>
+            <label style="display:block;font-size:12px;color:#9aa;margin:12px 0 5px;">📌 Действия</label>
+            <div class="action-row">
+              <button class="btn-sm" onclick="addAction('alert')">💬 Alert</button>
+              <button class="btn-sm" onclick="addAction('console')">🖥️ Console</button>
+              <button class="btn-sm" onclick="addAction('color')">🎨 Цвет</button>
+              <button class="btn-sm" onclick="addAction('bgcolor')">🖌️ Фон</button>
+              <button class="btn-sm" onclick="addAction('redirect')">🔗 Переход</button>
+              <button class="btn-sm" onclick="addAction('hide')">👻 Скрыть</button>
+              <button class="btn-sm" onclick="addAction('show')">👀 Показать</button>
+              <button class="btn-sm" onclick="addAction('toggle')">🔄 Переключить</button>
+              <button class="btn-sm" onclick="addAction('custom')">✏️ Свой код</button>
+            </div>
+            <div class="action-row">
+              <button class="btn-sm yellow" onclick="addAction('var_declare')">📦 Создать</button>
+              <button class="btn-sm yellow" onclick="addAction('var_set')">✏️ Изменить</button>
+              <button class="btn-sm yellow" onclick="addAction('var_math')">➕ Математика</button>
+              <button class="btn-sm yellow" onclick="addAction('var_alert')">💬 Показать</button>
+            </div>
+            <div class="action-row">
+              <button class="btn-sm purple" onclick="addAction('if')">❓ Если</button>
+              <button class="btn-sm purple" onclick="addAction('wait')">⏱️ Задержка</button>
+            </div>
+            <div id="actionList" class="list"><div class="empty">Нет действий</div></div>
+            <div style="display:flex;gap:5px;margin-top:10px;">
+              <button class="btn-sm red" onclick="deleteFunction()">🗑️ Удалить функцию</button>
+            </div>
+            <div class="code-box" id="codeBox">// код</div>
           </div>
         </div>
       </div>
     </div>
-
-    <div>
-      <div class="card">
-        <h3 style="font-weight:400;color:#bbb;margin-bottom:10px;font-size:1rem;">👁️ Предпросмотр</h3>
-        <iframe id="preview" class="preview-frame"></iframe>
-      </div>
+  </div>
+  <div>
+    <div class="card">
+      <h3 style="font-weight:400;color:#bbb;margin-bottom:10px;font-size:1rem;">👁️ Предпросмотр</h3>
+      <iframe id="preview" class="preview-frame"></iframe>
     </div>
   </div>
+</div>
 
-  <input type="file" id="fileInput" style="display:none" accept=".json" onchange="importProject(event)">
-  <datalist id="funcNamesList"></datalist>
-  <p style="text-align:center;color:#555;font-size:0.8rem;margin-top:16px;">💾 Автосохранение • v0.7.1 BETA • Помощник по написанию: DeepSeek • Лицензия: MIT</p>
+<input type="file" id="fileInput" style="display:none" accept=".json" onchange="importProject(event)">
+<datalist id="funcNamesList"></datalist>
+<p style="text-align:center;color:#555;font-size:0.8rem;margin-top:16px;">💾 Автосохранение • v0.7.2 ALPHA • Помощник по написанию: DeepSeek • Лицензия: MIT</p>
 </div>
 
 <script>
-/* ============================================================
-   СОСТОЯНИЕ
-   ============================================================ */
+/* ============ СОСТОЯНИЕ ============ */
 var state = {
-  settings: {
-    title: 'Мой сайт',
-    filename: 'site',
-    bgColor: '#ffffff',
-    textColor: '#000000',
-    font: 'sans-serif'
-  },
+  settings: { title:'Мой сайт', filename:'site', bgColor:'#ffffff', textColor:'#000000', font:'sans-serif' },
   blocks: [],
   jsFunctions: []
 };
@@ -210,20 +186,16 @@ var BLOCK_DEFAULTS = {
 
 var RESERVED = ['break','case','catch','class','const','continue','debugger','default','delete','do','else','export','extends','finally','for','function','if','import','in','instanceof','new','return','super','switch','this','throw','try','typeof','var','void','while','with','yield','let','static','enum','await','alert','console','window','document','body'];
 
-/* ============================================================
-   УТИЛИТЫ
-   ============================================================ */
+/* ============ УТИЛИТЫ ============ */
 function esc(s) {
-  return String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 function escJS(s) {
-  return String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
+  return String(s == null ? '' : s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n');
 }
 function cleanFuncName(name) {
   if (!name) return '';
-  return String(name).trim().replace(/\(\)$/, '');
+  return String(name).trim().replace(/\(\)$/,'');
 }
 function validFuncName(name) {
   if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(name)) return false;
@@ -232,25 +204,17 @@ function validFuncName(name) {
 function validUrl(str) {
   if (!str) return false;
   if (str.charAt(0) === '#' || str.charAt(0) === '/') return true;
-  try { new URL(str); return true; } catch (e) { return /^(mailto:|tel:|javascript:)/.test(str); }
+  try { new URL(str); return true; } catch(e) { return /^(mailto:|tel:|javascript:)/.test(str); }
 }
 function cleanAnchor(raw) {
   if (!raw) return '';
-  var s = String(raw).trim();
-  s = s.replace(/^#+/, '');
-  s = s.replace(/\s+/g, '-');
-  s = s.replace(/[^a-zA-Z0-9_-]/g, '');
+  var s = String(raw).trim().replace(/^#+/,'').replace(/\s+/g,'-').replace(/[^a-zA-Z0-9_-]/g,'');
   if (s && !/^[a-zA-Z]/.test(s)) s = 'a' + s;
   return s;
 }
 
-/* ============================================================
-   МОДАЛКА
-   ============================================================ */
-function closeModal() {
-  var m = document.querySelector('.modal-bg');
-  if (m) m.remove();
-}
+/* ============ МОДАЛКА ============ */
+function closeModal() { var m = document.querySelector('.modal-bg'); if (m) m.remove(); }
 
 function openModal(opts) {
   closeModal();
@@ -259,33 +223,21 @@ function openModal(opts) {
   var modal = document.createElement('div');
   modal.className = 'modal' + (opts.wide ? ' wide' : '');
 
-  if (opts.title) {
-    var h = document.createElement('h3');
-    h.textContent = opts.title;
-    modal.appendChild(h);
-  }
-
+  if (opts.title) { var h = document.createElement('h3'); h.textContent = opts.title; modal.appendChild(h); }
   var body = document.createElement('div');
   body.className = 'modal-body';
   if (opts.html) body.innerHTML = opts.html;
   modal.appendChild(body);
 
-  var inputs = {};
-  var wraps = {};
-  (opts.fields || []).forEach(function (f) {
+  var inputs = {}, wraps = {};
+  (opts.fields || []).forEach(function(f) {
     var wrap = document.createElement('div');
     wrap.className = 'field';
-
-    if (f.label) {
-      var lbl = document.createElement('label');
-      lbl.textContent = f.label;
-      wrap.appendChild(lbl);
-    }
-
+    if (f.label) { var lbl = document.createElement('label'); lbl.textContent = f.label; wrap.appendChild(lbl); }
     var el;
     if (f.type === 'select') {
       el = document.createElement('select');
-      (f.options || []).forEach(function (opt) {
+      (f.options || []).forEach(function(opt) {
         var o = document.createElement('option');
         o.value = opt.value !== undefined ? opt.value : opt;
         o.textContent = opt.text !== undefined ? opt.text : opt;
@@ -306,14 +258,8 @@ function openModal(opts) {
       el.value = f.value !== undefined ? f.value : '';
       if (f.placeholder) el.placeholder = f.placeholder;
     }
-
     wrap.appendChild(el);
-    if (f.hint) {
-      var h2 = document.createElement('div');
-      h2.className = 'hint';
-      h2.textContent = f.hint;
-      wrap.appendChild(h2);
-    }
+    if (f.hint) { var h2 = document.createElement('div'); h2.className = 'hint'; h2.textContent = f.hint; wrap.appendChild(h2); }
     body.appendChild(wrap);
     inputs[f.name] = el;
     wraps[f.name] = wrap;
@@ -321,15 +267,14 @@ function openModal(opts) {
 
   var actions = document.createElement('div');
   actions.className = 'modal-actions';
-
-  var buttons = opts.buttons || [{ text: 'OK', className: 'btn-primary' }];
-  buttons.forEach(function (b) {
+  var buttons = opts.buttons || [{ text:'OK', className:'btn-primary' }];
+  buttons.forEach(function(b) {
     var btn = document.createElement('button');
     btn.className = 'btn ' + (b.className || 'btn-primary');
     btn.textContent = b.text;
-    btn.onclick = function () {
+    btn.onclick = function() {
       var vals = {};
-      Object.keys(inputs).forEach(function (k) { vals[k] = inputs[k].value; });
+      Object.keys(inputs).forEach(function(k) { vals[k] = inputs[k].value; });
       if (b.onClick) {
         var keep = b.onClick(vals);
         if (keep === true) return;
@@ -342,179 +287,174 @@ function openModal(opts) {
   bg.appendChild(modal);
   document.body.appendChild(bg);
 
-  bg.addEventListener('click', function (e) {
-    if (e.target === bg && !opts.fields) closeModal();
-  });
-
+  bg.addEventListener('click', function(e) { if (e.target === bg && !opts.fields) closeModal(); });
   var first = modal.querySelector('input, select, textarea');
   if (first && opts.fields && opts.fields.length) first.focus();
-
   if (opts.fields && opts.fields.length) {
-    modal.addEventListener('keydown', function (e) {
+    modal.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
         e.preventDefault();
         var btns = actions.querySelectorAll('.btn');
-        if (btns.length) btns[btns.length - 1].click();
+        if (btns.length) btns[btns.length-1].click();
       }
     });
   }
-
   return { inputs: inputs, wraps: wraps };
 }
 
-function alertBox(title, text) {
-  openModal({ title: title, html: '<p>' + text + '</p>' });
-}
+function alertBox(title, text) { openModal({ title: title, html: '<p>' + text + '</p>' }); }
 function confirmBox(title, text, onYes) {
-  openModal({
-    title: title, html: '<p>' + text + '</p>',
-    buttons: [
-      { text: 'Отмена', className: 'btn-secondary' },
-      { text: 'Да', className: 'btn-danger', onClick: onYes }
-    ]
-  });
+  openModal({ title: title, html: '<p>' + text + '</p>',
+    buttons: [ { text:'Отмена', className:'btn-secondary' }, { text:'Да', className:'btn-danger', onClick:onYes } ] });
 }
 
-/* ============================================================
-   СОХРАНЕНИЕ
-   ============================================================ */
-function save() {
-  try { localStorage.setItem('sites_ide_v8', JSON.stringify(state)); } catch (e) {}
-}
+/* ============ СОХРАНЕНИЕ ============ */
+function save() { try { localStorage.setItem('sites_ide_v9', JSON.stringify(state)); } catch(e) {} }
 function load() {
   try {
-    var raw = localStorage.getItem('sites_ide_v8');
+    var raw = localStorage.getItem('sites_ide_v9');
     if (!raw) return;
     var data = JSON.parse(raw);
     if (data.settings) state.settings = Object.assign(state.settings, data.settings);
     if (data.blocks) state.blocks = data.blocks;
     if (data.jsFunctions) state.jsFunctions = data.jsFunctions;
-
-    state.blocks.forEach(function (b) {
+    state.blocks.forEach(function(b) {
       var def = BLOCK_DEFAULTS[b.type];
       if (!def) return;
-      Object.keys(def).forEach(function (k) { if (b[k] === undefined) b[k] = def[k]; });
+      Object.keys(def).forEach(function(k) { if (b[k] === undefined) b[k] = def[k]; });
       if (b.type !== 'button' && b.type !== 'link') delete b.onclick;
       if (b.anchor) b.anchor = cleanAnchor(b.anchor);
     });
-    state.jsFunctions.forEach(function (f) {
+    state.jsFunctions.forEach(function(f) {
       f.name = cleanFuncName(f.name);
       if (!f.actions) f.actions = [];
     });
-  } catch (e) {}
+  } catch(e) {}
 }
 
-/* ============================================================
-   РЕНДЕР БЛОКА
-   ============================================================ */
+/* ============ РЕНДЕР БЛОКА ============ */
 function renderBlockHTML(b) {
-  var hiddenStyle = b.hidden ? 'display:none;' : '';
-  var wrapperStyle = 'margin:8px 0;' + hiddenStyle;
   var a = cleanAnchor(b.anchor);
-  var anchorAttr = a ? ' id="' + esc(a) + '"' : '';
+  var idAttr = a ? ' id="' + esc(a) + '"' : '';
+  var display = b.hidden ? 'display:none;' : '';
+  var wrapperStyle = 'margin:8px 0;text-align:' + b.align + ';' + display;
+  var open = '<div' + idAttr + ' style="' + wrapperStyle + '">';
+  var close = '</div>';
 
   if (b.type === 'button') {
-    var btnStyle = 'background:' + b.bg + ';color:' + b.color + ';'
-      + 'padding:10px 24px;border:none;'
-      + 'border-radius:' + (b.rounded ? '30px' : '6px') + ';'
-      + 'cursor:pointer;font-size:16px;text-decoration:none;'
-      + 'display:inline-block;font-family:inherit;';
-
+    var btnStyle = 'background:' + b.bg + ';color:' + b.color + ';padding:10px 24px;border:none;border-radius:' + (b.rounded?'30px':'6px') + ';cursor:pointer;font-size:16px;text-decoration:none;display:inline-block;font-family:inherit;';
     var fn = cleanFuncName(b.onclick);
     if (fn) {
-      return '<div style="text-align:' + b.align + ';' + wrapperStyle + '">'
-        + '<button' + anchorAttr + ' style="' + btnStyle + '" onclick="' + fn + '()">'
-        + esc(b.text) + '</button></div>';
-    } else {
-      var href = b.link || '#';
-      return '<div style="text-align:' + b.align + ';' + wrapperStyle + '">'
-        + '<a' + anchorAttr + ' href="' + esc(href) + '" style="' + btnStyle + '">'
-        + esc(b.text) + '</a></div>';
+      return open + '<button style="' + btnStyle + '" onclick="' + fn + '.call(this)">' + esc(b.text) + '</button>' + close;
     }
+    var href = b.link || '#';
+    return open + '<a href="' + esc(href) + '" style="' + btnStyle + '">' + esc(b.text) + '</a>' + close;
   }
 
   if (b.type === 'text') {
-    return '<div style="text-align:' + b.align + ';' + wrapperStyle + '">'
-      + '<p' + anchorAttr + ' style="color:' + b.color + ';font-size:18px;margin:0;">'
-      + esc(b.text) + '</p></div>';
+    return open + '<p style="color:' + b.color + ';font-size:18px;margin:0;">' + esc(b.text) + '</p>' + close;
   }
 
   if (b.type === 'link') {
     var linkStyle = 'color:' + b.color + ';text-decoration:none;font-size:16px;';
-    var btnPart = '';
-    if (b.buttonMode) {
-      btnPart = 'background:' + b.bg + ';padding:10px 24px;'
-        + 'border-radius:' + (b.rounded ? '30px' : '6px') + ';display:inline-block;';
-    }
-
+    var btnPart = b.buttonMode ? 'background:' + b.bg + ';padding:10px 24px;border-radius:' + (b.rounded?'30px':'6px') + ';display:inline-block;' : '';
     var fn2 = cleanFuncName(b.onclick);
-    var href2, onclickAttr = '';
+    var href2, onClickAttr = '';
     if (fn2) {
       href2 = 'javascript:void(0)';
-      onclickAttr = ' onclick="' + fn2 + '()"';
+      onClickAttr = ' onclick="' + fn2 + '.call(this)"';
     } else {
       href2 = b.link || '#';
     }
-
-    return '<div style="text-align:' + b.align + ';' + wrapperStyle + '">'
-      + '<a' + anchorAttr + ' href="' + esc(href2) + '" style="' + linkStyle + btnPart + '"' + onclickAttr + '>'
-      + esc(b.text) + '</a></div>';
+    return open + '<a href="' + esc(href2) + '" style="' + linkStyle + btnPart + '"' + onClickAttr + '>' + esc(b.text) + '</a>' + close;
   }
 
   if (b.type === 'image') {
-    return '<div style="text-align:' + b.align + ';' + wrapperStyle + '">'
-      + '<img' + anchorAttr + ' src="' + esc(b.src) + '" alt="image" style="max-width:100%;border-radius:8px;">'
-      + '</div>';
+    return open + '<img src="' + esc(b.src) + '" alt="image" style="max-width:100%;border-radius:8px;">' + close;
   }
   return '';
 }
 
-/* ============================================================
-   JS КОД
-   ============================================================ */
+/* ============ ГЕНЕРАЦИЯ JS КОДА ============ */
 function actionToJS(a) {
   var sel = a.params.selector || 'this';
-
-  // ★ ФИКС: для #anchor и .class берем из values, для custom — из customSelector
+  var isTag = false;
+  var realSel = sel;
   if (sel === 'custom') {
-    sel = (a.params.customSelector || '').trim() || 'body';
+    realSel = (a.params.customSelector || '').trim() || 'body';
   } else if (sel === '#anchor') {
-    sel = '#' + cleanAnchor(a.params.anchorName || '');
-    if (sel === '#') sel = 'body';
+    var an = cleanAnchor(a.params.anchorName || '');
+    realSel = an ? '#' + an : 'body';
   } else if (sel === '.class') {
-    var cls = (a.params.className || '').trim().replace(/^\./, '').replace(/[^a-zA-Z0-9_-]/g, '');
-    sel = cls ? '.' + cls : 'body';
+    var cls = (a.params.className || '').trim().replace(/^\./,'').replace(/[^a-zA-Z0-9_-]/g,'');
+    realSel = cls ? '.' + cls : 'body';
+  } else if (sel === 'button' || sel === 'p' || sel === 'img' || sel === 'div' || sel === 'a') {
+    isTag = true;
+  }
+
+  var escaped = realSel.replace(/"/g,'\\"');
+
+  function codeColor(v) { return v + '.style.color = "' + (a.params.color||'#ff0000') + '";'; }
+  function codeBg(v) { return v + '.style.backgroundColor = "' + (a.params.bgcolor||'#ff0000') + '";'; }
+  function codeHide(v) { return v + '.style.display = "none";'; }
+  function codeShow(v) { return v + '.style.display = "";'; }
+  function codeToggle(v) { return v + '.style.display = (v.style.display === "none") ? "" : "none";'.replace(/v\./g, v + '.'); }
+
+  function wrapSingle(v) {
+    return 'var ' + v + ' = document.querySelector("' + escaped + '"); if (' + v + ') { ';
+  }
+  function wrapAll(fn) {
+    return 'document.querySelectorAll("' + escaped + '").forEach(function(el){ ' + fn('el') + ' });';
   }
 
   switch (a.type) {
-    case 'alert': return 'alert("' + escJS(a.params.msg || 'Hello!') + '");';
-    case 'console': return 'console.log("' + escJS(a.params.msg || 'Hello!') + '");';
+    case 'alert':
+      return 'alert("' + escJS(a.params.msg || 'Hello!') + '");';
+    case 'console':
+      return 'console.log("' + escJS(a.params.msg || 'Hello!') + '");';
     case 'color':
-      if (sel === 'this') return 'this.style.color = "' + a.params.color + '";';
-      return 'document.querySelector("' + sel.replace(/"/g, '\\"') + '").style.color = "' + a.params.color + '";';
+      if (sel === 'this') return codeColor('this');
+      if (isTag) return wrapAll(codeColor);
+      return wrapSingle('el') + codeColor('el') + ' }';
     case 'bgcolor':
-      if (sel === 'this') return 'this.style.backgroundColor = "' + a.params.bgcolor + '";';
-      return 'document.querySelector("' + sel.replace(/"/g, '\\"') + '").style.backgroundColor = "' + a.params.bgcolor + '";';
-    case 'redirect': return 'window.location.href = "' + escJS(a.params.url || '') + '";';
+      if (sel === 'this') return codeBg('this');
+      if (isTag) return wrapAll(codeBg);
+      return wrapSingle('el') + codeBg('el') + ' }';
     case 'hide':
-      if (sel === 'this') return 'this.style.display = "none";';
-      return 'document.querySelector("' + sel.replace(/"/g, '\\"') + '").style.display = "none";';
+      if (sel === 'this') return codeHide('this');
+      if (isTag) return wrapAll(codeHide);
+      return wrapSingle('el') + codeHide('el') + ' }';
     case 'show':
-      if (sel === 'this') return 'this.style.display = "";';
-      return 'document.querySelector("' + sel.replace(/"/g, '\\"') + '").style.display = "";';
+      if (sel === 'this') return codeShow('this');
+      if (isTag) return wrapAll(codeShow);
+      return wrapSingle('el') + codeShow('el') + ' }';
     case 'toggle':
       if (sel === 'this') return 'this.style.display = (this.style.display === "none") ? "" : "none";';
-      return 'var el = document.querySelector("' + sel.replace(/"/g, '\\"') + '"); if (el) el.style.display = (el.style.display === "none") ? "" : "none";';
-    case 'custom': return a.params.code || '// пусто';
-    case 'var_declare': return (a.params.varType || 'let') + ' ' + a.params.name + ' = ' + a.params.value + ';';
-    case 'var_set': return a.params.name + ' = ' + a.params.value + ';';
+      if (isTag) return wrapAll(codeToggle);
+      return wrapSingle('el') + codeToggle('el') + ' }';
+    case 'redirect':
+      return 'window.location.href = "' + escJS(a.params.url || '') + '";';
+    case 'custom':
+      return a.params.code || '// пусто';
+    case 'var_declare':
+      var val = (a.params.value === '' || a.params.value === undefined) ? '0' : a.params.value;
+      return (a.params.varType || 'let') + ' ' + a.params.name + ' = ' + val + ';';
+    case 'var_set':
+      var val2 = (a.params.value === '' || a.params.value === undefined) ? '0' : a.params.value;
+      return a.params.name + ' = ' + val2 + ';';
     case 'var_math':
       if (a.params.operator === '++') return a.params.name + '++;';
       if (a.params.operator === '--') return a.params.name + '--;';
-      return a.params.name + ' ' + a.params.operator + '= ' + a.params.value + ';';
-    case 'var_alert': return 'alert(' + a.params.name + ');';
-    case 'if': return 'if (' + a.params.left + ' ' + a.params.operator + ' ' + a.params.right + ') { alert("' + escJS(a.params.thenMsg || 'OK') + '"); }';
-    case 'wait': return 'setTimeout(function() {}, ' + a.params.ms + ');';
+      var val3 = (a.params.value === '' || a.params.value === undefined) ? '0' : a.params.value;
+      return a.params.name + ' ' + a.params.operator + '= ' + val3 + ';';
+    case 'var_alert':
+      return 'alert(' + a.params.name + ');';
+    case 'if':
+      return 'if (' + a.params.left + ' ' + a.params.operator + ' ' + a.params.right + ') { alert("' + escJS(a.params.thenMsg || 'OK') + '"); }';
+    case 'wait':
+      var ms = parseInt(a.params.ms, 10);
+      if (isNaN(ms) || ms < 0) ms = 1000;
+      return 'setTimeout(function() {}, ' + ms + ');';
   }
   return '// ' + a.type;
 }
@@ -527,9 +467,7 @@ function generateAllFuncs() {
   return state.jsFunctions.map(generateFuncCode).join('\n\n');
 }
 
-/* ============================================================
-   ПРЕДПРОСМОТР (с глобальными настройками)
-   ============================================================ */
+/* ============ ПРЕДПРОСМОТР ============ */
 function updatePreview() {
   var iframe = document.getElementById('preview');
   var doc = iframe.contentDocument || iframe.contentWindow.document;
@@ -546,20 +484,12 @@ function updatePreview() {
   doc.close();
 }
 
-/* ============================================================
-   СПИСОК БЛОКОВ + DnD
-   ============================================================ */
-var dragFrom = -1;
-var dndBound = {};
-
+/* ============ СПИСОК БЛОКОВ ============ */
 function updateBlockList() {
   var c = document.getElementById('blockList');
-  if (!state.blocks.length) {
-    c.innerHTML = '<div class="empty">Нет блоков</div>';
-    return;
-  }
+  if (!state.blocks.length) { c.innerHTML = '<div class="empty">Нет блоков</div>'; return; }
   var html = '';
-  state.blocks.forEach(function (b, i) {
+  state.blocks.forEach(function(b, i) {
     var cls = 'list-item' + (i === selectedBlockIndex ? ' active' : '');
     var tags = '';
     if (b.hidden) tags += '<span class="tag tag-hidden">👻</span>';
@@ -568,53 +498,18 @@ function updateBlockList() {
       if (fn) tags += '<span class="tag tag-func">⚡' + esc(fn) + '</span>';
     }
     var lbl = b.text || b.src || '';
-    html += '<div class="' + cls + '" draggable="true" data-i="' + i + '" onclick="selectBlock(' + i + ')">'
-      + '<span class="handle">⋮⋮</span>'
+    html += '<div class="' + cls + '" onclick="selectBlock(' + i + ')">'
       + '<span class="text">' + esc(b.type.toUpperCase() + ' ' + (i+1) + ': ' + lbl) + '</span>'
       + tags
       + '<button class="del" onclick="event.stopPropagation();deleteBlock(' + i + ')">✕</button>'
       + '</div>';
   });
   c.innerHTML = html;
-
-  if (!dndBound.blocks) {
-    dndBound.blocks = true;
-    c.addEventListener('dragstart', function (e) {
-      var item = e.target.closest('.list-item');
-      if (!item) return;
-      dragFrom = parseInt(item.dataset.i);
-      item.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    c.addEventListener('dragend', function () {
-      c.querySelectorAll('.list-item').forEach(function (it) { it.classList.remove('dragging','drag-over'); });
-    });
-    c.addEventListener('dragover', function (e) {
-      e.preventDefault();
-      var item = e.target.closest('.list-item');
-      if (!item) return;
-      if (parseInt(item.dataset.i) === dragFrom) return;
-      c.querySelectorAll('.list-item').forEach(function (it) { it.classList.remove('drag-over'); });
-      item.classList.add('drag-over');
-    });
-    c.addEventListener('drop', function (e) {
-      e.preventDefault();
-      var item = e.target.closest('.list-item');
-      if (!item) return;
-      var to = parseInt(item.dataset.i);
-      if (dragFrom === -1 || to === dragFrom) return;
-      var m = state.blocks.splice(dragFrom, 1)[0];
-      state.blocks.splice(to, 0, m);
-      selectedBlockIndex = to;
-      dragFrom = -1;
-      save(); renderAll();
-    });
-  }
 }
 
 function addBlock(type) {
   var b = { type: type };
-  Object.keys(BLOCK_DEFAULTS[type]).forEach(function (k) { b[k] = BLOCK_DEFAULTS[type][k]; });
+  Object.keys(BLOCK_DEFAULTS[type]).forEach(function(k) { b[k] = BLOCK_DEFAULTS[type][k]; });
   state.blocks.push(b);
   selectedBlockIndex = state.blocks.length - 1;
   save(); renderAll();
@@ -631,9 +526,7 @@ function selectBlock(i) {
   showBlockParams(i);
 }
 
-/* ============================================================
-   ПАРАМЕТРЫ БЛОКА
-   ============================================================ */
+/* ============ ПАРАМЕТРЫ БЛОКА ============ */
 function showBlockParams(i) {
   var b = state.blocks[i];
   if (!b) return;
@@ -641,15 +534,13 @@ function showBlockParams(i) {
   var h = '<div class="params"><h4>⚙️ ' + b.type.toUpperCase() + '</h4>';
 
   if (b.type === 'image') {
-    h += '<div class="field"><label>URL картинки</label>'
-      + '<input type="text" value="' + esc(b.src) + '" onchange="setProp(' + i + ',\'src\',this.value)"></div>';
+    h += '<div class="field"><label>URL картинки</label><input type="text" value="' + esc(b.src) + '" onchange="setProp(' + i + ',\'src\',this.value)"></div>';
   } else {
-    h += '<div class="field"><label>Текст</label>'
-      + '<input type="text" value="' + esc(b.text) + '" onchange="setProp(' + i + ',\'text\',this.value)"></div>';
+    h += '<div class="field"><label>Текст</label><input type="text" value="' + esc(b.text) + '" onchange="setProp(' + i + ',\'text\',this.value)"></div>';
   }
 
   h += '<div class="field"><label>Выравнивание</label><div class="align-row">';
-  ['left','center','right'].forEach(function (a) {
+  ['left','center','right'].forEach(function(a) {
     var act = (b.align === a) ? ' active' : '';
     var icon = a === 'left' ? '◀️' : (a === 'center' ? '🔘' : '▶️');
     h += '<button type="button" class="' + act.trim() + '" onclick="setProp(' + i + ',\'align\',\'' + a + '\')">' + icon + '</button>';
@@ -657,12 +548,10 @@ function showBlockParams(i) {
   h += '</div></div>';
 
   if (b.type === 'button' || b.type === 'text' || (b.type === 'link' && b.buttonMode)) {
-    h += '<div class="field"><label>Цвет текста</label>'
-      + '<input type="color" value="' + b.color + '" onchange="setProp(' + i + ',\'color\',this.value)"></div>';
+    h += '<div class="field"><label>Цвет текста</label><input type="color" value="' + b.color + '" onchange="setProp(' + i + ',\'color\',this.value)"></div>';
   }
   if (b.type === 'button' || (b.type === 'link' && b.buttonMode)) {
-    h += '<div class="field"><label>Цвет фона</label>'
-      + '<input type="color" value="' + b.bg + '" onchange="setProp(' + i + ',\'bg\',this.value)"></div>';
+    h += '<div class="field"><label>Цвет фона</label><input type="color" value="' + b.bg + '" onchange="setProp(' + i + ',\'bg\',this.value)"></div>';
   }
   if (b.type === 'button' || b.type === 'link') {
     h += '<label class="check"><input type="checkbox" ' + (b.rounded?'checked':'') + ' onchange="setProp(' + i + ',\'rounded\',this.checked)"> Скруглённая</label>';
@@ -671,20 +560,14 @@ function showBlockParams(i) {
     h += '<label class="check"><input type="checkbox" ' + (b.buttonMode?'checked':'') + ' onchange="setProp(' + i + ',\'buttonMode\',this.checked)"> Кнопочный вид</label>';
   }
 
-  h += '<div class="field" style="margin-top:10px;"><label>Якорь (id)</label>'
-    + '<input type="text" value="' + esc(b.anchor) + '" onchange="setProp(' + i + ',\'anchor\',this.value)" placeholder="myAnchor">'
-    + '<div class="hint">Только латиница, цифры, _ и -. Без # в начале.</div></div>';
+  h += '<div class="field" style="margin-top:10px;"><label>Якорь (id)</label><input type="text" value="' + esc(b.anchor) + '" onchange="setProp(' + i + ',\'anchor\',this.value)" placeholder="myAnchor"><div class="hint">Латиница, цифры, _ и -. Без #.</div></div>';
 
   if (b.type === 'button' || b.type === 'link') {
-    h += '<div class="section-divider"><div class="section-title link">🔗 Ссылка</div>'
-      + '<div class="field"><input type="text" value="' + esc(b.link) + '" onchange="setProp(' + i + ',\'link\',this.value)" placeholder="https://example.com или #anchor">'
-      + '<div class="hint">Оставь пустым, если нужна только функция</div></div></div>';
+    h += '<div class="section-divider"><div class="section-title link">🔗 Ссылка</div><div class="field"><input type="text" value="' + esc(b.link) + '" onchange="setProp(' + i + ',\'link\',this.value)" placeholder="https://example.com"><div class="hint">Оставь пустым, если нужна только функция</div></div></div>';
   }
 
   if (b.type === 'button' || b.type === 'link') {
-    h += '<div class="section-divider"><div class="section-title func">⚡ Функция при клике</div>'
-      + '<div class="field"><input type="text" value="' + esc(cleanFuncName(b.onclick)) + '" onchange="setProp(' + i + ',\'onclick\',this.value)" placeholder="myFunction" list="funcNamesList">'
-      + '<div class="hint">Имя JS-функции без скобок</div></div></div>';
+    h += '<div class="section-divider"><div class="section-title func">⚡ Функция при клике</div><div class="field"><input type="text" value="' + esc(cleanFuncName(b.onclick)) + '" onchange="setProp(' + i + ',\'onclick\',this.value)" placeholder="myFunction" list="funcNamesList"><div class="hint">Имя функции без скобок</div></div></div>';
   }
 
   h += '<label class="check" style="margin-top:12px;"><input type="checkbox" ' + (b.hidden?'checked':'') + ' onchange="setProp(' + i + ',\'hidden\',this.checked)"> 👻 Невидимый при загрузке</label>';
@@ -699,14 +582,12 @@ function setProp(i, key, val) {
   save();
   updatePreview();
   updateBlockList();
-  if (key === 'align' || key === 'rounded' || key === 'buttonMode' || key === 'anchor') {
+  if (key === 'align' || key === 'rounded' || key === 'buttonMode' || key === 'anchor' || key === 'hidden') {
     showBlockParams(i);
   }
 }
 
-/* ============================================================
-   ВКЛАДКИ
-   ============================================================ */
+/* ============ ВКЛАДКИ ============ */
 function switchTab(tab) {
   document.getElementById('ifaceTab').classList.toggle('hidden', tab !== 'iface');
   document.getElementById('logicTab').classList.toggle('hidden', tab !== 'logic');
@@ -715,25 +596,16 @@ function switchTab(tab) {
   if (tab === 'logic') updateFuncList();
 }
 
-/* ============================================================
-   ФУНКЦИИ
-   ============================================================ */
+/* ============ ФУНКЦИИ ============ */
 function updateFuncList() {
   var c = document.getElementById('funcList');
   var dl = document.getElementById('funcNamesList');
-  dl.innerHTML = state.jsFunctions.map(function (f) { return '<option value="' + esc(f.name) + '">'; }).join('');
-
-  if (!state.jsFunctions.length) {
-    c.innerHTML = '<div class="empty">Нет функций</div>';
-    return;
-  }
+  dl.innerHTML = state.jsFunctions.map(function(f) { return '<option value="' + esc(f.name) + '">'; }).join('');
+  if (!state.jsFunctions.length) { c.innerHTML = '<div class="empty">Нет функций</div>'; return; }
   var html = '';
-  state.jsFunctions.forEach(function (f, i) {
+  state.jsFunctions.forEach(function(f, i) {
     var cls = 'list-item' + (i === selectedFuncIndex ? ' active' : '');
-    html += '<div class="' + cls + '" onclick="openFuncEditor(' + i + ')">'
-      + '<span class="text">⚡ ' + esc(f.name) + ' (' + f.actions.length + ')</span>'
-      + '<button class="del" onclick="event.stopPropagation();deleteFunc(' + i + ')">✕</button>'
-      + '</div>';
+    html += '<div class="' + cls + '" onclick="openFuncEditor(' + i + ')"><span class="text">⚡ ' + esc(f.name) + ' (' + f.actions.length + ')</span><button class="del" onclick="event.stopPropagation();deleteFunc(' + i + ')">✕</button></div>';
   });
   c.innerHTML = html;
 }
@@ -741,15 +613,15 @@ function updateFuncList() {
 function addFunction() {
   openModal({
     title: '➕ Новая функция',
-    fields: [{ name: 'name', label: 'Имя', value: 'myFunction', placeholder: 'myFunction' }],
+    fields: [{ name:'name', label:'Имя', value:'myFunction' }],
     buttons: [
-      { text: 'Отмена', className: 'btn-secondary' },
-      { text: 'Создать', className: 'btn-success', onClick: function (v) {
+      { text:'Отмена', className:'btn-secondary' },
+      { text:'Создать', className:'btn-success', onClick: function(v) {
         var name = cleanFuncName(v.name);
-        if (!name) { alertBox('Ошибка', 'Пустое имя'); return true; }
-        if (!validFuncName(name)) { alertBox('Ошибка', 'Невалидное имя'); return true; }
-        if (state.jsFunctions.some(function (f) { return f.name === name; })) { alertBox('Ошибка', 'Уже есть'); return true; }
-        state.jsFunctions.push({ name: name, actions: [] });
+        if (!name) { alertBox('Ошибка','Пустое имя'); return true; }
+        if (!validFuncName(name)) { alertBox('Ошибка','Невалидное имя'); return true; }
+        if (state.jsFunctions.some(function(f){ return f.name === name; })) { alertBox('Ошибка','Уже есть'); return true; }
+        state.jsFunctions.push({ name:name, actions:[] });
         selectedFuncIndex = state.jsFunctions.length - 1;
         save(); updateFuncList(); openFuncEditor(selectedFuncIndex);
       }}
@@ -773,43 +645,28 @@ function renameFunction(newName) {
   newName = cleanFuncName(newName);
   var oldName = state.jsFunctions[selectedFuncIndex].name;
   if (!newName || newName === oldName) return;
-  if (!validFuncName(newName)) {
-    alertBox('Ошибка', 'Недопустимое имя');
-    document.getElementById('funcName').value = oldName;
-    return;
-  }
-  if (state.jsFunctions.some(function (f, idx) { return idx !== selectedFuncIndex && f.name === newName; })) {
-    alertBox('Ошибка', 'Уже есть');
-    document.getElementById('funcName').value = oldName;
-    return;
-  }
+  if (!validFuncName(newName)) { alertBox('Ошибка','Недопустимое имя'); document.getElementById('funcName').value = oldName; return; }
+  if (state.jsFunctions.some(function(f,idx){ return idx !== selectedFuncIndex && f.name === newName; })) { alertBox('Ошибка','Уже есть'); document.getElementById('funcName').value = oldName; return; }
   state.jsFunctions[selectedFuncIndex].name = newName;
-  state.blocks.forEach(function (b) {
-    if ((b.type === 'button' || b.type === 'link') && cleanFuncName(b.onclick) === oldName) {
-      b.onclick = newName;
-    }
+  state.blocks.forEach(function(b) {
+    if ((b.type === 'button' || b.type === 'link') && cleanFuncName(b.onclick) === oldName) b.onclick = newName;
   });
   save(); updatePreview(); updateBlockList(); updateFuncList(); refreshCode();
 }
 
 function deleteFunc(i) {
   var name = state.jsFunctions[i].name;
-  confirmBox('Удалить функцию?', 'Функция "' + esc(name) + '" будет удалена.', function () {
-    state.blocks.forEach(function (b) {
+  confirmBox('Удалить?', 'Функция "' + esc(name) + '" будет удалена.', function() {
+    state.blocks.forEach(function(b) {
       if ((b.type === 'button' || b.type === 'link') && cleanFuncName(b.onclick) === name) b.onclick = '';
     });
     state.jsFunctions.splice(i, 1);
-    if (selectedFuncIndex === i) {
-      selectedFuncIndex = -1;
-      document.getElementById('funcEditor').classList.add('hidden');
-    } else if (selectedFuncIndex > i) selectedFuncIndex--;
+    if (selectedFuncIndex === i) { selectedFuncIndex = -1; document.getElementById('funcEditor').classList.add('hidden'); }
+    else if (selectedFuncIndex > i) selectedFuncIndex--;
     save(); renderAll();
   });
 }
-function deleteFunction() {
-  if (selectedFuncIndex === -1) return;
-  deleteFunc(selectedFuncIndex);
-}
+function deleteFunction() { if (selectedFuncIndex === -1) return; deleteFunc(selectedFuncIndex); }
 
 function refreshCode() {
   var box = document.getElementById('codeBox');
@@ -817,32 +674,30 @@ function refreshCode() {
   box.textContent = generateFuncCode(state.jsFunctions[selectedFuncIndex]);
 }
 
-/* ============================================================
-   ДЕЙСТВИЯ
-   ============================================================ */
+/* ============ ДЕЙСТВИЯ ============ */
 var ACTION_DEFAULTS = {
-  alert: { msg: 'Hello!' },
-  console: { msg: 'Hello console!' },
-  color: { selector: 'this', color: '#ff0000', customSelector: '', anchorName: '', className: '' },
-  bgcolor: { selector: 'this', bgcolor: '#ff0000', customSelector: '', anchorName: '', className: '' },
-  redirect: { url: 'https://example.com' },
-  hide: { selector: 'this', customSelector: '', anchorName: '', className: '' },
-  show: { selector: 'this', customSelector: '', anchorName: '', className: '' },
-  toggle: { selector: 'this', customSelector: '', anchorName: '', className: '' },
-  custom: { code: '// ваш код' },
-  var_declare: { varType: 'let', name: 'myVar', value: '10' },
-  var_set: { name: 'myVar', value: '20' },
-  var_math: { name: 'myVar', operator: '+', value: '5' },
-  var_alert: { name: 'myVar' },
-  if: { left: 'myVar', operator: '==', right: '10', thenMsg: 'OK' },
-  wait: { ms: '1000' }
+  alert: { msg:'Hello!' },
+  console: { msg:'Hello console!' },
+  color: { selector:'this', color:'#ff0000', customSelector:'', anchorName:'', className:'' },
+  bgcolor: { selector:'this', bgcolor:'#ff0000', customSelector:'', anchorName:'', className:'' },
+  redirect: { url:'https://example.com' },
+  hide: { selector:'this', customSelector:'', anchorName:'', className:'' },
+  show: { selector:'this', customSelector:'', anchorName:'', className:'' },
+  toggle: { selector:'this', customSelector:'', anchorName:'', className:'' },
+  custom: { code:'// ваш код' },
+  var_declare: { varType:'let', name:'myVar', value:'10' },
+  var_set: { name:'myVar', value:'20' },
+  var_math: { name:'myVar', operator:'+', value:'5' },
+  var_alert: { name:'myVar' },
+  if: { left:'myVar', operator:'==', right:'10', thenMsg:'OK' },
+  wait: { ms:'1000' }
 };
 
 function addAction(type) {
-  if (selectedFuncIndex === -1) { alertBox('Внимание', 'Выберите функцию'); return; }
+  if (selectedFuncIndex === -1) { alertBox('Внимание','Выберите функцию'); return; }
   var params = {};
-  Object.keys(ACTION_DEFAULTS[type]).forEach(function (k) { params[k] = ACTION_DEFAULTS[type][k]; });
-  state.jsFunctions[selectedFuncIndex].actions.push({ type: type, params: params });
+  Object.keys(ACTION_DEFAULTS[type]).forEach(function(k) { params[k] = ACTION_DEFAULTS[type][k]; });
+  state.jsFunctions[selectedFuncIndex].actions.push({ type:type, params:params });
   save(); updateActionList(); refreshCode();
   editAction(state.jsFunctions[selectedFuncIndex].actions.length - 1);
 }
@@ -859,16 +714,15 @@ function updateActionList() {
   var actions = state.jsFunctions[selectedFuncIndex].actions;
   if (!actions.length) { c.innerHTML = '<div class="empty">Нет действий</div>'; return; }
   var html = '';
-  actions.forEach(function (a, i) {
+  actions.forEach(function(a, i) {
     var icon = '📝', label = a.type, p = a.params;
     var selLabel = p.selector || 'this';
     if (selLabel === 'custom') selLabel = p.customSelector || '?';
     else if (selLabel === '#anchor') selLabel = '#' + (p.anchorName || '?');
     else if (selLabel === '.class') selLabel = '.' + (p.className || '?');
-
     switch (a.type) {
-      case 'alert': icon = '💬'; label = 'Alert: "' + (p.msg || '') + '"'; break;
-      case 'console': icon = '🖥️'; label = 'Console: "' + (p.msg || '') + '"'; break;
+      case 'alert': icon = '💬'; label = 'Alert: "' + (p.msg||'') + '"'; break;
+      case 'console': icon = '🖥️'; label = 'Console: "' + (p.msg||'') + '"'; break;
       case 'color': icon = '🎨'; label = 'Цвет "' + selLabel + '" → ' + p.color; break;
       case 'bgcolor': icon = '🖌️'; label = 'Фон "' + selLabel + '" → ' + p.bgcolor; break;
       case 'redirect': icon = '🔗'; label = 'Переход: ' + p.url; break;
@@ -883,34 +737,27 @@ function updateActionList() {
       case 'if': icon = '❓'; label = 'if (' + p.left + ' ' + p.operator + ' ' + p.right + ')'; break;
       case 'wait': icon = '⏱️'; label = 'Ждать ' + p.ms + ' мс'; break;
     }
-    html += '<div class="list-item" onclick="editAction(' + i + ')">'
-      + '<span class="text">' + icon + ' ' + esc(label) + '</span>'
-      + '<button class="del" onclick="event.stopPropagation();deleteAction(' + i + ')">✕</button>'
-      + '</div>';
+    html += '<div class="list-item" onclick="editAction(' + i + ')"><span class="text">' + icon + ' ' + esc(label) + '</span><button class="del" onclick="event.stopPropagation();deleteAction(' + i + ')">✕</button></div>';
   });
   c.innerHTML = html;
 }
 
-/* ============================================================
-   РЕДАКТОР ДЕЙСТВИЯ — ★ ГЛАВНЫЙ ФИКС ★
-   Поле для ввода показывается в зависимости от выбранного селектора
-   ============================================================ */
+/* ============ РЕДАКТОР ДЕЙСТВИЯ ============ */
 function editAction(i) {
   if (selectedFuncIndex === -1) return;
   var a = state.jsFunctions[selectedFuncIndex].actions[i];
   if (!a) return;
-
   var curSel = a.params.selector || 'this';
 
   var selectorOptions = [
-    { value: 'this',  text: '🖱️ this — сам элемент' },
-    { value: 'body',  text: 'body — вся страница' },
-    { value: '#anchor', text: '#anchor — по id (якорю)' },
-    { value: '.class',  text: '.class — по классу' },
-    { value: 'button',  text: 'button — все кнопки' },
-    { value: 'p',       text: 'p — все параграфы' },
-    { value: 'img',     text: 'img — все картинки' },
-    { value: 'custom',  text: '✏️ Свой селектор' }
+    { value:'this',  text:'🖱️ this — сам элемент' },
+    { value:'body',  text:'body — вся страница' },
+    { value:'#anchor', text:'#anchor — по id (якорю)' },
+    { value:'.class',  text:'.class — по классу' },
+    { value:'button',  text:'button — все кнопки' },
+    { value:'p',       text:'p — все параграфы' },
+    { value:'img',     text:'img — все картинки' },
+    { value:'custom',  text:'✏️ Свой селектор' }
   ];
 
   var title = '', fields = [], html = '', hasSelector = false;
@@ -918,321 +765,234 @@ function editAction(i) {
   switch (a.type) {
     case 'alert':
       title = '💬 Alert';
-      fields = [{ name: 'msg', label: 'Текст', value: a.params.msg || '' }];
+      fields = [{ name:'msg', label:'Текст', value:a.params.msg || '' }];
       break;
     case 'console':
       title = '🖥️ Console';
-      fields = [{ name: 'msg', label: 'Текст', value: a.params.msg || '' }];
+      fields = [{ name:'msg', label:'Текст', value:a.params.msg || '' }];
       break;
-
-    // ★ ФИКС: три отдельных поля для #anchor, .class, custom — показываются по выбору
     case 'color':
       title = '🎨 Цвет текста'; hasSelector = true;
       fields = [
-        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: curSel },
-        { name: 'anchorName', label: '📌 Имя якоря (id)', value: a.params.anchorName || '', placeholder: 'myAnchor',
-          hint: 'Для варианта «#anchor» — введи сюда id элемента. Решётку писать не нужно.' },
-        { name: 'className', label: '🏷️ Имя класса', value: a.params.className || '', placeholder: 'myClass',
-          hint: 'Для варианта «.class» — введи имя класса без точки.' },
-        { name: 'customSelector', label: '✏️ Свой CSS-селектор', value: a.params.customSelector || '', placeholder: '#myBtn или .card',
-          hint: 'Для варианта «Свой селектор» — введи любой CSS-селектор.' },
-        { name: 'color', label: 'Цвет', type: 'color', value: a.params.color || '#ff0000' }
+        { name:'selector', label:'Элемент', type:'select', options:selectorOptions, value:curSel },
+        { name:'anchorName', label:'📌 Имя якоря (id)', value:a.params.anchorName || '', placeholder:'myAnchor', hint:'Без #' },
+        { name:'className', label:'🏷️ Имя класса', value:a.params.className || '', placeholder:'myClass', hint:'Без точки' },
+        { name:'customSelector', label:'✏️ Свой CSS-селектор', value:a.params.customSelector || '', placeholder:'#myBtn или .card' },
+        { name:'color', label:'Цвет', type:'color', value:a.params.color || '#ff0000' }
       ];
       break;
     case 'bgcolor':
       title = '🖌️ Цвет фона'; hasSelector = true;
       fields = [
-        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: curSel },
-        { name: 'anchorName', label: '📌 Имя якоря (id)', value: a.params.anchorName || '', placeholder: 'myAnchor',
-          hint: 'Для варианта «#anchor».' },
-        { name: 'className', label: '🏷️ Имя класса', value: a.params.className || '', placeholder: 'myClass',
-          hint: 'Для варианта «.class».' },
-        { name: 'customSelector', label: '✏️ Свой CSS-селектор', value: a.params.customSelector || '', placeholder: '#myBtn или .card',
-          hint: 'Для варианта «Свой селектор».' },
-        { name: 'bgcolor', label: 'Цвет фона', type: 'color', value: a.params.bgcolor || '#ff0000' }
+        { name:'selector', label:'Элемент', type:'select', options:selectorOptions, value:curSel },
+        { name:'anchorName', label:'📌 Имя якоря (id)', value:a.params.anchorName || '', placeholder:'myAnchor' },
+        { name:'className', label:'🏷️ Имя класса', value:a.params.className || '', placeholder:'myClass' },
+        { name:'customSelector', label:'✏️ Свой CSS-селектор', value:a.params.customSelector || '' },
+        { name:'bgcolor', label:'Цвет фона', type:'color', value:a.params.bgcolor || '#ff0000' }
       ];
       break;
     case 'redirect':
       title = '🔗 Переход';
-      fields = [{ name: 'url', label: 'URL', value: a.params.url || '' }];
+      fields = [{ name:'url', label:'URL', value:a.params.url || '' }];
       break;
     case 'hide':
       title = '👻 Скрыть'; hasSelector = true;
       fields = [
-        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: curSel },
-        { name: 'anchorName', label: '📌 Имя якоря (id)', value: a.params.anchorName || '', placeholder: 'myAnchor' },
-        { name: 'className', label: '🏷️ Имя класса', value: a.params.className || '', placeholder: 'myClass' },
-        { name: 'customSelector', label: '✏️ Свой CSS-селектор', value: a.params.customSelector || '' }
+        { name:'selector', label:'Элемент', type:'select', options:selectorOptions, value:curSel },
+        { name:'anchorName', label:'📌 Имя якоря (id)', value:a.params.anchorName || '', placeholder:'myAnchor' },
+        { name:'className', label:'🏷️ Имя класса', value:a.params.className || '', placeholder:'myClass' },
+        { name:'customSelector', label:'✏️ Свой CSS-селектор', value:a.params.customSelector || '' }
       ];
       break;
     case 'show':
       title = '👀 Показать'; hasSelector = true;
       fields = [
-        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: curSel },
-        { name: 'anchorName', label: '📌 Имя якоря (id)', value: a.params.anchorName || '', placeholder: 'myAnchor' },
-        { name: 'className', label: '🏷️ Имя класса', value: a.params.className || '', placeholder: 'myClass' },
-        { name: 'customSelector', label: '✏️ Свой CSS-селектор', value: a.params.customSelector || '' }
+        { name:'selector', label:'Элемент', type:'select', options:selectorOptions, value:curSel },
+        { name:'anchorName', label:'📌 Имя якоря (id)', value:a.params.anchorName || '', placeholder:'myAnchor' },
+        { name:'className', label:'🏷️ Имя класса', value:a.params.className || '', placeholder:'myClass' },
+        { name:'customSelector', label:'✏️ Свой CSS-селектор', value:a.params.customSelector || '' }
       ];
       break;
     case 'toggle':
       title = '🔄 Переключить'; hasSelector = true;
       fields = [
-        { name: 'selector', label: 'Элемент', type: 'select', options: selectorOptions, value: curSel },
-        { name: 'anchorName', label: '📌 Имя якоря (id)', value: a.params.anchorName || '', placeholder: 'myAnchor' },
-        { name: 'className', label: '🏷️ Имя класса', value: a.params.className || '', placeholder: 'myClass' },
-        { name: 'customSelector', label: '✏️ Свой CSS-селектор', value: a.params.customSelector || '' }
+        { name:'selector', label:'Элемент', type:'select', options:selectorOptions, value:curSel },
+        { name:'anchorName', label:'📌 Имя якоря (id)', value:a.params.anchorName || '', placeholder:'myAnchor' },
+        { name:'className', label:'🏷️ Имя класса', value:a.params.className || '', placeholder:'myClass' },
+        { name:'customSelector', label:'✏️ Свой CSS-селектор', value:a.params.customSelector || '' }
       ];
       break;
     case 'custom':
       title = '✏️ Свой код';
       html = '<p>JavaScript. <code>this</code> — текущий элемент.</p>';
-      fields = [{ name: 'code', label: 'Код', type: 'textarea', value: a.params.code || '' }];
+      fields = [{ name:'code', label:'Код', type:'textarea', value:a.params.code || '' }];
       break;
     case 'var_declare':
       title = '📦 Создать переменную';
       fields = [
-        { name: 'varType', label: 'Тип', type: 'select',
-          options: [{value:'let',text:'let'},{value:'const',text:'const'},{value:'var',text:'var'}],
-          value: a.params.varType || 'let' },
-        { name: 'name', label: 'Имя', value: a.params.name || 'myVar' },
-        { name: 'value', label: 'Значение', value: a.params.value || '10' }
+        { name:'varType', label:'Тип', type:'select', options:[{value:'let',text:'let'},{value:'const',text:'const'},{value:'var',text:'var'}], value:a.params.varType || 'let' },
+        { name:'name', label:'Имя', value:a.params.name || 'myVar' },
+        { name:'value', label:'Значение', value:a.params.value || '10' }
       ];
       break;
     case 'var_set':
       title = '✏️ Изменить переменную';
       fields = [
-        { name: 'name', label: 'Имя', value: a.params.name || 'myVar' },
-        { name: 'value', label: 'Значение', value: a.params.value || '20' }
+        { name:'name', label:'Имя', value:a.params.name || 'myVar' },
+        { name:'value', label:'Значение', value:a.params.value || '20' }
       ];
       break;
     case 'var_math':
       title = '➕ Математика';
       fields = [
-        { name: 'name', label: 'Имя', value: a.params.name || 'myVar' },
-        { name: 'operator', label: 'Операция', type: 'select',
-          options: [{value:'+',text:'+'},{value:'-',text:'-'},{value:'*',text:'*'},{value:'/',text:'/'},{value:'++',text:'++'},{value:'--',text:'--'}],
-          value: a.params.operator || '+' },
-        { name: 'value', label: 'Число', value: a.params.value || '5' }
+        { name:'name', label:'Имя', value:a.params.name || 'myVar' },
+        { name:'operator', label:'Операция', type:'select', options:[{value:'+',text:'+'},{value:'-',text:'-'},{value:'*',text:'*'},{value:'/',text:'/'},{value:'++',text:'++'},{value:'--',text:'--'}], value:a.params.operator || '+' },
+        { name:'value', label:'Число', value:a.params.value || '5' }
       ];
       break;
     case 'var_alert':
       title = '💬 Alert с переменной';
-      fields = [{ name: 'name', label: 'Имя', value: a.params.name || 'myVar' }];
+      fields = [{ name:'name', label:'Имя', value:a.params.name || 'myVar' }];
       break;
     case 'if':
       title = '❓ Условие';
       fields = [
-        { name: 'left', label: 'Левая часть', value: a.params.left || 'myVar' },
-        { name: 'operator', label: 'Оператор', type: 'select',
-          options: [{value:'==',text:'=='},{value:'!=',text:'!='},{value:'>',text:'>'},{value:'<',text:'<'},{value:'>=',text:'>='},{value:'<=',text:'<='}],
-          value: a.params.operator || '==' },
-        { name: 'right', label: 'Правая часть', value: a.params.right || '10' },
-        { name: 'thenMsg', label: 'Сообщение', value: a.params.thenMsg || 'OK' }
+        { name:'left', label:'Левая часть', value:a.params.left || 'myVar' },
+        { name:'operator', label:'Оператор', type:'select', options:[{value:'==',text:'=='},{value:'!=',text:'!='},{value:'>',text:'>'},{value:'<',text:'<'},{value:'>=',text:'>='},{value:'<=',text:'<='}], value:a.params.operator || '==' },
+        { name:'right', label:'Правая часть', value:a.params.right || '10' },
+        { name:'thenMsg', label:'Сообщение', value:a.params.thenMsg || 'OK' }
       ];
       break;
     case 'wait':
       title = '⏱️ Задержка';
-      fields = [{ name: 'ms', label: 'Мс (1000 = 1 сек)', value: a.params.ms || '1000' }];
+      fields = [{ name:'ms', label:'Мс (1000 = 1 сек)', value:a.params.ms || '1000' }];
       break;
   }
 
   var refs = openModal({
     title: title, html: html, fields: fields,
     buttons: [
-      { text: 'Отмена', className: 'btn-secondary' },
-      { text: 'Сохранить', className: 'btn-success', onClick: function (v) {
-        // Валидация заполнения соответствующего поля
+      { text:'Отмена', className:'btn-secondary' },
+      { text:'Сохранить', className:'btn-success', onClick: function(v) {
         if (hasSelector) {
-          if (v.selector === '#anchor' && !String(v.anchorName || '').trim()) {
-            alertBox('Ошибка', 'Выбрано «#anchor», но имя якоря не указано. Введите id элемента.');
-            return true;
-          }
-          if (v.selector === '.class' && !String(v.className || '').trim()) {
-            alertBox('Ошибка', 'Выбрано «.class», но имя класса не указано.');
-            return true;
-          }
-          if (v.selector === 'custom' && !String(v.customSelector || '').trim()) {
-            alertBox('Ошибка', 'Выбрано «Свой селектор», но поле пустое.');
-            return true;
-          }
+          if (v.selector === '#anchor' && !String(v.anchorName || '').trim()) { alertBox('Ошибка','Выбрано «#anchor», но имя якоря не указано'); return true; }
+          if (v.selector === '.class' && !String(v.className || '').trim()) { alertBox('Ошибка','Выбрано «.class», но имя класса не указано'); return true; }
+          if (v.selector === 'custom' && !String(v.customSelector || '').trim()) { alertBox('Ошибка','Выбрано «Свой селектор», но поле пустое'); return true; }
         }
-        Object.keys(v).forEach(function (k) { a.params[k] = v[k]; });
+        Object.keys(v).forEach(function(k) { a.params[k] = v[k]; });
         save(); updateActionList(); refreshCode();
       }}
     ]
   });
 
-  // ★ Показываем/скрываем поля в зависимости от выбора селектора
   if (hasSelector && refs) {
     var anchorWrap = refs.wraps.anchorName;
     var classWrap = refs.wraps.className;
     var customWrap = refs.wraps.customSelector;
-
-    var updateVisibility = function () {
+    var upd = function() {
       var val = refs.inputs.selector.value;
       if (anchorWrap) anchorWrap.style.display = (val === '#anchor') ? '' : 'none';
       if (classWrap) classWrap.style.display = (val === '.class') ? '' : 'none';
       if (customWrap) customWrap.style.display = (val === 'custom') ? '' : 'none';
     };
-    updateVisibility();
-    refs.inputs.selector.addEventListener('change', updateVisibility);
+    upd();
+    refs.inputs.selector.addEventListener('change', upd);
   }
 }
 
-/* ============================================================
-   ГЛОБАЛЬНЫЕ НАСТРОЙКИ
-   ============================================================ */
+/* ============ НАСТРОЙКИ ============ */
 function openSettings() {
   var s = state.settings;
   openModal({
     title: '⚙️ Глобальные настройки',
-    html: '<p>Эти параметры применятся ко всему сайту при компиляции и в предпросмотре.</p>',
     fields: [
-      { name: 'title', label: '📄 Заголовок сайта (title)', value: s.title, placeholder: 'Мой сайт' },
-      { name: 'filename', label: '💾 Имя файла при экспорте', value: s.filename, placeholder: 'site',
-        hint: 'Без .html — добавится автоматически' },
-      { name: 'bgColor', label: '🎨 Цвет фона страницы', type: 'color', value: s.bgColor },
-      { name: 'textColor', label: '🎨 Цвет текста по умолчанию', type: 'color', value: s.textColor },
-      { name: 'font', label: '🔤 Шрифт', type: 'select',
-        options: [
-          { value: 'sans-serif', text: 'Sans-Serif (по умолчанию)' },
-          { value: 'serif', text: 'Serif (с засечками)' },
-          { value: 'monospace', text: 'Monospace (моно)' },
-          { value: 'Arial, sans-serif', text: 'Arial' },
-          { value: 'Georgia, serif', text: 'Georgia' },
-          { value: 'Courier New, monospace', text: 'Courier New' }
-        ],
-        value: s.font }
+      { name:'title', label:'📄 Заголовок сайта', value:s.title, placeholder:'Мой сайт' },
+      { name:'filename', label:'💾 Имя файла', value:s.filename, placeholder:'site', hint:'Без .html' },
+      { name:'bgColor', label:'🎨 Цвет фона', type:'color', value:s.bgColor },
+      { name:'textColor', label:'🎨 Цвет текста', type:'color', value:s.textColor },
+      { name:'font', label:'🔤 Шрифт', type:'select',
+        options:[
+          {value:'sans-serif',text:'Sans-Serif'},
+          {value:'serif',text:'Serif'},
+          {value:'monospace',text:'Monospace'},
+          {value:'Arial, sans-serif',text:'Arial'},
+          {value:'Georgia, serif',text:'Georgia'},
+          {value:'Courier New, monospace',text:'Courier New'}
+        ], value:s.font }
     ],
     buttons: [
-      { text: 'Отмена', className: 'btn-secondary' },
-      { text: 'Сохранить', className: 'btn-success', onClick: function (v) {
+      { text:'Отмена', className:'btn-secondary' },
+      { text:'Сохранить', className:'btn-success', onClick: function(v) {
         state.settings.title = v.title || 'Мой сайт';
-        state.settings.filename = String(v.filename || 'site').replace(/[^a-zA-Z0-9_-]/g, '') || 'site';
+        state.settings.filename = String(v.filename || 'site').replace(/[^a-zA-Z0-9_-]/g,'') || 'site';
         state.settings.bgColor = v.bgColor;
         state.settings.textColor = v.textColor;
         state.settings.font = v.font;
-        save();
-        updatePreview();
+        save(); updatePreview();
       }}
     ]
   });
 }
 
-/* ============================================================
-   ВАЛИДАЦИЯ + АВТОФИКСЫ
-   ============================================================ */
-function autoFix() {
-  var fixes = [];
-  state.jsFunctions.forEach(function (f) {
-    var c = cleanFuncName(f.name);
-    if (c !== f.name) { fixes.push('Функция "' + f.name + '" → "' + c + '"'); f.name = c; }
-  });
-  state.blocks.forEach(function (b, i) {
-    if ((b.type === 'button' || b.type === 'link') && b.onclick) {
-      var c = cleanFuncName(b.onclick);
-      if (c !== b.onclick) { b.onclick = c; fixes.push('Блок #' + (i+1) + ': имя функции очищено'); }
-    }
-    if ((b.type === 'text' || b.type === 'image') && b.onclick) {
-      delete b.onclick;
-      fixes.push('Блок #' + (i+1) + ': удалён onclick');
-    }
-    if (b.anchor) {
-      var ca = cleanAnchor(b.anchor);
-      if (ca !== b.anchor) {
-        fixes.push('Блок #' + (i+1) + ': якорь "' + b.anchor + '" → "' + ca + '"');
-        b.anchor = ca;
-      }
-    }
-  });
-  return fixes;
-}
-
+/* ============ ВАЛИДАЦИЯ ============ */
 function validate() {
   var errors = [], warnings = [];
-  state.blocks.forEach(function (b, i) {
+  state.blocks.forEach(function(b, i) {
     var label = 'Блок #' + (i+1) + ' (' + b.type + ')';
     if (b.type === 'button' || b.type === 'text' || b.type === 'link') {
       if (!b.text || !b.text.trim()) errors.push(label + ': пустой текст');
     }
     if (b.type === 'image' && (!b.src || !b.src.trim())) errors.push(label + ': пустой URL');
-    if (b.type === 'link' && b.link && !validUrl(b.link) && !/^[#\/]/.test(b.link)) {
-      warnings.push(label + ': URL может быть невалидным');
-    }
     if (b.anchor) {
       var ca = cleanAnchor(b.anchor);
-      if (!ca) errors.push(label + ': якорь пустой после очистки');
-      else if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(ca)) errors.push(label + ': невалидный якорь "' + b.anchor + '"');
+      if (!ca) errors.push(label + ': невалидный якорь');
     }
     if (b.type === 'button' || b.type === 'link') {
       var fn = cleanFuncName(b.onclick);
-      if (fn && !state.jsFunctions.some(function (f) { return f.name === fn; })) {
+      if (fn && !state.jsFunctions.some(function(f) { return f.name === fn; })) {
         errors.push(label + ': нет функции "' + fn + '"');
       }
     }
   });
-
-  state.jsFunctions.forEach(function (f) {
+  state.jsFunctions.forEach(function(f) {
     var label = 'Функция "' + f.name + '"';
     if (!validFuncName(f.name)) errors.push(label + ': невалидное имя');
     var vars = {};
-    f.actions.forEach(function (a, j) {
-      var pos = ', действие #' + (j+1);
+    f.actions.forEach(function(a, j) {
+      var pos = ', #' + (j+1);
       if (a.type === 'var_declare') {
-        if (!a.params.name || !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(a.params.name)) {
-          errors.push(label + pos + ': невалидное имя переменной');
-        } else vars[a.params.name] = true;
+        if (!a.params.name || !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(a.params.name)) errors.push(label + pos + ': невалидное имя переменной');
+        else vars[a.params.name] = true;
+        if (a.params.value === '' || a.params.value === undefined) errors.push(label + pos + ': пустое значение переменной');
       }
-      if ((a.type === 'var_set' || a.type === 'var_math' || a.type === 'var_alert') && !a.params.name) {
-        errors.push(label + pos + ': нет имени переменной');
+      if (a.type === 'var_set' && (a.params.value === '' || a.params.value === undefined)) {
+        errors.push(label + pos + ': пустое значение');
       }
-      // Проверка селекторов
-      if (a.params && a.params.selector) {
-        if (a.params.selector === 'custom' && !String(a.params.customSelector || '').trim()) {
-          errors.push(label + pos + ': «свой селектор» пустой');
-        }
-        if (a.params.selector === '#anchor' && !String(a.params.anchorName || '').trim()) {
-          errors.push(label + pos + ': «#anchor» без имени якоря');
-        }
-        if (a.params.selector === '.class' && !String(a.params.className || '').trim()) {
-          errors.push(label + pos + ': «.class» без имени класса');
-        }
+      if (a.type === 'wait' && (a.params.ms === '' || isNaN(parseInt(a.params.ms, 10)))) {
+        errors.push(label + pos + ': задержка должна быть числом');
       }
-    });
-    f.actions.forEach(function (a, j) {
-      if ((a.type === 'var_set' || a.type === 'var_math' || a.type === 'var_alert') && a.params.name && !vars[a.params.name]) {
-        warnings.push(label + ', #' + (j+1) + ': переменная "' + a.params.name + '" не объявлена');
-      }
+      if (a.params && a.params.selector === 'custom' && !String(a.params.customSelector || '').trim()) errors.push(label + pos + ': пустой свой селектор');
+      if (a.params && a.params.selector === '#anchor' && !String(a.params.anchorName || '').trim()) errors.push(label + pos + ': #anchor без имени');
+      if (a.params && a.params.selector === '.class' && !String(a.params.className || '').trim()) errors.push(label + pos + ': .class без имени');
     });
   });
   return { errors: errors, warnings: warnings };
 }
 
-/* ============================================================
-   КОМПИЛЯЦИЯ
-   ============================================================ */
+/* ============ КОМПИЛЯЦИЯ ============ */
 function compile() {
-  var fixes = autoFix();
-  if (fixes.length) {
-    alertBox('🔧 Автоисправления', '<p>Применено:</p><ul style="margin-left:18px;">'
-      + fixes.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul><p>Попробуйте снова.</p>');
-    save(); renderAll();
-    return;
-  }
   var v = validate();
   if (v.errors.length) {
-    alertBox('❌ Ошибки', '<ul style="margin-left:18px;color:#ff8;">'
-      + v.errors.map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul>');
+    alertBox('❌ Ошибки', '<ul style="margin-left:18px;color:#ff8;">' + v.errors.map(function(e){ return '<li>' + esc(e) + '</li>'; }).join('') + '</ul>');
     return;
   }
   if (v.warnings.length) {
     openModal({
       title: '⚠️ Предупреждения',
-      html: '<p>Продолжить?</p><ul style="margin-left:18px;color:#ffd;">'
-        + v.warnings.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') + '</ul>',
+      html: '<p>Продолжить?</p><ul style="margin-left:18px;color:#ffd;">' + v.warnings.map(function(w){ return '<li>' + esc(w) + '</li>'; }).join('') + '</ul>',
       buttons: [
-        { text: 'Отмена', className: 'btn-secondary' },
-        { text: 'Продолжить', className: 'btn-success', onClick: doCompile }
+        { text:'Отмена', className:'btn-secondary' },
+        { text:'Продолжить', className:'btn-success', onClick: doCompile }
       ]
     });
     return;
@@ -1246,13 +1006,13 @@ function doCompile() {
     + '<meta charset="UTF-8">\n'
     + '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
     + '<title>' + esc(s.title) + '</title>\n'
-    + '<style>body{margin:20px;font-family:' + s.font + ';background:' + s.bgColor + ';color:' + s.textColor + ';}'
+    + '<style>body{margin:20px;font-family:' + s.font + ';background:' + s.bgColor + ';color:' + s.textColor + ';}\n'
     + 'button{cursor:pointer;font-family:inherit;}</style>\n'
     + '<script>\n' + generateAllFuncs() + '\n<\/script>\n'
     + '</head>\n<body>\n'
     + state.blocks.map(renderBlockHTML).join('\n')
     + '\n</body>\n</html>';
-  var blob = new Blob([html], { type: 'text/html' });
+  var blob = new Blob([html], { type:'text/html' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = s.filename + '.html';
@@ -1260,11 +1020,9 @@ function doCompile() {
   URL.revokeObjectURL(a.href);
 }
 
-/* ============================================================
-   ЭКСПОРТ / ИМПОРТ
-   ============================================================ */
+/* ============ ЭКСПОРТ / ИМПОРТ ============ */
 function exportProject() {
-  var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  var blob = new Blob([JSON.stringify(state, null, 2)], { type:'application/json' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = state.settings.filename + '_project.json';
@@ -1276,21 +1034,21 @@ function importProject(e) {
   var file = e.target.files[0];
   if (!file) return;
   var reader = new FileReader();
-  reader.onload = function (ev) {
+  reader.onload = function(ev) {
     try {
       var data = JSON.parse(ev.target.result);
-      if (!data.blocks) { alertBox('Ошибка', 'Неверный формат'); return; }
+      if (!data.blocks) { alertBox('Ошибка','Неверный формат'); return; }
       if (data.settings) state.settings = Object.assign(state.settings, data.settings);
       state.blocks = data.blocks || [];
       state.jsFunctions = data.jsFunctions || [];
-      state.blocks.forEach(function (b) {
+      state.blocks.forEach(function(b) {
         var def = BLOCK_DEFAULTS[b.type];
         if (!def) return;
-        Object.keys(def).forEach(function (k) { if (b[k] === undefined) b[k] = def[k]; });
+        Object.keys(def).forEach(function(k) { if (b[k] === undefined) b[k] = def[k]; });
         if (b.type !== 'button' && b.type !== 'link') delete b.onclick;
         if (b.anchor) b.anchor = cleanAnchor(b.anchor);
       });
-      state.jsFunctions.forEach(function (f) {
+      state.jsFunctions.forEach(function(f) {
         f.name = cleanFuncName(f.name);
         if (!f.actions) f.actions = [];
       });
@@ -1299,79 +1057,48 @@ function importProject(e) {
       save(); renderAll();
       document.getElementById('blockParams').innerHTML = '';
       document.getElementById('funcEditor').classList.add('hidden');
-      alertBox('Успех', '✅ Загружено!');
-    } catch (err) { alertBox('Ошибка', 'Импорт: ' + err.message); }
+      alertBox('Успех','✅ Загружено!');
+    } catch(err) { alertBox('Ошибка','Импорт: ' + err.message); }
   };
   reader.readAsText(file);
   e.target.value = '';
 }
 
 function clearAll() {
-  confirmBox('Очистить всё?', 'Все блоки и функции будут удалены.', function () {
-    state.blocks = [];
-    state.jsFunctions = [];
-    selectedBlockIndex = -1;
-    selectedFuncIndex = -1;
+  confirmBox('Очистить?','Все блоки и функции удалятся.', function() {
+    state.blocks = []; state.jsFunctions = [];
+    selectedBlockIndex = -1; selectedFuncIndex = -1;
     save(); renderAll();
     document.getElementById('blockParams').innerHTML = '';
     document.getElementById('funcEditor').classList.add('hidden');
   });
 }
 
-/* ============================================================
-   СПРАВОЧНИК
-   ============================================================ */
+/* ============ СПРАВОЧНИК ============ */
 function openHelp() {
-  var h = ''
-    + '<div class="help-block"><h3>👋 Добро пожаловать</h3>'
-    + '<p>Визуальный конструктор. Слева — панель, справа — предпросмотр.</p>'
-    + '<div class="help-tip">💡 Функции работают в предпросмотре</div></div>'
-
-    + '<div class="help-block"><h3>⚙️ Глобальные настройки</h3>'
-    + '<p>Кнопка «Настройки» в тулбаре: заголовок сайта, имя файла, цвет фона страницы, цвет текста, шрифт.</p></div>'
-
-    + '<div class="help-block"><h3>🧩 Блоки</h3>'
-    + '<table class="help-table">'
-    + '<tr><th>Блок</th><th>Умеет</th></tr>'
-    + '<tr><td><span class="badge">Кнопка</span></td><td>Ссылка + функция</td></tr>'
-    + '<tr><td><span class="badge">Ссылка</span></td><td>Ссылка + функция</td></tr>'
-    + '<tr><td><span class="badge">Текст</span></td><td>Только отображение</td></tr>'
-    + '<tr><td><span class="badge">Картинка</span></td><td>Только отображение</td></tr>'
-    + '</table></div>'
-
-    + '<div class="help-block"><h3>🎯 Селекторы — ГЛАВНОЕ</h3>'
-    + '<p>Когда выбираешь элемент в действии, рядом появляется поле для ввода:</p>'
-    + '<table class="help-table">'
-    + '<tr><th>Выбор</th><th>Появляется поле</th></tr>'
-    + '<tr><td><code>this</code></td><td>— (не нужно ничего вводить)</td></tr>'
-    + '<tr><td><code>body / button / p / img</code></td><td>— (не нужно)</td></tr>'
-    + '<tr><td><code>#anchor</code></td><td>📌 <b>Имя якоря (id)</b> — введи id без решётки</td></tr>'
-    + '<tr><td><code>.class</code></td><td>🏷️ <b>Имя класса</b> — без точки</td></tr>'
-    + '<tr><td><code>custom</code></td><td>✏️ <b>Свой CSS-селектор</b></td></tr>'
-    + '</table>'
-    + '<div class="help-tip">💡 Пример: хочешь изменить цвет блока с якорем <code>myAnchor</code>. В действии «Цвет» выбираешь <b>#anchor</b>, в поле «Имя якоря» пишешь <b>myAnchor</b>.</div></div>'
-
-    + '<div class="help-block"><h3>⚡ Действия</h3>'
-    + '<ul>'
+  var h = '<div class="help-block"><h3>👋 Добро пожаловать</h3><p>Визуальный конструктор. Слева — панель, справа — предпросмотр.</p><div class="help-tip">💡 Функции работают и в предпросмотре, и в скомпилированном файле.</div></div>'
+    + '<div class="help-block"><h3>🎯 Селекторы</h3>'
+    + '<table class="help-table"><tr><th>Выбор</th><th>Что появится</th></tr>'
+    + '<tr><td><code>this</code></td><td>—</td></tr>'
+    + '<tr><td><code>body / button / p / img</code></td><td>— (работает на всех элементах тега)</td></tr>'
+    + '<tr><td><code>#anchor</code></td><td>📌 Поле «Имя якоря»</td></tr>'
+    + '<tr><td><code>.class</code></td><td>🏷️ Поле «Имя класса»</td></tr>'
+    + '<tr><td><code>custom</code></td><td>✏️ Поле «Свой селектор»</td></tr></table>'
+    + '<div class="help-tip">Пример: блок с якорем <code>myBlock</code>. Действие «Показать» → выбираешь <b>#anchor</b> → пишешь <code>myBlock</code> → работает.</div></div>'
+    + '<div class="help-block"><h3>⚙️ Настройки</h3><p>Кнопка «Настройки»: заголовок, имя файла, цвет фона, цвет текста, шрифт.</p></div>'
+    + '<div class="help-block"><h3>⚡ Действия</h3><ul>'
     + '<li><b>💬 Alert / 🖥️ Console</b> — сообщения</li>'
     + '<li><b>🎨 Цвет / 🖌️ Фон</b> — стили</li>'
     + '<li><b>👻 Скрыть / 👀 Показать / 🔄 Переключить</b> — видимость</li>'
     + '<li><b>🔗 Переход</b> — на URL</li>'
-    + '<li><b>📦 Переменные</b> — создание, изменение, математика</li>'
+    + '<li><b>📦 Переменные</b> — работа с переменными</li>'
     + '<li><b>❓ Если / ⏱️ Задержка</b> — условия</li>'
     + '</ul></div>';
 
-  openModal({
-    title: '📖 Справочник',
-    html: h,
-    wide: true,
-    buttons: [{ text: 'Понятно', className: 'btn-primary' }]
-  });
+  openModal({ title:'📖 Справочник', html:h, wide:true, buttons:[{ text:'Понятно', className:'btn-primary' }] });
 }
 
-/* ============================================================
-   ОБЩИЙ РЕНДЕР + СТАРТ
-   ============================================================ */
+/* ============ РЕНДЕР + СТАРТ ============ */
 function renderAll() {
   updatePreview();
   updateBlockList();
@@ -1381,7 +1108,7 @@ function renderAll() {
 load();
 renderAll();
 setInterval(save, 5000);
-console.log('Sites IDE v0.7.1 BETA');
+console.log('Sites IDE v0.7.2 ALPHA');
 </script>
 </body>
 </html>
