@@ -9,10 +9,12 @@
         body { background: #0b0b18; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 20px; }
         .container { max-width: 1400px; margin: 0 auto; }
         h1 { font-size: 2.4rem; color: #f2b84b; border-bottom: 2px solid #23233a; padding-bottom: 12px; margin-bottom: 20px; }
+
         .card { background: #14142a; padding: 18px 22px; border-radius: 14px; margin-bottom: 18px; border: 1px solid #2a2a4a; }
-        .flex { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
-        .btn { padding: 10px 24px; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.2s; background: #2a2a52; color: #ddd; font-size: 0.95rem; }
-        .btn:hover { transform: scale(1.04); filter: brightness(1.2); }
+        .flex { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+        .btn { padding: 10px 20px; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.2s; background: #2a2a52; color: #ddd; font-size: 0.9rem; white-space: nowrap; }
+        .btn:hover { transform: translateY(-1px); filter: brightness(1.15); }
         .btn-primary { background: #f2b84b; color: #1a1a2e; }
         .btn-primary:hover { background: #facc6b; }
         .btn-danger { background: #7a3a3a; color: #fff; }
@@ -21,38 +23,71 @@
         .btn-success:hover { background: #3a9a4a; }
         .btn-info { background: #2a5a9a; color: #fff; }
         .btn-info:hover { background: #3a7aca; }
-        .panel { display: flex; flex-direction: row; gap: 20px; flex-wrap: wrap; }
-        .panel-left { flex: 1; min-width: 300px; }
-        .panel-right { flex: 2; min-width: 300px; }
-        .preview-iframe { width: 100%; height: 500px; border: 1px solid #2a2a4a; border-radius: 8px; background: #fff; }
-        .params-group { margin-bottom: 20px; background: #16213e; padding: 15px; border-radius: 8px; }
-        .params-group label { display: block; font-size: 13px; color: #aaa; margin: 10px 0 4px; }
-        .params-group input, .params-group select, .params-group textarea { width: 100%; padding: 8px 10px; background: #0f3460; border: 1px solid #1a4a7a; color: #fff; border-radius: 6px; font-size: 14px; font-family: inherit; }
-        .params-group input[type="color"] { height: 40px; padding: 2px; cursor: pointer; }
-        .params-group textarea { min-height: 80px; resize: vertical; font-family: monospace; }
-        .params-group .toggle { display: flex; gap: 10px; margin-top: 5px; }
-        .params-group .toggle button { flex: 1; padding: 8px; background: #0f3460; border: 2px solid transparent; border-radius: 6px; color: #fff; cursor: pointer; font-size: 14px; }
+        .btn-secondary { background: #3a3a5a; color: #ddd; }
+
+        .panel { display: grid; grid-template-columns: minmax(320px, 1fr) minmax(400px, 1.6fr); gap: 20px; }
+        @media (max-width: 900px) { .panel { grid-template-columns: 1fr; } }
+
+        .preview-iframe { width: 100%; height: 560px; border: 1px solid #2a2a4a; border-radius: 8px; background: #fff; display: block; }
+
+        .params-group { margin-bottom: 16px; background: #16213e; padding: 14px 16px; border-radius: 8px; border: 1px solid #1f2f4a; }
+        .params-group label { display: block; font-size: 12px; color: #9aa; margin: 8px 0 4px; font-weight: 500; }
+        .params-group input:not([type="checkbox"]):not([type="color"]),
+        .params-group select,
+        .params-group textarea {
+            width: 100%; padding: 8px 10px; background: #0f3460; border: 1px solid #1a4a7a;
+            color: #fff; border-radius: 6px; font-size: 14px; font-family: inherit;
+        }
+        .params-group input:focus, .params-group select:focus, .params-group textarea:focus {
+            outline: none; border-color: #f2b84b;
+        }
+        .params-group input[type="color"] { height: 36px; width: 100%; padding: 2px; cursor: pointer; border-radius: 6px; border: 1px solid #1a4a7a; background: #0f3460; }
+        .params-group .toggle { display: flex; gap: 6px; margin-top: 4px; }
+        .params-group .toggle button { flex: 1; padding: 8px; background: #0f3460; border: 2px solid transparent; border-radius: 6px; color: #fff; cursor: pointer; font-size: 14px; transition: all 0.15s; }
+        .params-group .toggle button:hover { background: #1a4a7a; }
         .params-group .toggle button.active { border-color: #e94560; background: #1a4a7a; }
+
         .block-list { margin-top: 10px; }
-        .block-item { background: #16213e; padding: 10px 14px; margin-bottom: 6px; border-radius: 6px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid #e94560; }
+        .block-item {
+            background: #16213e; padding: 10px 12px; margin-bottom: 6px; border-radius: 6px;
+            cursor: grab; display: flex; justify-content: space-between; align-items: center;
+            border-left: 3px solid #e94560; transition: all 0.15s; user-select: none;
+            font-size: 13px;
+        }
         .block-item:hover { background: #1a2a4a; }
         .block-item.active { border-left-color: #f2b84b; background: #1e2a4a; }
-        .block-item .del { background: transparent; border: none; color: #e94560; cursor: pointer; font-size: 16px; }
+        .block-item.dragging { opacity: 0.4; cursor: grabbing; }
+        .block-item.drag-over { border-top: 2px solid #f2b84b; }
+        .block-item .drag-handle { color: #666; margin-right: 8px; font-size: 14px; flex-shrink: 0; }
+        .block-item .item-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .block-item .del { background: transparent; border: none; color: #e94560; cursor: pointer; font-size: 16px; padding: 0 4px; flex-shrink: 0; }
         .block-item .del:hover { color: #ff6b81; }
-        .empty-state { color: #666; text-align: center; padding: 30px 0; font-size: 14px; }
+
+        .empty-state { color: #666; text-align: center; padding: 24px 0; font-size: 13px; }
         .hidden { display: none !important; }
-        .btn-sm { background: #0f3460; border: none; color: #fff; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin: 2px; }
+
+        .btn-sm { background: #0f3460; border: none; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: all 0.15s; }
         .btn-sm:hover { background: #1a4a7a; }
+        .btn-sm.active { background: #1a4a7a; }
+
         .tab-switch { display: flex; gap: 6px; background: #0f3460; padding: 4px; border-radius: 8px; margin-bottom: 15px; }
-        .tab-switch button { background: transparent; border: none; color: #aaa; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+        .tab-switch button { flex: 1; background: transparent; border: none; color: #aaa; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.15s; }
         .tab-switch button.active { background: #1a4a7a; color: #fff; }
-        .js-editor { background: #0d0d1a; padding: 12px; border-radius: 8px; margin-top: 10px; font-family: monospace; font-size: 13px; border: 1px solid #1a4a7a; min-height: 100px; white-space: pre-wrap; color: #ccc; overflow: auto; max-height: 300px; }
+
+        .js-editor {
+            background: #0d0d1a; padding: 12px; border-radius: 8px; margin-top: 10px;
+            font-family: 'Consolas', monospace; font-size: 13px; border: 1px solid #1a4a7a;
+            min-height: 100px; white-space: pre-wrap; color: #9cdcfe; overflow: auto;
+            max-height: 300px; line-height: 1.5;
+        }
         .file-input-hidden { display: none; }
         .footer { text-align: center; color: #555; font-size: 0.8rem; margin-top: 20px; }
-        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0a0a18; }
-        ::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 2px; }
-        .action-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+        ::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a3a5a; }
+
+        .action-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
         .action-buttons .btn-sm { background: #1a4a7a; }
         .action-buttons .btn-sm:hover { background: #2a5a9a; }
         .action-buttons .btn-var { background: #7a5a1a; }
@@ -63,54 +98,57 @@
         /* ===== МОДАЛЬНОЕ ОКНО ===== */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(3px);
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(3px);
             display: flex; align-items: center; justify-content: center;
-            z-index: 9999; animation: fadeIn 0.15s ease;
+            z-index: 9999; padding: 20px; animation: fadeIn 0.15s ease;
         }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .modal-box {
             background: #14142a; border: 1px solid #2a2a4a; border-radius: 14px;
-            padding: 24px 28px; min-width: 400px; max-width: 90vw; max-height: 90vh;
-            overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            padding: 24px 28px; width: 100%; max-width: 460px; max-height: 90vh;
+            overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.7);
             animation: slideUp 0.2s ease;
         }
-        .modal-box.wide { min-width: 700px; }
+        .modal-box.wide { max-width: 780px; }
         .modal-title { color: #f2b84b; font-size: 1.3rem; margin-bottom: 16px; font-weight: 600; }
         .modal-body { color: #ccc; font-size: 14px; line-height: 1.6; }
         .modal-body p { margin-bottom: 10px; }
         .modal-body code { background: #0d0d1a; padding: 2px 6px; border-radius: 4px; color: #f2b84b; font-family: monospace; font-size: 13px; }
-        .modal-body pre { background: #0d0d1a; padding: 12px; border-radius: 6px; overflow-x: auto; margin: 10px 0; color: #9cdcfe; font-family: monospace; font-size: 13px; }
-        .modal-body h3 { color: #f2b84b; margin: 18px 0 8px; font-size: 1.05rem; }
-        .modal-body ul { margin-left: 20px; margin-bottom: 10px; }
-        .modal-body li { margin-bottom: 4px; }
-        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-        .modal-actions .btn { padding: 8px 20px; font-size: 0.9rem; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap; }
+        .modal-actions .btn { padding: 9px 20px; font-size: 0.9rem; }
         .modal-field { margin-bottom: 14px; }
-        .modal-field label { display: block; font-size: 13px; color: #aaa; margin-bottom: 5px; }
+        .modal-field label { display: block; font-size: 12px; color: #9aa; margin-bottom: 5px; font-weight: 500; }
         .modal-field input, .modal-field select, .modal-field textarea {
             width: 100%; padding: 9px 12px; background: #0f3460; border: 1px solid #1a4a7a;
             color: #fff; border-radius: 6px; font-size: 14px; font-family: inherit;
         }
-        .modal-field textarea { min-height: 90px; resize: vertical; font-family: monospace; }
         .modal-field input:focus, .modal-field select:focus, .modal-field textarea:focus {
             outline: none; border-color: #f2b84b;
         }
+        .modal-field textarea { min-height: 90px; resize: vertical; font-family: 'Consolas', monospace; font-size: 13px; }
+        .modal-hint { font-size: 12px; color: #7a8a9a; margin-top: 4px; font-style: italic; }
 
         /* ===== СПРАВОЧНИК ===== */
         .help-section { margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #2a2a4a; }
-        .help-section:last-child { border-bottom: none; }
-        .help-section h3 { color: #f2b84b; margin-bottom: 10px; font-size: 1.1rem; }
-        .help-section h4 { color: #e94560; margin: 12px 0 6px; font-size: 0.95rem; }
+        .help-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .help-section h3 { color: #f2b84b; margin-bottom: 10px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .help-section h4 { color: #e94560; margin: 14px 0 8px; font-size: 0.95rem; }
         .help-section p { color: #bbb; margin-bottom: 8px; }
-        .help-badge { display: inline-block; background: #1a4a7a; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 6px; }
+        .help-section ul { margin-left: 18px; margin-bottom: 8px; color: #bbb; }
+        .help-section li { margin-bottom: 5px; }
+        .help-badge { display: inline-block; background: #1a4a7a; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-right: 6px; font-weight: 600; }
+        .help-tip { background: #1a2a3a; border-left: 3px solid #f2b84b; padding: 10px 12px; border-radius: 4px; margin: 10px 0; font-size: 13px; color: #cbd; }
+        .help-table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
+        .help-table th, .help-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #2a2a4a; }
+        .help-table th { color: #f2b84b; font-weight: 600; }
+        .help-table code { background: #0d0d1a; padding: 1px 5px; border-radius: 3px; color: #9cdcfe; }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>🧩 Sites IDE</h1>
 
-    <!-- Панель инструментов -->
     <div class="card">
         <div class="flex">
             <button class="btn btn-success" onclick="compileHTML()">⚙️ Скомпилировать</button>
@@ -121,18 +159,17 @@
         </div>
     </div>
 
-    <!-- Основная панель -->
     <div class="panel">
         <div class="panel-left">
             <div class="card">
                 <div class="tab-switch">
-                    <button class="btn-sm active" id="tabInterface" onclick="switchTab('interface')">🧩 Интерфейс</button>
-                    <button class="btn-sm" id="tabLogic" onclick="switchTab('logic')">⚡ Логика (JS)</button>
+                    <button class="active" id="tabInterface" onclick="switchTab('interface')">🧩 Интерфейс</button>
+                    <button id="tabLogic" onclick="switchTab('logic')">⚡ Логика (JS)</button>
                 </div>
 
                 <!-- Вкладка: Интерфейс -->
                 <div id="tabInterfaceContent">
-                    <h3 style="font-weight:400;color:#bbb;margin-bottom:12px;">🧩 Блоки</h3>
+                    <h3 style="font-weight:400;color:#bbb;margin-bottom:12px;font-size:1rem;">🧩 Блоки</h3>
                     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
                         <button class="btn-sm" onclick="addBlock('button')">➕ Кнопка</button>
                         <button class="btn-sm" onclick="addBlock('text')">📝 Текст</button>
@@ -149,26 +186,25 @@
 
                 <!-- Вкладка: Логика -->
                 <div id="tabLogicContent" class="hidden">
-                    <h3 style="font-weight:400;color:#bbb;margin-bottom:12px;">⚡ JavaScript функции</h3>
+                    <h3 style="font-weight:400;color:#bbb;margin-bottom:12px;font-size:1rem;">⚡ JavaScript функции (beta)</h3>
                     <p style="color:#888;font-size:13px;margin-bottom:10px;">
-                        Создайте функцию, затем добавьте в неё действия. 
-                        Функция привязывается к выбранному блоку автоматически.
+                        Создайте функцию, добавьте действия. Функция привяжется к выбранному блоку. Этот раздел помечен как beta, это означает что все баги в нём не выловлены :)
                     </p>
-                    
+
                     <div style="margin-bottom:12px;">
                         <button class="btn-sm btn-success" onclick="addJSFunction()">➕ Добавить функцию</button>
                     </div>
-                    
+
                     <div id="jsFunctionList" class="block-list">
                         <div class="empty-state">Нет функций. Добавьте первую!</div>
                     </div>
-                    
+
                     <div id="jsEditorPanel" class="hidden">
                         <div class="params-group">
-                            <h4 style="margin:0 0 10px;color:#f2b84b;">✏️ Редактор функции</h4>
+                            <h4 style="margin:0 0 10px;color:#f2b84b;font-size:0.95rem;">✏️ Редактор функции</h4>
                             <label>Название функции</label>
                             <input type="text" id="jsFuncName" onchange="renameJSFunction(this.value)">
-                            
+
                             <label style="margin-top:12px;">📌 Базовые действия</label>
                             <div class="action-buttons">
                                 <button class="btn-sm" onclick="addJSAction('alert')">💬 Alert</button>
@@ -184,27 +220,28 @@
 
                             <label style="margin-top:12px;">🔢 Переменные</label>
                             <div class="action-buttons">
-                                <button class="btn-sm btn-var" onclick="addJSAction('var_declare')">📦 Создать переменную</button>
-                                <button class="btn-sm btn-var" onclick="addJSAction('var_set')">✏️ Изменить переменную</button>
+                                <button class="btn-sm btn-var" onclick="addJSAction('var_declare')">📦 Создать</button>
+                                <button class="btn-sm btn-var" onclick="addJSAction('var_set')">✏️ Изменить</button>
                                 <button class="btn-sm btn-var" onclick="addJSAction('var_math')">➕ Математика</button>
-                                <button class="btn-sm btn-var" onclick="addJSAction('var_alert')">💬 Вывести переменную</button>
+                                <button class="btn-sm btn-var" onclick="addJSAction('var_alert')">💬 Показать</button>
                             </div>
 
                             <label style="margin-top:12px;">🔀 Условия и циклы</label>
                             <div class="action-buttons">
-                                <button class="btn-sm btn-cond" onclick="addJSAction('if')">❓ Условие (if)</button>
+                                <button class="btn-sm btn-cond" onclick="addJSAction('if')">❓ Если</button>
                                 <button class="btn-sm btn-cond" onclick="addJSAction('wait')">⏱️ Задержка</button>
                             </div>
-                            
+
+                            <label style="margin-top:12px;">📋 Список действий</label>
                             <div id="jsActionList" class="block-list">
                                 <div class="empty-state">Нет действий. Добавьте первое!</div>
                             </div>
-                            
+
                             <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
                                 <button class="btn-sm btn-success" onclick="generateJSFunction()">🔄 Обновить код</button>
                                 <button class="btn-sm btn-danger" onclick="deleteJSFunction()">🗑️ Удалить функцию</button>
                             </div>
-                            
+
                             <div class="js-editor" id="jsOutput">// Здесь будет код функции</div>
                         </div>
                     </div>
@@ -214,14 +251,14 @@
 
         <div class="panel-right">
             <div class="card">
-                <h3 style="font-weight:400;color:#bbb;margin-bottom:12px;">👁️ Предпросмотр</h3>
+                <h3 style="font-weight:400;color:#bbb;margin-bottom:12px;font-size:1rem;">👁️ Предпросмотр</h3>
                 <iframe id="preview" class="preview-iframe"></iframe>
             </div>
         </div>
     </div>
 
     <input type="file" id="importInput" class="file-input-hidden" accept=".json" onchange="importProject(event)">
-    <div class="footer">💾 Все данные сохраняются в localStorage • Версия 3.5</div>
+    <div class="footer">💾 Автосохранение в localStorage • Версия 4.0 • Помощник по написанию: DeepSeek • License: MIT</div>
 </div>
 
 <script>
@@ -244,10 +281,9 @@
     };
 
     // =============================================================
-    //  МОДАЛЬНОЕ ОКНО (заменяет alert / prompt / confirm)
+    //  МОДАЛЬНОЕ ОКНО
     // =============================================================
     function showModal({ title, body, fields = [], buttons = [] }) {
-        // Убираем старое окно если есть
         const existing = document.querySelector('.modal-overlay');
         if (existing) existing.remove();
 
@@ -257,20 +293,17 @@
         const box = document.createElement('div');
         box.className = 'modal-box' + (fields.length > 4 ? ' wide' : '');
 
-        // Заголовок
         const titleEl = document.createElement('div');
         titleEl.className = 'modal-title';
         titleEl.textContent = title;
         box.appendChild(titleEl);
 
-        // Тело
         const bodyEl = document.createElement('div');
         bodyEl.className = 'modal-body';
         if (typeof body === 'string') bodyEl.innerHTML = body;
         else if (body instanceof HTMLElement) bodyEl.appendChild(body);
         box.appendChild(bodyEl);
 
-        // Поля ввода
         const fieldRefs = {};
         fields.forEach(f => {
             const wrap = document.createElement('div');
@@ -307,14 +340,20 @@
                 if (f.placeholder) input.placeholder = f.placeholder;
             }
             wrap.appendChild(input);
+
+            if (f.hint) {
+                const hint = document.createElement('div');
+                hint.className = 'modal-hint';
+                hint.textContent = f.hint;
+                wrap.appendChild(hint);
+            }
+
             bodyEl.appendChild(wrap);
             fieldRefs[f.name] = input;
         });
 
-        // Кнопки
         const actions = document.createElement('div');
         actions.className = 'modal-actions';
-
         const close = () => overlay.remove();
 
         if (buttons.length === 0) {
@@ -341,19 +380,16 @@
         overlay.appendChild(box);
         document.body.appendChild(overlay);
 
-        // Клик по фону закрывает (кроме wide-окна со справочником)
         overlay.addEventListener('click', e => {
-            if (e.target === overlay && !fields.length && !box.classList.contains('wide')) close();
+            if (e.target === overlay && !fields.length) close();
         });
 
-        // Автофокус
         const firstInput = box.querySelector('input, select, textarea');
-        if (firstInput) firstInput.focus();
+        if (firstInput && fields.length) firstInput.focus();
 
         return fieldRefs;
     }
 
-    // Короткие обёртки
     function modalAlert(title, text) {
         showModal({
             title,
@@ -377,7 +413,7 @@
     // =============================================================
     function loadState() {
         try {
-            const saved = localStorage.getItem('sites_ide_v35');
+            const saved = localStorage.getItem('sites_ide_v40');
             if (saved) {
                 const parsed = JSON.parse(saved);
                 state = { ...state, ...parsed };
@@ -388,7 +424,7 @@
 
     function saveState() {
         try {
-            localStorage.setItem('sites_ide_v35', JSON.stringify(state));
+            localStorage.setItem('sites_ide_v40', JSON.stringify(state));
         } catch (e) { console.warn('Ошибка сохранения', e); }
     }
 
@@ -438,6 +474,54 @@
     }
 
     // =============================================================
+    //  DRAG & DROP — ОБЩИЙ МЕХАНИЗМ
+    // =============================================================
+    let dragSrcIndex = -1;
+    let dragType = '';
+
+    function setupDragDrop(container, itemSelector, type, onReorder) {
+        // Уже навешаны обработчики?
+        if (container.dataset.dnd === type) return;
+        container.dataset.dnd = type;
+
+        container.addEventListener('dragstart', e => {
+            const item = e.target.closest(itemSelector);
+            if (!item) return;
+            dragSrcIndex = parseInt(item.dataset.index);
+            dragType = type;
+            item.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        });
+
+        container.addEventListener('dragend', e => {
+            const item = e.target.closest(itemSelector);
+            if (item) item.classList.remove('dragging');
+            container.querySelectorAll(itemSelector).forEach(i => i.classList.remove('drag-over'));
+            dragSrcIndex = -1;
+            dragType = '';
+        });
+
+        container.addEventListener('dragover', e => {
+            e.preventDefault();
+            const item = e.target.closest(itemSelector);
+            if (!item || dragType !== type) return;
+            const idx = parseInt(item.dataset.index);
+            if (idx === dragSrcIndex) return;
+            container.querySelectorAll(itemSelector).forEach(i => i.classList.remove('drag-over'));
+            item.classList.add('drag-over');
+        });
+
+        container.addEventListener('drop', e => {
+            e.preventDefault();
+            const item = e.target.closest(itemSelector);
+            if (!item || dragType !== type) return;
+            const targetIndex = parseInt(item.dataset.index);
+            if (dragSrcIndex === -1 || targetIndex === dragSrcIndex) return;
+            onReorder(dragSrcIndex, targetIndex);
+        });
+    }
+
+    // =============================================================
     //  СПИСОК БЛОКОВ
     // =============================================================
     function updateBlockList() {
@@ -447,11 +531,24 @@
             return;
         }
         container.innerHTML = state.blocks.map((b, i) => `
-            <div class="block-item ${i === selectedBlockIndex ? 'active' : ''}" onclick="selectBlock(${i})">
-                <span>${b.type.toUpperCase()} ${i+1}: ${b.text || b.src || ''}</span>
+            <div class="block-item ${i === selectedBlockIndex ? 'active' : ''}"
+                 draggable="true"
+                 data-index="${i}"
+                 onclick="selectBlock(${i})">
+                <span class="drag-handle">⋮⋮</span>
+                <span class="item-text">${b.type.toUpperCase()} ${i+1}: ${b.text || b.src || ''}</span>
                 <button class="del" onclick="event.stopPropagation();deleteBlock(${i})">✕</button>
             </div>
         `).join('');
+
+        setupDragDrop(container, '.block-item', 'blocks', (from, to) => {
+            const [moved] = state.blocks.splice(from, 1);
+            state.blocks.splice(to, 0, moved);
+            selectedBlockIndex = to;
+            renderAll();
+            showBlockParams(to);
+            saveState();
+        });
     }
 
     function addBlock(type) {
@@ -498,7 +595,7 @@
         if (!b) return;
         const panel = document.getElementById('paramsPanel');
 
-        let html = `<div class="params-group"><h4 style="margin:0 0 10px;color:#e94560;">⚙️ ${b.type.toUpperCase()}</h4>`;
+        let html = `<div class="params-group"><h4 style="margin:0 0 10px;color:#e94560;font-size:0.95rem;">⚙️ ${b.type.toUpperCase()}</h4>`;
 
         const fields = {
             button: [
@@ -545,7 +642,7 @@
                 html += `</div>`;
             } else if (f.type === 'checkbox') {
                 const checked = b[f.key] ? 'checked' : '';
-                html += `<label style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+                html += `<label style="display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer;">
                         <input type="checkbox" ${checked} onchange="updateBlockProp(${i},'${f.key}',this.checked)"> ${f.label}</label>`;
             } else if (f.type === 'color') {
                 html += `<label>${f.label}</label><input type="color" value="${b[f.key]||'#ffffff'}" onchange="updateBlockProp(${i},'${f.key}',this.value)">`;
@@ -580,17 +677,21 @@
     //  JS ФУНКЦИИ
     // =============================================================
     function addJSFunction() {
-        const fields = showModal({
+        showModal({
             title: '➕ Новая функция',
-            body: '<p>Введите название функции. Оно будет использоваться в коде страницы.</p>',
+            body: '<p>Введите имя функции. <b>Без скобок</b> — они добавятся автоматически.</p>',
             fields: [
-                { name: 'name', label: 'Название', value: 'myFunction', placeholder: 'myFunction' }
+                { name: 'name', label: 'Имя функции', value: 'myFunction', placeholder: 'myFunction', hint: 'Пример: myFunction, doSomething, changeColor' }
             ],
             buttons: [
                 { text: 'Отмена', className: 'btn-secondary', onClick: () => {} },
                 { text: 'Создать', className: 'btn-success', onClick: (v) => {
-                    const name = (v.name || '').trim();
+                    let name = (v.name || '').trim().replace(/\(\)$/, ''); // убираем () на конце, если ввели
                     if (!name) { modalAlert('Ошибка', 'Имя функции не может быть пустым'); return; }
+                    if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(name)) {
+                        modalAlert('Ошибка', 'Имя должно начинаться с буквы, _ или $ и содержать только буквы, цифры, _ и $.');
+                        return;
+                    }
                     if (state.jsFunctions.some(f => f.name === name)) {
                         modalAlert('Ошибка', 'Функция с таким именем уже существует!');
                         return;
@@ -612,11 +713,26 @@
             return;
         }
         container.innerHTML = state.jsFunctions.map((f, i) => `
-            <div class="block-item ${i === selectedFuncIndex ? 'active' : ''}" onclick="openJSFunctionEditor(${i})">
-                <span>⚡ ${f.name} (${f.actions.length} действий)</span>
+            <div class="block-item ${i === selectedFuncIndex ? 'active' : ''}"
+                 draggable="true"
+                 data-index="${i}"
+                 onclick="openJSFunctionEditor(${i})">
+                <span class="drag-handle">⋮⋮</span>
+                <span class="item-text">⚡ ${f.name} (${f.actions.length} действий)</span>
                 <button class="del" onclick="event.stopPropagation();deleteJSFunctionByIndex(${i})">✕</button>
             </div>
         `).join('');
+
+        setupDragDrop(container, '.block-item', 'functions', (from, to) => {
+            const [moved] = state.jsFunctions.splice(from, 1);
+            state.jsFunctions.splice(to, 0, moved);
+            if (selectedFuncIndex === from) selectedFuncIndex = to;
+            else if (selectedFuncIndex > from && selectedFuncIndex <= to) selectedFuncIndex--;
+            else if (selectedFuncIndex < from && selectedFuncIndex >= to) selectedFuncIndex++;
+            renderAll();
+            updateJSFunctionList();
+            saveState();
+        });
     }
 
     function openJSFunctionEditor(i) {
@@ -632,7 +748,12 @@
 
     function renameJSFunction(newName) {
         if (selectedFuncIndex === -1) return;
+        newName = (newName || '').trim().replace(/\(\)$/, '');
         if (!newName) return;
+        if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(newName)) {
+            modalAlert('Ошибка', 'Недопустимое имя функции.');
+            return;
+        }
         state.jsFunctions[selectedFuncIndex].name = newName;
         updateJSFunctionList();
         generateJSFunction();
@@ -665,7 +786,7 @@
     }
 
     // =============================================================
-    //  ДОБАВЛЕНИЕ ДЕЙСТВИЙ
+    //  ДОБАВЛЕНИЕ ДЕЙСТВИЙ (более логичный порядок)
     // =============================================================
     function addJSAction(type) {
         if (selectedFuncIndex === -1) {
@@ -674,28 +795,33 @@
         }
         let action = { type, params: {} };
         switch (type) {
+            // Сообщения
             case 'alert':    action.params.msg = 'Hello!'; break;
             case 'console':  action.params.msg = 'Hello console!'; break;
+            // Изменение стиля
             case 'color':    action.params.selector = 'this'; action.params.color = '#ff0000'; break;
             case 'bgcolor':  action.params.selector = 'this'; action.params.bgcolor = '#ff0000'; break;
+            // Навигация
             case 'redirect': action.params.url = 'https://example.com'; break;
+            // Видимость
             case 'hide':     action.params.selector = 'this'; break;
             case 'show':     action.params.selector = 'this'; break;
             case 'toggle':   action.params.selector = 'this'; break;
+            // Универсальное
             case 'custom':   action.params.code = '// ваш код здесь'; break;
-            // НОВЫЕ
+            // Переменные
             case 'var_declare': action.params.name = 'myVar'; action.params.value = '10'; action.params.varType = 'let'; break;
             case 'var_set':     action.params.name = 'myVar'; action.params.value = '20'; break;
             case 'var_math':    action.params.name = 'myVar'; action.params.operator = '+'; action.params.value = '5'; break;
             case 'var_alert':   action.params.name = 'myVar'; break;
-            case 'if':          action.params.left = 'myVar'; action.params.operator = '=='; action.params.right = '10'; break;
+            // Условия и циклы
+            case 'if':          action.params.left = 'myVar'; action.params.operator = '=='; action.params.right = '10'; action.params.thenMsg = 'Условие выполнено!'; break;
             case 'wait':        action.params.ms = '1000'; break;
         }
         state.jsFunctions[selectedFuncIndex].actions.push(action);
         updateJSActionList();
         generateJSFunction();
         saveState();
-        // Сразу открыть редактор действия
         editJSAction(state.jsFunctions[selectedFuncIndex].actions.length - 1);
     }
 
@@ -708,22 +834,21 @@
     }
 
     // =============================================================
-    //  УЛУЧШЕННЫЙ РЕДАКТОР ДЕЙСТВИЙ (с нормальными полями)
+    //  РЕДАКТОР ДЕЙСТВИЙ
     // =============================================================
     function editJSAction(index) {
         if (selectedFuncIndex === -1) return;
         const a = state.jsFunctions[selectedFuncIndex].actions[index];
         if (!a) return;
 
-        // Список вариантов селекторов
         const selectorOptions = [
-            { value: 'this', text: '🖱️ this (сам элемент)' },
-            { value: '#anchor', text: '#anchor (по id)' },
-            { value: '.class', text: '.class (по классу)' },
-            { value: 'body', text: 'body (вся страница)' },
-            { value: 'button', text: 'button (все кнопки)' },
-            { value: 'p', text: 'p (все параграфы)' },
-            { value: 'img', text: 'img (все картинки)' },
+            { value: 'this', text: '🖱️ this — сам элемент (кнопка)' },
+            { value: 'body', text: 'body — вся страница' },
+            { value: '#anchor', text: '#anchor — по id' },
+            { value: '.class', text: '.class — по классу' },
+            { value: 'button', text: 'button — все кнопки' },
+            { value: 'p', text: 'p — все параграфы' },
+            { value: 'img', text: 'img — все картинки' },
             { value: 'custom', text: '✏️ Свой селектор...' }
         ];
 
@@ -732,85 +857,94 @@
         let body = '';
 
         switch (a.type) {
+            // ===== СООБЩЕНИЯ =====
             case 'alert':
-                title = '💬 Alert';
-                body = '<p>Показать всплывающее сообщение.</p>';
-                fields = [{ name: 'msg', label: 'Сообщение', value: a.params.msg || '' }];
+                title = '💬 Alert — всплывающее сообщение';
+                body = '<p>Показывает окно с сообщением. Работает всегда, независимо от элемента.</p>';
+                fields = [{ name: 'msg', label: 'Текст сообщения', value: a.params.msg || '', placeholder: 'Hello!' }];
                 break;
             case 'console':
-                title = '🖥️ Console';
-                body = '<p>Вывести сообщение в консоль браузера.</p>';
-                fields = [{ name: 'msg', label: 'Сообщение', value: a.params.msg || '' }];
+                title = '🖥️ Console — вывод в консоль';
+                body = '<p>Пишет сообщение в консоль браузера (F12 → Console). Полезно для отладки.</p>';
+                fields = [{ name: 'msg', label: 'Текст сообщения', value: a.params.msg || '', placeholder: 'Debug info' }];
                 break;
+            // ===== СТИЛИ =====
             case 'color':
                 title = '🎨 Изменить цвет текста';
-                body = '<p>Выберите элемент и цвет его текста.</p>';
+                body = '<p>Меняет <b>цвет текста</b> выбранного элемента.</p>';
                 fields = [
-                    { name: 'selector', label: 'Элемент (селектор)', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
-                    { name: 'customSelector', label: 'Свой селектор (если выбран "custom")', value: a.params.customSelector || '' },
-                    { name: 'color', label: 'Цвет текста', type: 'color', value: a.params.color || '#ff0000' }
+                    { name: 'selector', label: 'Какой элемент изменить?', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
+                    { name: 'customSelector', label: 'CSS-селектор (если выбран «Свой»)', value: a.params.customSelector || '', placeholder: '#myBtn или .card', hint: 'Используйте # для id, . для класса' },
+                    { name: 'color', label: 'Новый цвет текста', type: 'color', value: a.params.color || '#ff0000' }
                 ];
                 break;
             case 'bgcolor':
                 title = '🖌️ Изменить цвет фона';
-                body = '<p>Выберите элемент и цвет его фона.</p>';
+                body = '<p>Меняет <b>фон</b> выбранного элемента.</p>';
                 fields = [
-                    { name: 'selector', label: 'Элемент (селектор)', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
-                    { name: 'customSelector', label: 'Свой селектор (если выбран "custom")', value: a.params.customSelector || '' },
-                    { name: 'bgcolor', label: 'Цвет фона', type: 'color', value: a.params.bgcolor || '#ff0000' }
+                    { name: 'selector', label: 'Какой элемент изменить?', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
+                    { name: 'customSelector', label: 'CSS-селектор (если выбран «Свой»)', value: a.params.customSelector || '', placeholder: '#myBtn или .card' },
+                    { name: 'bgcolor', label: 'Новый цвет фона', type: 'color', value: a.params.bgcolor || '#ff0000' }
                 ];
                 break;
+            // ===== НАВИГАЦИЯ =====
             case 'redirect':
                 title = '🔗 Переход по ссылке';
-                body = '<p>Перенаправить пользователя на другой URL.</p>';
-                fields = [{ name: 'url', label: 'URL', value: a.params.url || 'https://example.com' }];
+                body = '<p>Перенаправляет пользователя на указанный URL.</p>';
+                fields = [
+                    { name: 'url', label: 'URL для перехода', value: a.params.url || 'https://example.com', placeholder: 'https://google.com' }
+                ];
                 break;
+            // ===== ВИДИМОСТЬ =====
             case 'hide':
                 title = '👻 Скрыть элемент';
-                body = '<p>Скрыть выбранный элемент (display: none).</p>';
+                body = '<p>Скрывает выбранный элемент (display: none).</p>';
                 fields = [
-                    { name: 'selector', label: 'Элемент (селектор)', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
-                    { name: 'customSelector', label: 'Свой селектор (если выбран "custom")', value: a.params.customSelector || '' }
+                    { name: 'selector', label: 'Какой элемент скрыть?', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
+                    { name: 'customSelector', label: 'CSS-селектор (если выбран «Свой»)', value: a.params.customSelector || '' }
                 ];
                 break;
             case 'show':
                 title = '👀 Показать элемент';
-                body = '<p>Показать ранее скрытый элемент.</p>';
+                body = '<p>Показывает ранее скрытый элемент.</p>';
                 fields = [
-                    { name: 'selector', label: 'Элемент (селектор)', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
-                    { name: 'customSelector', label: 'Свой селектор (если выбран "custom")', value: a.params.customSelector || '' }
+                    { name: 'selector', label: 'Какой элемент показать?', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
+                    { name: 'customSelector', label: 'CSS-селектор (если выбран «Свой»)', value: a.params.customSelector || '' }
                 ];
                 break;
             case 'toggle':
                 title = '🔄 Переключить видимость';
-                body = '<p>Скрыть, если показан, и наоборот.</p>';
+                body = '<p>Скрывает, если элемент показан, и наоборот.</p>';
                 fields = [
-                    { name: 'selector', label: 'Элемент (селектор)', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
-                    { name: 'customSelector', label: 'Свой селектор (если выбран "custom")', value: a.params.customSelector || '' }
+                    { name: 'selector', label: 'Какой элемент переключить?', type: 'select', options: selectorOptions, value: a.params.selector || 'this' },
+                    { name: 'customSelector', label: 'CSS-селектор (если выбран «Свой»)', value: a.params.customSelector || '' }
                 ];
                 break;
+            // ===== СВОЙ КОД =====
             case 'custom':
-                title = '✏️ Свой код';
-                body = '<p>Введите произвольный JavaScript-код.</p>';
-                fields = [{ name: 'code', label: 'Код', type: 'textarea', value: a.params.code || '' }];
+                title = '✏️ Свой JavaScript-код';
+                body = '<p>Введите произвольный JavaScript. <code>this</code> указывает на текущий элемент.</p>';
+                fields = [
+                    { name: 'code', label: 'Код', type: 'textarea', value: a.params.code || '', placeholder: '// например:\nconsole.log("test");\ndocument.body.style.background = "red";' }
+                ];
                 break;
             // ===== ПЕРЕМЕННЫЕ =====
             case 'var_declare':
                 title = '📦 Создать переменную';
-                body = '<p>Объявление новой переменной.</p>';
+                body = '<p>Объявляет новую переменную. <b>let</b> — можно менять, <b>const</b> — нельзя, <b>var</b> — устаревший.</p>';
                 fields = [
-                    { name: 'varType', label: 'Тип', type: 'select', options: [
-                        { value: 'let', text: 'let (изменяемая)' },
-                        { value: 'const', text: 'const (константа)' },
-                        { value: 'var', text: 'var (старая)' }
+                    { name: 'varType', label: 'Тип переменной', type: 'select', options: [
+                        { value: 'let', text: 'let — изменяемая' },
+                        { value: 'const', text: 'const — константа' },
+                        { value: 'var', text: 'var — устаревшая' }
                     ], value: a.params.varType || 'let' },
-                    { name: 'name', label: 'Имя переменной', value: a.params.name || 'myVar' },
-                    { name: 'value', label: 'Значение', value: a.params.value || '10' }
+                    { name: 'name', label: 'Имя переменной', value: a.params.name || 'myVar', placeholder: 'myVar' },
+                    { name: 'value', label: 'Значение', value: a.params.value || '10', placeholder: '10 или "текст"' }
                 ];
                 break;
             case 'var_set':
                 title = '✏️ Изменить переменную';
-                body = '<p>Присвоить переменной новое значение.</p>';
+                body = '<p>Присваивает переменной новое значение.</p>';
                 fields = [
                     { name: 'name', label: 'Имя переменной', value: a.params.name || 'myVar' },
                     { name: 'value', label: 'Новое значение', value: a.params.value || '20' }
@@ -818,7 +952,7 @@
                 break;
             case 'var_math':
                 title = '➕ Математика с переменной';
-                body = '<p>Изменить значение переменной математической операцией.</p>';
+                body = '<p>Изменяет значение переменной арифметической операцией.</p>';
                 fields = [
                     { name: 'name', label: 'Имя переменной', value: a.params.name || 'myVar' },
                     { name: 'operator', label: 'Операция', type: 'select', options: [
@@ -833,18 +967,19 @@
                 ];
                 break;
             case 'var_alert':
-                title = '💬 Вывести переменную';
-                body = '<p>Показать значение переменной через alert.</p>';
+                title = '💬 Показать переменную';
+                body = '<p>Выводит значение переменной через alert.</p>';
                 fields = [
                     { name: 'name', label: 'Имя переменной', value: a.params.name || 'myVar' }
                 ];
                 break;
+            // ===== УСЛОВИЯ =====
             case 'if':
                 title = '❓ Условие (if)';
-                body = '<p>Если условие верно — выполнить простое действие (alert).</p>';
+                body = '<p>Если условие верно — показывает сообщение.</p>';
                 fields = [
-                    { name: 'left', label: 'Левая часть (переменная или число)', value: a.params.left || 'myVar' },
-                    { name: 'operator', label: 'Оператор', type: 'select', options: [
+                    { name: 'left', label: 'Левая часть (переменная или значение)', value: a.params.left || 'myVar' },
+                    { name: 'operator', label: 'Оператор сравнения', type: 'select', options: [
                         { value: '==', text: '== равно' },
                         { value: '!=', text: '!= не равно' },
                         { value: '>', text: '> больше' },
@@ -853,14 +988,14 @@
                         { value: '<=', text: '<= меньше или равно' }
                     ], value: a.params.operator || '==' },
                     { name: 'right', label: 'Правая часть', value: a.params.right || '10' },
-                    { name: 'thenMsg', label: 'Что вывести, если условие верно', value: a.params.thenMsg || 'Условие выполнено!' }
+                    { name: 'thenMsg', label: 'Сообщение при выполнении', value: a.params.thenMsg || 'Условие выполнено!' }
                 ];
                 break;
             case 'wait':
                 title = '⏱️ Задержка';
-                body = '<p>Подождать указанное количество миллисекунд перед следующим действием.</p>';
+                body = '<p>Ждёт указанное время (в миллисекундах) перед следующим действием. 1000 мс = 1 секунда.</p>';
                 fields = [
-                    { name: 'ms', label: 'Миллисекунды (1000 = 1 сек)', value: a.params.ms || '1000' }
+                    { name: 'ms', label: 'Миллисекунды', value: a.params.ms || '1000', placeholder: '1000' }
                 ];
                 break;
         }
@@ -873,7 +1008,6 @@
                 { text: 'Отмена', className: 'btn-secondary', onClick: () => {} },
                 { text: 'Сохранить', className: 'btn-success', onClick: (v) => {
                     Object.assign(a.params, v);
-                    // Если custom-селектор — заменяем selector
                     if (a.params.selector === 'custom') {
                         a.params.selector = a.params.customSelector || 'body';
                     }
@@ -916,24 +1050,37 @@
                 case 'wait':        icon = '⏱️'; label = `Ждать ${a.params.ms} мс`; break;
             }
             return `
-                <div class="block-item" onclick="editJSAction(${i})">
-                    <span>${icon} ${label}</span>
+                <div class="block-item ${i === -1 ? 'active' : ''}"
+                     draggable="true"
+                     data-index="${i}"
+                     onclick="editJSAction(${i})">
+                    <span class="drag-handle">⋮⋮</span>
+                    <span class="item-text">${icon} ${label}</span>
                     <button class="del" onclick="event.stopPropagation();deleteJSAction(${i})">✕</button>
                 </div>
             `;
         }).join('');
+
+        setupDragDrop(container, '.block-item', 'actions', (from, to) => {
+            const actions = state.jsFunctions[selectedFuncIndex].actions;
+            const [moved] = actions.splice(from, 1);
+            actions.splice(to, 0, moved);
+            updateJSActionList();
+            generateJSFunction();
+            saveState();
+        });
     }
 
     // =============================================================
-    //  ГЕНЕРАЦИЯ JS-КОДА
+    //  ГЕНЕРАЦИЯ КОДА ДЕЙСТВИЯ
     // =============================================================
-    function actionToJS(a, indent = '    ') {
+    function actionToJS(a) {
         const sel = a.params.selector || 'this';
         const customSel = sel === 'custom' ? (a.params.customSelector || 'body') : sel;
 
         switch (a.type) {
-            case 'alert':    return `alert("${a.params.msg || 'Hello!'}");`;
-            case 'console':  return `console.log("${a.params.msg || 'Hello!'}");`;
+            case 'alert':    return `alert("${escapeStr(a.params.msg || 'Hello!')}");`;
+            case 'console':  return `console.log("${escapeStr(a.params.msg || 'Hello!')}");`;
             case 'color':
                 return sel === 'this'
                     ? `this.style.color = "${a.params.color || '#ff0000'}";`
@@ -942,7 +1089,7 @@
                 return sel === 'this'
                     ? `this.style.backgroundColor = "${a.params.bgcolor || '#ff0000'}";`
                     : `document.querySelector("${customSel}").style.backgroundColor = "${a.params.bgcolor || '#ff0000'}";`;
-            case 'redirect': return `window.location.href = "${a.params.url || 'https://example.com'}";`;
+            case 'redirect': return `window.location.href = "${escapeStr(a.params.url || 'https://example.com')}";`;
             case 'hide':
                 return sel === 'this'
                     ? `this.style.display = "none";`
@@ -954,9 +1101,8 @@
             case 'toggle':
                 return sel === 'this'
                     ? `this.style.display = (this.style.display === "none") ? "" : "none";`
-                    : `{ const el = document.querySelector("${customSel}"); el.style.display = (el.style.display === "none") ? "" : "none"; }`;
-            case 'custom':   return (a.params.code || '// пустой код').split('\n').join('\n' + indent);
-            // ПЕРЕМЕННЫЕ
+                    : `{ const el = document.querySelector("${customSel}"); if (el) el.style.display = (el.style.display === "none") ? "" : "none"; }`;
+            case 'custom':   return (a.params.code || '// пустой код');
             case 'var_declare': return `${a.params.varType || 'let'} ${a.params.name || 'myVar'} = ${a.params.value || '10'};`;
             case 'var_set':     return `${a.params.name || 'myVar'} = ${a.params.value || '20'};`;
             case 'var_math':
@@ -964,10 +1110,14 @@
                 if (a.params.operator === '--') return `${a.params.name || 'myVar'}--;`;
                 return `${a.params.name || 'myVar'} ${a.params.operator || '+'}= ${a.params.value || '5'};`;
             case 'var_alert':   return `alert(${a.params.name || 'myVar'});`;
-            case 'if':          return `if (${a.params.left || 'x'} ${a.params.operator || '=='} ${a.params.right || '10'}) { alert("${a.params.thenMsg || 'OK'}"); }`;
-            case 'wait':        return `setTimeout(function() { /* следующее действие */ }, ${a.params.ms || '1000'});`;
+            case 'if':          return `if (${a.params.left || 'x'} ${a.params.operator || '=='} ${a.params.right || '10'}) { alert("${escapeStr(a.params.thenMsg || 'OK')}"); }`;
+            case 'wait':        return `setTimeout(function() { /* следующее действие */ }, ${a.params.wait_ms || a.params.ms || '1000'});`;
             default:            return '// неизвестное действие';
         }
+    }
+
+    function escapeStr(s) {
+        return String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
     }
 
     function generateJSFunction() {
@@ -977,12 +1127,12 @@
         }
         const f = state.jsFunctions[selectedFuncIndex];
         if (!f) return;
-        
+
         if (f.actions.length === 0) {
             document.getElementById('jsOutput').textContent = `function ${f.name}() {\n    // нет действий\n}`;
             return;
         }
-        
+
         const lines = f.actions.map(a => actionToJS(a));
         const fullFunc = `function ${f.name}() {\n    ${lines.join('\n    ')}\n}`;
         document.getElementById('jsOutput').textContent = fullFunc;
@@ -996,9 +1146,199 @@
     }
 
     // =============================================================
-    //  КОМПИЛЯЦИЯ HTML
+    //  ПРОВЕРКА ВАЛИДНОСТИ ПЕРЕД КОМПИЛЯЦИЕЙ
+    // =============================================================
+    function validateProject() {
+        const errors = [];
+        const warnings = [];
+
+        // 1. Проверка блоков
+        state.blocks.forEach((b, i) => {
+            const name = `Блок #${i+1} (${b.type})`;
+
+            if (b.type === 'button') {
+                if (!b.text || !b.text.trim()) errors.push(`${name}: пустой текст кнопки`);
+                if (b.link && b.link !== '#' && !isValidUrl(b.link) && !b.link.startsWith('#')) {
+                    warnings.push(`${name}: подозрительная ссылка "${b.link}"`);
+                }
+            }
+            if (b.type === 'text') {
+                if (!b.text || !b.text.trim()) errors.push(`${name}: пустой текст`);
+            }
+            if (b.type === 'link') {
+                if (!b.text || !b.text.trim()) errors.push(`${name}: пустой текст ссылки`);
+                if (!b.url || !b.url.trim()) errors.push(`${name}: пустой URL`);
+                else if (!isValidUrl(b.url) && !b.url.startsWith('#') && !b.url.startsWith('/')) {
+                    warnings.push(`${name}: URL "${b.url}" может быть невалидным`);
+                }
+            }
+            if (b.type === 'image') {
+                if (!b.src || !b.src.trim()) errors.push(`${name}: пустой URL картинки`);
+            }
+
+            // Проверка onclick — есть ли такая функция
+            if (b.onclick) {
+                const funcName = b.onclick.replace(/\(\)$/, '').trim();
+                if (funcName && !state.jsFunctions.some(f => f.name === funcName)) {
+                    errors.push(`${name}: вызывает несуществующую функцию "${funcName}"`);
+                }
+            }
+        });
+
+        // 2. Проверка функций
+        state.jsFunctions.forEach((f, i) => {
+            const fname = `Функция "${f.name}"`;
+
+            if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(f.name)) {
+                errors.push(`${fname}: невалидное имя функции`);
+            }
+
+            // Проверка переменных
+            const declaredVars = new Set();
+            f.actions.forEach((a, j) => {
+                if (a.type === 'var_declare') {
+                    if (!a.params.name || !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(a.params.name)) {
+                        errors.push(`${fname}, действие #${j+1}: невалидное имя переменной "${a.params.name}"`);
+                    } else {
+                        declaredVars.add(a.params.name);
+                    }
+                }
+                if (['var_set', 'var_math', 'var_alert'].includes(a.type)) {
+                    if (!a.params.name) {
+                        errors.push(`${fname}, действие #${j+1}: не указано имя переменной`);
+                    }
+                }
+                // Проверка URL
+                if (a.type === 'redirect' && a.params.url) {
+                    if (!isValidUrl(a.params.url)) {
+                        warnings.push(`${fname}, действие #${j+1}: URL "${a.params.url}" может быть невалидным`);
+                    }
+                }
+            });
+
+            // Проверка на использование несуществующих переменных
+            f.actions.forEach((a, j) => {
+                if (['var_set', 'var_math', 'var_alert'].includes(a.type)) {
+                    if (a.params.name && !declaredVars.has(a.params.name)) {
+                        warnings.push(`${fname}, действие #${j+1}: переменная "${a.params.name}" не объявлена (объявите её выше)`);
+                    }
+                }
+                if (a.type === 'if') {
+                    if (a.params.left && !declaredVars.has(a.params.left) && !/^\d+$/.test(a.params.left)) {
+                        warnings.push(`${fname}, действие #${j+1}: "${a.params.left}" не объявлена и не число`);
+                    }
+                }
+            });
+        });
+
+        // 3. Общая проверка
+        if (state.blocks.length === 0) {
+            warnings.push('Нет ни одного блока — страница будет пустой');
+        }
+
+        return { errors, warnings };
+    }
+
+    function isValidUrl(str) {
+        if (!str) return false;
+        if (str.startsWith('#') || str.startsWith('/')) return true;
+        try {
+            new URL(str);
+            return true;
+        } catch (e) {
+            return /^(mailto:|tel:|javascript:)/.test(str);
+        }
+    }
+
+    // =============================================================
+    //  КОМПИЛЯЦИЯ HTML (с автопроверкой и автоисправлением)
     // =============================================================
     function compileHTML() {
+        // 1. Автоисправления
+        const fixes = autoFix();
+        if (fixes.length > 0) {
+            modalAlert('🔧 Автоисправления',
+                `<p>Перед сборкой были применены автоматические исправления:</p>
+                <ul style="margin-left:18px;margin-top:8px;">${fixes.map(f => `<li>${f}</li>`).join('')}</ul>
+                <p style="margin-top:12px;color:#9ac;">Проверьте результат и попробуйте снова.</p>`
+            );
+            return;
+        }
+
+        // 2. Проверка валидности
+        const { errors, warnings } = validateProject();
+
+        if (errors.length > 0) {
+            modalAlert('❌ Найдены ошибки',
+                `<p>Исправьте следующие ошибки и повторите:</p>
+                <ul style="margin-left:18px;margin-top:8px;color:#ff8;">${errors.map(e => `<li>${e}</li>`).join('')}</ul>`
+            );
+            return;
+        }
+
+        if (warnings.length > 0) {
+            showModal({
+                title: '⚠️ Есть предупреждения',
+                body: `<p>Найдены потенциальные проблемы, но они не критичны. Продолжить сборку?</p>
+                    <ul style="margin-left:18px;margin-top:8px;color:#ffd;">${warnings.map(w => `<li>${w}</li>`).join('')}</ul>`,
+                buttons: [
+                    { text: 'Отмена', className: 'btn-secondary', onClick: () => {} },
+                    { text: 'Продолжить', className: 'btn-success', onClick: () => doCompile() }
+                ]
+            });
+            return;
+        }
+
+        doCompile();
+    }
+
+    function autoFix() {
+        const fixes = [];
+        let changed = false;
+
+        // Функции: убираем () с конца имён
+        state.jsFunctions.forEach(f => {
+            const cleaned = f.name.replace(/\(\)$/, '').trim();
+            if (cleaned !== f.name) {
+                fixes.push(`Имя функции "${f.name}" → "${cleaned}"`);
+                f.name = cleaned;
+                changed = true;
+            }
+        });
+
+        // Блоки: убираем () у onclick
+        state.blocks.forEach((b, i) => {
+            if (b.onclick && !/\(\)$/.test(b.onclick)) {
+                b.onclick = b.onclick + '()';
+                fixes.push(`Блок #${i+1}: к onclick добавлены скобки`);
+                changed = true;
+            }
+        });
+
+        // Переменные: пустые значения → 0
+        state.jsFunctions.forEach((f, i) => {
+            f.actions.forEach((a, j) => {
+                if (a.type === 'var_declare' && (a.params.value === '' || a.params.value === undefined)) {
+                    a.params.value = '0';
+                    fixes.push(`${f.name}: пустое значение переменной "${a.params.name}" → 0`);
+                    changed = true;
+                }
+                if (a.type === 'var_set' && (a.params.value === '' || a.params.value === undefined)) {
+                    a.params.value = '0';
+                    fixes.push(`${f.name}: пустое значение в var_set → 0`);
+                    changed = true;
+                }
+            });
+        });
+
+        if (changed) {
+            renderAll();
+            saveState();
+        }
+        return fixes;
+    }
+
+    function doCompile() {
         const allFunctions = state.jsFunctions.map(f => {
             if (f.actions.length === 0) return `function ${f.name}() { /* нет действий */ }`;
             const lines = f.actions.map(a => actionToJS(a));
@@ -1006,23 +1346,24 @@
         }).join('\n\n');
 
         const htmlContent = `<!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой сайт</title>
     <style>
         body { margin: 20px; font-family: sans-serif; background: #fff; }
         button { cursor: pointer; }
     </style>
     <script>
-        ${allFunctions}
+${allFunctions}
     <\/script>
 </head>
 <body>
-    ${state.blocks.map(b => renderBlock(b)).join('')}
+${state.blocks.map(b => renderBlock(b)).join('\n')}
 </body>
 </html>`;
-        
+
         const blob = new Blob([htmlContent], { type: 'text/html' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
@@ -1071,72 +1412,100 @@
     }
 
     // =============================================================
-    //  СПРАВОЧНИК
+    //  УЛУЧШЕННЫЙ СПРАВОЧНИК
     // =============================================================
     function openHelp() {
         const body = `
             <div class="help-section">
                 <h3>👋 Добро пожаловать в Sites IDE!</h3>
-                <p>Это визуальный конструктор сайтов. Слева — панель инструментов, справа — предпросмотр.</p>
+                <p>Визуальный конструктор сайтов. Слева — панель управления, справа — предпросмотр в реальном времени.</p>
+                <div class="help-tip">💡 <b>Совет:</b> все изменения сохраняются автоматически каждые 5 секунд. Кнопка <b>Экспорт</b> сохранит проект в JSON-файл на случай переноса.</div>
             </div>
 
             <div class="help-section">
-                <h3>🧩 Интерфейс</h3>
-                <p><span class="help-badge">Кнопка</span> Добавляет кликабельную кнопку с настройкой цвета, ссылки и якоря.</p>
-                <p><span class="help-badge">Текст</span> Позволяет добавить текстовый блок.</p>
-                <p><span class="help-badge">Ссылка</span> Обычная ссылка или в виде кнопки.</p>
-                <p><span class="help-badge">Картинка</span> Изображение по URL.</p>
-                <p>После добавления выберите блок в списке и настройте его параметры снизу.</p>
+                <h3>🧩 Интерфейс — добавляем блоки</h3>
+                <table class="help-table">
+                    <tr><th>Блок</th><th>Что делает</th></tr>
+                    <tr><td><span class="help-badge">Кнопка</span></td><td>Кликабельная кнопка. Можно задать текст, цвет, ссылку и якорь.</td></tr>
+                    <tr><td><span class="help-badge">Текст</span></td><td>Обычный текстовый блок с настройкой цвета и выравнивания.</td></tr>
+                    <tr><td><span class="help-badge">Ссылка</span></td><td>Гиперссылка. Есть режим «кнопочного вида».</td></tr>
+                    <tr><td><span class="help-badge">Картинка</span></td><td>Изображение по URL.</td></tr>
+                </table>
+                <p><b>Порядок блоков можно менять:</b> зажмите блок за <code>⋮⋮</code> слева и перетащите вверх/вниз.</p>
+                <p><b>Якорь (id)</b> — это метка, на которую можно перейти по ссылке вида <code>#myAnchor</code>. Также используется в JS-действиях как селектор.</p>
             </div>
 
             <div class="help-section">
-                <h3>⚡ Логика (JS)</h3>
-                <p>Создайте функцию, добавьте в неё действия. Функция автоматически привяжется к выбранному блоку (событие onclick).</p>
+                <h3>⚡ Логика (JS) — добавляем поведение</h3>
+                <p>Создайте <b>функцию</b>, добавьте в неё <b>действия</b>, и она автоматически привяжется к выбранному блоку.</p>
+                <div class="help-tip">💡 Имя функции вводится <b>без скобок</b> — они добавятся сами. Например: <code>myFunction</code>.</div>
 
-                <h4>💬 Базовые действия</h4>
+                <h4>💬 Сообщения</h4>
                 <ul>
-                    <li><code>Alert</code> — всплывающее сообщение</li>
-                    <li><code>Console</code> — вывод в консоль браузера</li>
-                    <li><code>Цвет</code> — изменить цвет текста выбранного элемента</li>
-                    <li><code>Фон</code> — изменить цвет фона выбранного элемента</li>
-                    <li><code>Переход</code> — перенаправление на URL</li>
-                    <li><code>Скрыть / Показать / Переключить</code> — управление видимостью</li>
-                    <li><code>Свой код</code> — произвольный JavaScript</li>
+                    <li><b>Alert</b> — всплывающее окно с текстом</li>
+                    <li><b>Console</b> — вывод в консоль браузера (F12 → Console)</li>
+                </ul>
+
+                <h4>🎨 Стили</h4>
+                <ul>
+                    <li><b>Цвет</b> — изменить цвет текста элемента</li>
+                    <li><b>Фон</b> — изменить цвет фона элемента</li>
+                </ul>
+
+                <h4>🔗 Навигация и видимость</h4>
+                <ul>
+                    <li><b>Переход</b> — перенаправление на URL</li>
+                    <li><b>Скрыть / Показать / Переключить</b> — управление видимостью элемента</li>
                 </ul>
 
                 <h4>🔢 Переменные</h4>
                 <ul>
-                    <li><code>Создать переменную</code> — let / const / var</li>
-                    <li><code>Изменить переменную</code> — присвоить новое значение</li>
-                    <li><code>Математика</code> — +, -, *, /, ++, --</li>
-                    <li><code>Вывести переменную</code> — alert с её значением</li>
+                    <li><b>Создать</b> — <code>let x = 10;</code></li>
+                    <li><b>Изменить</b> — <code>x = 20;</code></li>
+                    <li><b>Математика</b> — <code>x += 5;</code>, <code>x++;</code></li>
+                    <li><b>Показать</b> — <code>alert(x);</code></li>
                 </ul>
 
-                <h4>🔀 Условия и циклы</h4>
+                <h4>🔀 Условия и задержки</h4>
                 <ul>
-                    <li><code>Условие (if)</code> — сравнение двух значений и alert при выполнении</li>
-                    <li><code>Задержка</code> — setTimeout на N миллисекунд</li>
+                    <li><b>Если (if)</b> — <code>if (x > 10) alert("OK");</code></li>
+                    <li><b>Задержка</b> — <code>setTimeout(...)</code></li>
+                </ul>
+
+                <h4>✏️ Свой код</h4>
+                <p>Полная свобода: введите любой JavaScript. <code>this</code> = текущий элемент.</p>
+            </div>
+
+            <div class="help-section">
+                <h3>🎯 Выбор элемента для действий</h3>
+                <p>В действиях типа «Цвет», «Фон», «Скрыть» и т.п. есть выпадающий список:</p>
+                <table class="help-table">
+                    <tr><th>Селектор</th><th>Что выбирает</th></tr>
+                    <tr><td><code>this</code></td><td>Сам элемент, к которому привязана функция (обычно кнопка)</td></tr>
+                    <tr><td><code>body</code></td><td>Вся страница</td></tr>
+                    <tr><td><code>#anchor</code></td><td>Элемент с заданным id (якорем)</td></tr>
+                    <tr><td><code>.class</code></td><td>Все элементы с классом</td></tr>
+                    <tr><td><code>button / p / img</code></td><td>Все элементы этого тега</td></tr>
+                    <tr><td>Свой селектор</td><td>Любой CSS-селектор вручную</td></tr>
+                </table>
+                <div class="help-tip">💡 Чтобы действие работало на другой блок, задайте ему якорь (например, <code>myBtn</code>) и используйте селектор <code>#myBtn</code>.</div>
+            </div>
+
+            <div class="help-section">
+                <h3>🔧 Проверка и сборка</h3>
+                <p>Перед сборкой HTML проект проходит проверку:</p>
+                <ul>
+                    <li><b>Автоисправления</b> — убираются <code>()</code> из имён функций, подставляются скобки в onclick, заполняются пустые значения.</li>
+                    <li><b>Ошибки</b> — критичные проблемы (пустой текст, невалидное имя, ссылка на несуществующую функцию). Сборка останавливается.</li>
+                    <li><b>Предупреждения</b> — потенциальные проблемы (невалидный URL, необъявленные переменные). Сборка продолжается по подтверждению.</li>
                 </ul>
             </div>
 
             <div class="help-section">
-                <h3>🎯 Как выбрать элемент для действий</h3>
-                <p>В действиях типа «Цвет», «Фон», «Скрыть», «Показать», «Переключить» есть выпадающий список:</p>
-                <ul>
-                    <li><b>this</b> — тот самый элемент, к которому привязана функция (обычно кнопка)</li>
-                    <li><b>#anchor</b> — элемент с заданным якорем (id)</li>
-                    <li><b>.class</b> — по CSS-классу</li>
-                    <li><b>body</b> — вся страница</li>
-                    <li><b>button / p / img</b> — все элементы этого типа</li>
-                    <li><b>Свой селектор</b> — любой CSS-селектор</li>
-                </ul>
-            </div>
-
-            <div class="help-section">
-                <h3>💾 Сохранение</h3>
-                <p>Проект автоматически сохраняется в localStorage каждые 5 секунд.</p>
-                <p>Кнопка <b>Экспорт</b> сохраняет проект в JSON-файл, <b>Импорт</b> — загружает его обратно.</p>
-                <p>Кнопка <b>Скомпилировать</b> генерирует готовый HTML-файл сайта.</p>
+                <h3>📦 Экспорт / Импорт</h3>
+                <p><b>Экспорт</b> — сохраняет проект в JSON-файл (блоки + функции).</p>
+                <p><b>Импорт</b> — загружает проект из JSON-файла.</p>
+                <p><b>Скомпилировать</b> — генерирует готовый HTML-файл <code>site.html</code>.</p>
             </div>
         `;
         showModal({
@@ -1162,7 +1531,7 @@
     renderAll();
 
     setInterval(saveState, 5000);
-    console.log('🧩 Sites IDE (версия 3.5) загружена!');
+    console.log('🧩 Sites IDE (версия 4.0) загружена!');
 </script>
 </body>
 </html>
