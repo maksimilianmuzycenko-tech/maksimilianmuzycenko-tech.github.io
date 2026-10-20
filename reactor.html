@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reactor Simulator</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a0a0a;
+    color: #c8c8c8;
+    font-family: 'Courier New', monospace;
+    height: 100vh;
+    overflow: hidden; 
+  }
+  
+  .app { display: flex; height: 100vh; padding: 10px; gap: 10px; }
+
+  /* ================= ЛЕВАЯ КОЛОНКА ================= */
+  .left-column { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+  
+  .left-canvas { 
+    flex: 1; 
+    background: #111; 
+    border: 2px solid #333; 
+    position: relative; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    padding: 10px;
+  }
+
+  /* Индикатор тревоги */
+  .alarm-indicator {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background: #333;
+    border-radius: 50%;
+    border: 2px solid #555;
+    transition: background 0.2s;
+  }
+  .alarm-indicator.warning {
+    background: #ff4d4d;
+    border-color: #ff0000;
+    animation: blink 0.5s infinite alternate;
+    box-shadow: 0 0 15px #ff0000;
+  }
+  @keyframes blink {
+    from { opacity: 1; }
+    to { opacity: 0.3; }
+  }
+
+  .reactor-visual { font-size: 20px; color: #4ee44e; text-align: center; line-height: 1.5; margin-bottom: 20px;}
+  .reactor-visual span { color: #ff4d4d; font-weight: bold; font-size: 28px;}
+
+  /* Магазин */
+  .shop-panel {
+    background: #1a1a1a;
+    border: 1px solid #444;
+    padding: 10px;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .shop-item {
+    border-bottom: 1px dashed #333;
+    padding-bottom: 5px;
+  }
+  .shop-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .shop-panel button {
+    background: #2a5a2a; color: #fff; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold; width: 100%;
+  }
+  .shop-panel button:disabled { background: #333; color: #666; cursor: not-allowed; }
+  .shop-panel button:hover:not(:disabled) { background: #3a7a3a; }
+
+  .left-control-panel { background: #111; border: 2px solid #333; padding: 15px; height: 280px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
+  .section-title { color: #4ee44e; font-size: 14px; text-align: center; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+
+  .suz-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .suz-item { background: #1a1a1a; border: 1px solid #333; padding: 8px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+  .suz-item span { color: #e4d24e; font-weight: bold; }
+  .suz-item.broken { border-color: #ff4d4d; background: #2a1010; color: #ff4d4d;}
+
+  .pumps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .pump-item { background: #1a1a1a; border: 1px solid #333; padding: 10px; text-align: center; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+  .pump-item span { color: #e4d24e; font-weight: bold; }
+
+  /* ================= ПРАВАЯ КОЛОНКА ================= */
+  .right-column { width: 380px; display: flex; flex-direction: column; gap: 10px; }
+  .panel { background: #111; border: 2px solid #333; padding: 12px; display: flex; flex-direction: column; }
+  .stats-panel { flex: 1; gap: 10px; }
+  .stat-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding-bottom: 5px; font-size: 14px; }
+  .stat-label { color: #aaa; }
+  .stat-value { color: #e4d24e; font-weight: bold; }
+  .stat-value.danger { color: #ff4d4d; }
+
+  .buttons-panel { gap: 8px; }
+  .buttons-panel button { padding: 12px; background: #222; color: #c8c8c8; border: 1px solid #444; font-family: 'Courier New', monospace; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s;}
+  .buttons-panel button:hover { background: #333; }
+  .btn-az5 { background: #4a1010 !important; color: #ff4d4d !important; border-color: #ff4d4d !important; }
+  .btn-az5:hover { background: #6a1515 !important; }
+  
+  #alarm-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 999; }
+  #alarm-modal h1 { color: #ff4d4d; font-size: 40px; margin-bottom: 20px; }
+  #alarm-modal p { color: #ccc; font-size: 20px; }
+
+  /* ================= КНОПКА ПЕРЕКЛЮЧЕНИЯ ================= */
+  .mode-toggle {
+    position: absolute; top: 10px; left: 10px;
+    background: #333; color: #fff; border: none; padding: 5px 10px; cursor: pointer; font-family: monospace; font-size: 12px;
+  }
+  .mode-toggle:hover { background: #555; }
+
+  /* ================= МОБИЛЬНАЯ ВЕРСИЯ ================= */
+  .mobile-controls { display: none; }
+  .mobile-controls.active { display: flex; flex-direction: column; gap: 5px; margin-top: 10px;}
+  .mobile-row { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center;}
+  .mobile-btn { 
+    flex: 1; padding: 10px; background: #2a2a2a; border: 1px solid #555; color: #fff; font-family: monospace; font-size: 12px; cursor: pointer;
+    min-width: 60px;
+  }
+  .mobile-btn:active { background: #444; }
+
+  /* Режим телефона */
+  body.mobile-mode .app { flex-direction: column; overflow-y: auto; height: auto; }
+  body.mobile-mode .right-column { width: 100%; }
+  body.mobile-mode .left-canvas { min-height: 200px; }
+  body.mobile-mode .mobile-controls { display: flex; }
+  body.mobile-mode .left-control-panel { height: auto; }
+  body.mobile-mode .suz-grid { grid-template-columns: repeat(3, 1fr); }
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ЛЕВАЯ ЧАСТЬ -->
+  <div class="left-column">
+    <div class="left-canvas">
+      <button class="mode-toggle" id="toggle-mode">Режим: ПК</button>
+      <div class="alarm-indicator" id="alarm-indicator"></div>
+      
+      <div class="reactor-visual" id="reactor-vis">
+        НЕЙТРОННЫЙ ПОТОК: <span id="vis-power">0</span> кВт<br>
+        <span style="font-size: 14px; color: #888;" id="power-hint">(нажми Alt+Q чтобы поднять СУЗ)</span>
+      </div>
+
+      <!-- Магазин -->
+      <div class="shop-panel">
+        <div style="color: #4ee44e; font-weight: bold; margin-bottom: 5px;">МАГАЗИН</div>
+        
+        <div class="shop-item">
+          <div>Корпус (Ур. <span id="shop-level">1</span>)</div>
+          <div style="font-size: 12px; color: #aaa;">+100°C темп, +10 атм</div>
+          <button id="btn-buy-case" style="margin-top: 5px;">Купить за 10 000 ₽</button>
+        </div>
+
+        <div class="shop-item">
+          <div>АКБ (Ур. <span id="shop-akb-level">1</span>)</div>
+          <div style="font-size: 12px; color: #aaa;">+5000 кВт к хранению</div>
+          <button id="btn-buy-akb" style="margin-top: 5px;">Купить за 20 000 ₽</button>
+        </div>
+      </div>
+
+      <!-- Управление для телефона -->
+      <div class="mobile-controls" id="mobile-ctrl">
+        <div class="mobile-row" id="mobile-suz-row"></div>
+        <div class="mobile-row" style="margin-top: 5px;">
+          <button class="mobile-btn" onclick="togglePump(0)">Насос 1</button>
+          <button class="mobile-btn" onclick="togglePump(1)">Насос 2</button>
+          <button class="mobile-btn" onclick="togglePump(2)">Насос 3</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="left-control-panel">
+      <div>
+        <div class="section-title">ПАРЫ СУЗ (1-15)</div>
+        <div class="suz-grid" id="suz-grid"></div>
+      </div>
+      <div>
+        <div class="section-title">НАСОСЫ (1-3)</div>
+        <div class="pumps-grid">
+          <div class="pump-item">Насос 1 <span id="pump-1">0%</span></div>
+          <div class="pump-item">Насос 2 <span id="pump-2">0%</span></div>
+          <div class="pump-item">Насос 3 <span id="pump-3">0%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ПРАВАЯ ЧАСТЬ -->
+  <div class="right-column">
+    <div class="panel stats-panel">
+      <div class="stat-row"><span class="stat-label">Деньги:</span><span class="stat-value" id="val-money">5000 ₽</span></div>
+      <div class="stat-row"><span class="stat-label">АКБ:</span><span class="stat-value" id="val-energy">0 / 2000 кВт</span></div>
+      <div class="stat-row"><span class="stat-label">Выработка:</span><span class="stat-value" id="val-prod">0 кВт/тик</span></div>
+      <div class="stat-row"><span class="stat-label">Температура:</span><span class="stat-value" id="val-temp">30 / 1500 °C</span></div>
+      <div class="stat-row"><span class="stat-label">Рабочих СУЗ:</span><span class="stat-value" id="val-suz">15 / 15</span></div>
+      <div class="stat-row"><span class="stat-label">Рабочих ТВЭЛ:</span><span class="stat-value" id="val-tvel">30 / 30</span></div>
+      <div class="stat-row"><span class="stat-label">Топливо:</span><span class="stat-value" id="val-fuel">100%</span></div>
+      <div class="stat-row"><span class="stat-label">Давление:</span><span class="stat-value" id="val-press">1 / 130 атм</span></div>
+    </div>
+    
+    <div class="panel buttons-panel">
+      <button id="btn-az5" class="btn-az5">АЗ-5 (СТОП)</button>
+      <button id="btn-repair">РЕМОНТ СУЗ (500₽)</button>
+      <button id="btn-repair-tvel">РЕМОНТ ТВЭЛ (1000₽)</button>
+      <button id="btn-refuel">ЗАПРАВКА (2000₽)</button>
+      <button id="btn-sell">ПРОДАТЬ ЭНЕРГИЮ</button>
+      <button id="btn-save" style="margin-top: 10px; background: #2a5a2a; border-color: #4a7a4a;">СОХРАНИТЬ</button>
+    </div>
+  </div>
+</div>
+
+<div id="alarm-modal">
+  <h1>АВАРИЯ!</h1>
+  <p id="alarm-text">Реактор расплавился.</p>
+  <br>
+  <button onclick="location.reload()" style="padding:10px 20px; font-size: 18px; cursor:pointer;">Перезапустить</button>
+</div>
+
+<script>
+  // КОНСТАНТЫ
+  const cpdsuz = [1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3];
+  const cvttvel = [10, 10, 10, 10, 10, 10, 8, 8, 8, 8, 8, 8, 8, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 3, 3, 2, 2, 2];
+  const minus1cpdsuz = 24;
+  const TICK_RATE = 350;
+
+  // ПЕРЕМЕННЫЕ
+  let suzpogr = new Array(15).fill(100);
+  let suzBroken = new Array(15).fill(false);
+  let tvelBroken = new Array(30).fill(false);
+  
+  let nasosscorost = [0, 0, 0];
+  let topl = 100;
+  let temp = 30;
+  let davl = 1;
+  let tempmax = 1500; 
+  let davlmax = 130;  
+  let money = 5000;
+  let energy = 0; 
+  let maxEnergy = 2000; // Базовая ёмкость АКБ
+  let vihodcvt = 0;
+  let currentProd = 0; 
+  let isGameOver = false;
+  let caseLevel = 1;
+  let akbLevel = 1;
+
+  const suzLetters = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G'];
+
+  // ИНИЦИАЛИЗАЦИЯ UI
+  const suzGrid = document.getElementById('suz-grid');
+  for(let i=0; i<15; i++) {
+      const div = document.createElement('div');
+      div.className = 'suz-item';
+      div.id = `suz-item-${i}`;
+      div.innerHTML = `П${i+1} <span id="suz-val-${i}">100%</span>`;
+      suzGrid.appendChild(div);
+  }
+
+  // Мобильные кнопки СУЗ
+  const mobileSuzRow = document.getElementById('mobile-suz-row');
+  for(let i=0; i<15; i++) {
+    const btnUp = document.createElement('button');
+    btnUp.className = 'mobile-btn';
+    btnUp.innerText = `СУЗ ${i+1}↑`;
+    btnUp.onclick = () => changeSuz(i, -10);
+    
+    const btnDown = document.createElement('button');
+    btnDown.className = 'mobile-btn';
+    btnDown.innerText = `СУЗ ${i+1}↓`;
+    btnDown.onclick = () => changeSuz(i, 10);
+
+    mobileSuzRow.appendChild(btnUp);
+    mobileSuzRow.appendChild(btnDown);
+  }
+
+  function changeSuz(index, delta) {
+    if (suzBroken[index]) return;
+    suzpogr[index] = Math.max(0, Math.min(100, suzpogr[index] + delta));
+    document.getElementById(`suz-val-${index}`).innerText = suzpogr[index] + '%';
+  }
+
+  function togglePump(index) {
+    nasosscorost[index] = nasosscorost[index] === 0 ? 100 : 0;
+    updateUI();
+  }
+
+  // === СОХРАНЕНИЕ ===
+  function saveGame() {
+    const saveData = {
+      suzpogr, suzBroken, tvelBroken, nasosscorost, topl, temp, davl, money, energy, caseLevel, akbLevel, isGameOver
+    };
+    localStorage.setItem('reactor_save', JSON.stringify(saveData));
+    console.log("Игра сохранена!");
+  }
+
+  function loadGame() {
+    const saved = localStorage.getItem('reactor_save');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        if (data.isGameOver) return; 
+        
+        suzpogr = data.suzpogr || suzpogr;
+        suzBroken = data.suzBroken || suzBroken;
+        tvelBroken = data.tvelBroken || tvelBroken;
+        nasosscorost = data.nasosscorost || nasosscorost;
+        topl = data.topl || topl;
+        temp = data.temp || temp;
+        davl = data.davl || davl;
+        money = data.money || money;
+        energy = data.energy || energy;
+        caseLevel = data.caseLevel || 1;
+        akbLevel = data.akbLevel || 1;
+
+        tempmax = 1500 + (caseLevel - 1) * 100;
+        davlmax = 130 + (caseLevel - 1) * 10;
+        maxEnergy = 2000 + (akbLevel - 1) * 5000;
+
+        document.getElementById('shop-level').innerText = caseLevel;
+        document.getElementById('shop-akb-level').innerText = akbLevel;
+        
+        if (caseLevel >= 5) document.getElementById('btn-buy-case').disabled = true;
+        if (akbLevel >= 5) document.getElementById('btn-buy-akb').disabled = true;
+
+        updateUI();
+        console.log("Игра загружена!");
+      } catch(e) { console.error("Ошибка загрузки", e); }
+    }
+  }
+
+  // === ЦИКЛ ИГРЫ ===
+  function gameTick() {
+      if (isGameOver) return;
+
+      let totalReduction = 0;
+      for (let i = 0; i < 15; i++) {
+          if (!suzBroken[i]) totalReduction += (suzpogr[i] / 100) * cpdsuz[i];
+      }
+
+      let totalTvelPower = 0;
+      for (let i = 0; i < 30; i++) {
+          if (!tvelBroken[i]) totalTvelPower += cvttvel[i];
+      }
+
+      let neutronPower = totalTvelPower - (totalReduction * minus1cpdsuz);
+      if (neutronPower < 0) neutronPower = 0;
+      vihodcvt = neutronPower;
+
+      temp += neutronPower * 0.8; 
+      let cooling = (nasosscorost[0] + nasosscorost[1] + nasosscorost[2]) / 100 * 40; 
+      temp -= cooling;
+      if (temp < 30) temp = 30;
+
+      davl = 1 + (temp / 80);
+      if (davl > davlmax) davl = davlmax;
+
+      let turbineEfficiency = (temp / 300) * (davl / 10);
+      if (turbineEfficiency > 1.5) turbineEfficiency = 1.5;
+      
+      currentProd = neutronPower * turbineEfficiency;
+      energy += currentProd * (TICK_RATE / 1000); 
+      if (energy > maxEnergy) energy = maxEnergy; 
+
+      if (neutronPower > 0) {
+        topl -= (neutronPower / 1000) + 0.05; 
+        if (topl < 0) topl = 0;
+      }
+
+      if (neutronPower > 100) {
+          let breakChance = (neutronPower - 100) / 5000;
+          if (Math.random() < breakChance) {
+              let randomTvel = Math.floor(Math.random() * 30);
+              if (!tvelBroken[randomTvel]) tvelBroken[randomTvel] = true;
+          }
+      }
+      if (davl > 100) {
+          let breakChance = (davl - 100) / 500;
+          if (Math.random() < breakChance) {
+              let randomSuz = Math.floor(Math.random() * 15);
+              if (!suzBroken[randomSuz]) suzBroken[randomSuz] = true;
+          }
+      }
+
+      if (temp >= tempmax || davl >= davlmax) {
+          triggerAlarm("Температура или давление превысили норму.");
+          return;
+      }
+
+      updateUI();
+  }
+
+  function updateUI() {
+      document.getElementById('val-money').innerText = Math.floor(money) + ' ₽';
+      document.getElementById('val-energy').innerText = energy.toFixed(1) + ' / ' + maxEnergy + ' кВт';
+      document.getElementById('val-prod').innerText = currentProd.toFixed(1) + ' кВт/тик';
+      
+      // Форматируем температуру и давление
+      document.getElementById('val-temp').innerText = temp.toFixed(0) + ' / ' + tempmax + ' °C';
+      document.getElementById('val-press').innerText = davl.toFixed(2) + ' / ' + davlmax + ' атм';
+      
+      document.getElementById('val-fuel').innerText = Math.floor(topl) + '%';
+      document.getElementById('vis-power').innerText = vihodcvt.toFixed(0);
+      
+      if(temp > tempmax * 0.8) document.getElementById('val-temp').classList.add('danger');
+      else document.getElementById('val-temp').classList.remove('danger');
+      
+      if(davl > davlmax * 0.8) document.getElementById('val-press').classList.add('danger');
+      else document.getElementById('val-press').classList.remove('danger');
+
+      // Индикатор тревоги
+      let alarmInd = document.getElementById('alarm-indicator');
+      if (temp > tempmax * 0.6 || davl > davlmax * 0.6) {
+          alarmInd.classList.add('warning');
+      } else {
+          alarmInd.classList.remove('warning');
+      }
+
+      let workingSuz = 0;
+      for (let i = 0; i < 15; i++) {
+          let el = document.getElementById(`suz-val-${i}`);
+          let item = document.getElementById(`suz-item-${i}`);
+          if (el) {
+              if (suzBroken[i]) {
+                  el.innerText = "X";
+                  item.classList.add('broken');
+              } else {
+                  workingSuz++;
+                  el.innerText = Math.floor(suzpogr[i]) + '%';
+                  item.classList.remove('broken');
+              }
+          }
+      }
+      document.getElementById('val-suz').innerText = workingSuz + ' / 15';
+
+      let activeTvel = tvelBroken.filter(b => !b).length;
+      document.getElementById('val-tvel').innerText = activeTvel + ' / 30';
+
+      for (let i = 0; i < 3; i++) {
+          document.getElementById(`pump-${i+1}`).innerText = Math.floor(nasosscorost[i]) + '%';
+      }
+      
+      document.getElementById('shop-level').innerText = caseLevel;
+      document.getElementById('shop-akb-level').innerText = akbLevel;
+      
+      if (money >= 10000 && caseLevel < 5) document.getElementById('btn-buy-case').disabled = false;
+      else document.getElementById('btn-buy-case').disabled = true;
+      
+      if (money >= 20000 && akbLevel < 5) document.getElementById('btn-buy-akb').disabled = false;
+      else document.getElementById('btn-buy-akb').disabled = true;
+  }
+
+  function triggerAlarm(text) {
+      isGameOver = true;
+      document.getElementById('alarm-text').innerText = text;
+      document.getElementById('alarm-modal').style.display = 'flex';
+      localStorage.removeItem('reactor_save');
+  }
+
+  // === КЛАВИАТУРА ===
+  document.addEventListener('keydown', (e) => {
+      if (e.altKey) {
+          e.preventDefault();
+          for (let i = 0; i < suzLetters.length; i++) {
+              if (e.code === `Key${suzLetters[i]}`) {
+                  if (suzBroken[i]) return;
+                  if (e.shiftKey) changeSuz(i, 10); 
+                  else changeSuz(i, -10);          
+                  return;
+              }
+          }
+          if (e.code === 'Digit1') togglePump(0);
+          if (e.code === 'Digit2') togglePump(1);
+          if (e.code === 'Digit3') togglePump(2);
+          if (e.code === 'Digit4') nasosscorost[0] = Math.max(0, nasosscorost[0] - 10);
+          if (e.code === 'Digit5') nasosscorost[1] = Math.max(0, nasosscorost[1] - 10);
+          if (e.code === 'Digit6') nasosscorost[2] = Math.max(0, nasosscorost[2] - 10);
+      }
+  });
+
+  function isReactorShutdown() {
+      for (let i = 0; i < 15; i++) {
+          if (!suzBroken[i] && suzpogr[i] < 100) return false;
+      }
+      return true;
+  }
+
+  document.getElementById('btn-az5').addEventListener('click', () => {
+      if (isGameOver) return;
+      suzpogr = new Array(15).fill(100);
+      money -= 10000; 
+      if (money < 0) money = 0;
+      updateUI();
+  });
+
+  document.getElementById('btn-repair').addEventListener('click', () => {
+      if (isGameOver) return;
+      if (!isReactorShutdown()) { alert("ОСТАНОВИТЕ РЕАКТОР ПЕРЕД РЕМОНТОМ СУЗ!"); return; }
+      if (money >= 500) {
+          money -= 500;
+          suzBroken.fill(false); 
+          updateUI();
+      } else alert("Не хватает денег!");
+  });
+
+  document.getElementById('btn-repair-tvel').addEventListener('click', () => {
+      if (isGameOver) return;
+      if (!isReactorShutdown()) { alert("ОСТАНОВИТЕ РЕАКТОР ПЕРЕД РЕМОНТОМ ТВЭЛ!"); return; }
+      if (money >= 1000) {
+          money -= 1000;
+          tvelBroken.fill(false); 
+          updateUI();
+      } else alert("Не хватает денег!");
+  });
+
+  document.getElementById('btn-refuel').addEventListener('click', () => {
+      if (isGameOver) return;
+      if (!isReactorShutdown()) { alert("ОСТАНОВИТЕ РЕАКТОР ПЕРЕД ЗАПРАВКОЙ!"); return; }
+      if (money >= 2000) {
+          money -= 2000;
+          topl = 100;
+          updateUI();
+      } else alert("Не хватает денег!");
+  });
+
+  document.getElementById('btn-sell').addEventListener('click', () => {
+      if (isGameOver) return;
+      money += energy * 5; 
+      energy = 0;
+      updateUI();
+  });
+
+  document.getElementById('btn-save').addEventListener('click', () => {
+      saveGame();
+      alert("Игра сохранена!");
+  });
+
+  // === МАГАЗИН ===
+  document.getElementById('btn-buy-case').addEventListener('click', () => {
+      if (money >= 10000 && caseLevel < 5) {
+          money -= 10000;
+          caseLevel++;
+          tempmax += 100;
+          davlmax += 10;
+          document.getElementById('shop-level').innerText = caseLevel;
+          updateUI();
+          alert(`Корпус улучшен до уровня ${caseLevel}!`);
+      } else if (caseLevel >= 5) {
+          alert("Максимальный уровень корпуса!");
+      } else {
+          alert("Не хватает денег!");
+      }
+  });
+
+  document.getElementById('btn-buy-akb').addEventListener('click', () => {
+      if (money >= 20000 && akbLevel < 5) {
+          money -= 20000;
+          akbLevel++;
+          maxEnergy += 5000;
+          document.getElementById('shop-akb-level').innerText = akbLevel;
+          updateUI();
+          alert(`АКБ улучшена до уровня ${akbLevel}!`);
+      } else if (akbLevel >= 5) {
+          alert("Максимальный уровень АКБ!");
+      } else {
+          alert("Не хватает денег!");
+      }
+  });
+
+  // === ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМА ===
+  const toggleBtn = document.getElementById('toggle-mode');
+  toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('mobile-mode');
+    if (document.body.classList.contains('mobile-mode')) {
+      toggleBtn.innerText = "Режим: Телефон";
+      document.getElementById('power-hint').innerText = "(используй кнопки ниже)";
+    } else {
+      toggleBtn.innerText = "Режим: ПК";
+      document.getElementById('power-hint').innerText = "(нажми Alt+Q чтобы поднять СУЗ)";
+    }
+  });
+
+  // === СТАРТ ===
+  loadGame();
+  setInterval(gameTick, TICK_RATE);
+  setInterval(saveGame, 5000); 
+  updateUI();
+</script>
+</body>
+</html>
